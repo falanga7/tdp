@@ -28,6 +28,7 @@ class MyList:
 
         self._size += 1
 
+
     def insert(self,i,x):           #aggiungere eccezione se i non è compreso tra 0 e la dimensione della lista?
 
         if(i==0):                   #inserimento in testa
@@ -41,12 +42,13 @@ class MyList:
         elif (i>0 and i<self._size):   #inserimento all'interno della lista
             new = self.Node()  # creazione nodo
             new._data = x
-            node = self.Node           # scorro gli elementi della lista
-            position = 0
+            position = 0            # scorro gli elementi della lista
             while (position<i):
                 node = node._right
             new._right = node._right
             node._right = new
             new._left = node._right
+
+
     def __len__(self):
         return self._size
