@@ -43,6 +43,7 @@ class MyList:
             new = self.Node()  # creazione nodo
             new._data = x
             position = 0            # scorro gli elementi della lista
+            node = self._root
             while (position<i):
                 node = node._right
             new._right = node._right
@@ -52,3 +53,21 @@ class MyList:
 
     def __len__(self):
         return self._size
+
+
+    def __bool__(self):
+        return self._size>0
+
+
+    def __getitem__(self, j):
+        cnt = 0
+        if j<0: j=self._size
+        if j<0 or j>self._size:
+            raise IndexError()
+        current = self._root
+        while(current!=None):
+            if cnt==j:
+                return current
+            else:
+                cnt += 1
+                current = current._rigth
