@@ -1,4 +1,6 @@
-class MyList:
+from .doublelinkedlist import  DoubleLinkedList
+
+class MyList(DoubleLinkedList):
 
 
     class Node:
