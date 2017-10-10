@@ -90,8 +90,8 @@ class MyList():
 
     def __getitem__(self, j):
         cnt = 0
-        if j<0: j=self._size
-        if j<0 or j>self._size:
+        if j<0: j+=self._size
+        if j<0 or j>=self._size:
             raise IndexError()
         current = self._head._right if (not self._reverse) else self._head._left
         while(current!=None):
@@ -123,28 +123,29 @@ class MyList():
         self._head,self._tail = self._tail,self._head
         self._reverse = True if (not self._reverse) else False
 
-
+    def count(self,x):
+        count = 0
+        list = iter(self)
+        for element in list:
+           if(element._element is x):
+               count += 1
+        return count
 
 a = MyList()
 a.reverse()
 a.append(1)
 a.append(2)
-a.append(3)
-a.append(4)
+a.append(2)
+a.append(2)
 a.append(5)
 a.append(6)
 print(a)
 a.append(7)
 print(a)
 print(a)
-a.insert(1,'100')
+#a.insert(1,'100')
 #a.insert(2,'200')
 #a.insert(len(a)-1,'300')
 #a.insert(len(a)-3,'400')
-print(a)
-print(a[3]._element)
-current = iter(a)
-position = 0
-while(position<3):
-    print(next(current)._element)
-    position += 1
+
+print(a.count(2))
