@@ -1,6 +1,6 @@
-from .doublelinkedlist import  DoubleLinkedList
+#from .doublelinkedlist import DoubleLinkedList
 
-class MyList(DoubleLinkedList):
+class MyList():
 
 
     class Node:
@@ -46,7 +46,7 @@ class MyList(DoubleLinkedList):
         elif(i==self._size):        #inserimento in coda (append)
             self.append(x)
         elif (i>0 and i<self._size):   #inserimento all'interno della lista
-            new = self.Node(x,None,None)  # creazione nodo
+            """new = self.Node(x,None,None)  # creazione nodo
             position = 0            # scorro gli elementi della lista
             current = self._head._right if (not self._reverse) else self._head._left
             while (position<i-1):
@@ -56,6 +56,23 @@ class MyList(DoubleLinkedList):
                     current = current._left
                 position += 1
             if(not self._reverse):
+                new._right = current._right
+                new._left = current
+                current._right._left = new
+                current._right = new
+            else:
+                new._left = current._left
+                new._right = current
+                current._left._right = new
+                current._left = new"""
+            new = self.Node(x, None, None)
+            current = iter(self)
+            position = 0
+            while(position<i):
+                next(current)
+                position+=1
+
+            if (not self._reverse):
                 new._right = current._right
                 new._left = current
                 current._right._left = new
@@ -76,13 +93,13 @@ class MyList(DoubleLinkedList):
         if j<0: j=self._size
         if j<0 or j>self._size:
             raise IndexError()
-        current = self._head
+        current = self._head._right if (not self._reverse) else self._head._left
         while(current!=None):
             if cnt==j:
                 return current
             else:
                 cnt += 1
-                if self._fromLeft:
+                if not self._reverse:
                     current = current._right
                 else:
                     current = current._left
@@ -121,8 +138,13 @@ a.append(7)
 print(a)
 print(a)
 a.insert(1,'100')
-a.insert(2,'200')
-a.insert(len(a)-1,'300')
-a.insert(len(a)-3,'400')
-print(len(a))
+#a.insert(2,'200')
+#a.insert(len(a)-1,'300')
+#a.insert(len(a)-3,'400')
 print(a)
+print(a[3]._element)
+current = iter(a)
+position = 0
+while(position<3):
+    print(next(current)._element)
+    position += 1
