@@ -1,6 +1,9 @@
 from Progetto1.my_list import MyList
 
-a = MyList()
-a.append(1)
-print(a._head.element)
+dll = MyList()
+dll.append(1)
+dll.append(2)
+dll.append(3)
+dll.append(4)
+print(len(dll))
 

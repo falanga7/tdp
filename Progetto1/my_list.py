@@ -37,6 +37,25 @@ class MyList(DoubleLinkedList):
             self._tail.left = new
             self._tail = new
         self._size += 1
+
+    def __len__(self):
+        return self._size
+
+    def __getitem__(self, j):
+        cnt = 0
+        if j<0: j+=self._size
+        if j<0 or j>=self._size:
+            raise IndexError()
+        current = self._head._right if (not self._reverse) else self._head._left
+        while(current!=None):
+            if cnt==j:
+                return current
+            else:
+                cnt += 1
+                if not self._reverse:
+                    current = current._right
+                else:
+                    current = current._left
 '''
     ##Eccezione se i
     def insert(self,i,x):           #aggiungere eccezione se i non è compreso tra 0 e la dimensione della lista?
@@ -86,25 +105,10 @@ class MyList(DoubleLinkedList):
                 current._left = new
             self._size += 1
 
-    def __len__(self):
-        return self._size
+    
 
 
-    def __getitem__(self, j):
-        cnt = 0
-        if j<0: j+=self._size
-        if j<0 or j>=self._size:
-            raise IndexError()
-        current = self._head._right if (not self._reverse) else self._head._left
-        while(current!=None):
-            if cnt==j:
-                return current
-            else:
-                cnt += 1
-                if not self._reverse:
-                    current = current._right
-                else:
-                    current = current._left
+
 
     def __str__(self):
         toReturn = '<'
