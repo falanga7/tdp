@@ -1,25 +1,24 @@
 from .double_linked_list import DoubleLinkedList
 
-class MyList(DoubleLinkedList):
 
+class MyList(DoubleLinkedList):
 
     class _Node:
 
-        __slots__ = '_left','_element','_right'
+        __slots__ = '_left', '_element', '_right'
 
-        def __init__(self,element,left=None,right=None):
+        def __init__(self, element, left=None, right=None):
             self._left = left
             self._element = element
             self._right = right
 
-
     def __init__(self):
-        self._head = self._Node(None)           #nodo testa della lista
-        self._tail = self._Node(None)           #nodo coda della lista
+        self._head = self._Node(None)                                       # nodo testa della lista
+        self._tail = self._Node(None)                                       # nodo coda della lista
         self._head._right = self._tail
         self._tail._left = self._head
-        self._size = 0                                   #dimensione della lista
-        self._reverse = False                            #ordine di lettura default SX->DX
+        self._size = 0                                                      #dimensione della lista
+        self._reverse = False                                               #ordine di lettura default SX->DX
 
     def append(self,x):
 
