@@ -1,6 +1,6 @@
-#from .doublelinkedlist import DoubleLinkedList
+from .double_linked_list import DoubleLinkedList
 
-class MyList():
+class MyList(DoubleLinkedList):
 
 
     class _Node:
@@ -243,24 +243,3 @@ class MyList():
                 current = current._left
 
 
-a = MyList()
-a.reverse()
-a.append(1)
-a.append(2)
-a.append(2)
-a.append(2)
-a.append(5)
-a.append(6)
-print(a)
-a.append(7)
-print(a)
-print(a)
-a.insert(1,100)
-print(a)
-a.remove(100)
-b=a.copy()
-b.append(888)
-print(a)
-print(b)
-b.extend(a)
-print(b)
