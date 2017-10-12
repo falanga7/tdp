@@ -4,7 +4,7 @@ from .double_linked_list import DoubleLinkedList
 class MyList(DoubleLinkedList):
     """Implementazione di list di python, usando le DoubleLinkedList"""
 
-    class _Node:
+    class                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Node:
 
         __slots__ = 'element', 'left', 'right'
 
@@ -56,6 +56,13 @@ class MyList(DoubleLinkedList):
                     current = current._right
                 else:
                     current = current._left
+
+    def copia(self):
+        copia = MyList()
+        lista = iter(self)
+        for nodo in lista:
+            copia.append(nodo._element)
+        return copia
 '''
     ##Eccezione se i
     def insert(self,i,x):           #aggiungere eccezione se i non è compreso tra 0 e la dimensione della lista?
