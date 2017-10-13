@@ -17,12 +17,12 @@ class MyList(DoubleLinkedList):
         self._tail = self._Node(None)                                       # nodo coda della lista
         self._head._right = self._tail
         self._tail._left = self._head
-        self._size = 0                                                      #dimensione della lista
-        self._reverse = False                                               #ordine di lettura default SX->DX
+        self._size = 0                                                      # dimensione della lista
+        self._reverse = False                                               # ordine di lettura default SX->DX
 
     def append(self,x):
 
-        new = self._Node(x)                  #creazione nodo
+        new = self._Node(x)                                                 # creazione nodo
 
         if(not  self._reverse):
             new._right = self._tail
@@ -87,41 +87,73 @@ class MyList(DoubleLinkedList):
             position += 1
         return False
 
+    def __getitem__(self, k):
 
-    def __getitem__(self, j):
-        cnt = 0
-        if j<0: j+=self._size
-        if j<0 or j>=self._size:
-            raise IndexError()
-        current = self._head._right if (not self._reverse) else self._head._left
-        while(current!=self._tail):
-            if cnt==j:
-                return current._element
-            else:
-                cnt += 1
-                if not self._reverse:
-                    current = current._right
-                else:
-                    current = current._left
+        kabs=k if k >= 0 else -k
+        if kabs > self._size:
+            raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
-    def __setitem__(self, key, value):
-        cnt = 0
-        if key<0: key+=self._size
-        if key==self._size:
-            self.append(value)
-        if key<0 or key>=self._size:
-            raise IndexError()
-        current = self._head._right if (not self._reverse) else self._head._left
-        while(current!=self._tail):
-            if cnt==key:
-                current._element = value
-                return
-            else:
-                cnt += 1
-                if not self._reverse:
-                    current = current._right
-                else:
-                    current = current._left
+        if k >= 0:
+            current = self._head._right if not self._reverse else self._head._left
+            for kabs in range(kabs):
+                current= current.right if not self._reverse else current._left
+        else:
+            current= self._tail._left if not self._reverse else self._tail._right
+            for kabs in range(1, kabs):
+                current = current.right if not self._reverse else current._left
+
+        return current
+
+
+        # cnt = 0
+        # if j<0: j+=self._size
+        # if j<0 or j>=self._size:
+        #     raise IndexError()
+        # current = self._head._right if (not self._reverse) else self._head._left
+        # while(current!=self._tail):
+        #     if cnt==j:
+        #         return current._element
+        #     else:
+        #         cnt += 1
+        #         if not self._reverse:
+        #             current = current._right
+        #         else:
+        #             current = current._left
+
+    def __setitem__(self, k, v):
+
+        kabs = k if k >= 0 else -k
+        if kabs > self._size:
+            raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
+
+        if k >= 0:
+            current = self._head._right if not self._reverse else self._head._left
+            for kabs in range(kabs):
+                current = current.right if not self._reverse else current._left
+        else:
+            current = self._tail._left if not self._reverse else self._tail._right
+            for kabs in range(1, kabs):
+                current = current.right if not self._reverse else current._left
+
+        current._element = v
+
+        # cnt = 0
+        # if key<0: key+=self._size
+        # if key==self._size:
+        #     self.append(value)
+        # if key<0 or key>=self._size:
+        #     raise IndexError()
+        # current = self._head._right if (not self._reverse) else self._head._left
+        # while(current!=self._tail):
+        #     if cnt==key:
+        #         current._element = value
+        #         return
+        #     else:
+        #         cnt += 1
+        #         if not self._reverse:
+        #             current = current._right
+        #         else:
+        #             current = current._left
 
 
 
