@@ -36,14 +36,15 @@ from Progetto1.util import *
 # print(l_quattro)
 
 a = MyList()
-a.reverse()
 a.append(1)
 a.append(2)
-a.append(2)
-a.append(2)
+a.append(7)
+a.append(9)
 a.append(5)
 a.append(6)
 print(a)
+
+print(a[0])
 # a.append(7)
 # print(a)
 # print(a)

@@ -89,7 +89,7 @@ class MyList(DoubleLinkedList):
 
     def __getitem__(self, k):
 
-        kabs=k if k >= 0 else -k
+        kabs = k if k >= 0 else -k
         if kabs > self._size:
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
@@ -100,9 +100,9 @@ class MyList(DoubleLinkedList):
         else:
             current= self._tail._left if not self._reverse else self._tail._right
             for kabs in range(1, kabs):
-                current = current.right if not self._reverse else current._left
+                current = current._left if not self._reverse else current._right
 
-        return current
+        return current._element
 
 
         # cnt = 0
@@ -129,11 +129,11 @@ class MyList(DoubleLinkedList):
         if k >= 0:
             current = self._head._right if not self._reverse else self._head._left
             for kabs in range(kabs):
-                current = current.right if not self._reverse else current._left
+                current= current.right if not self._reverse else current._left
         else:
-            current = self._tail._left if not self._reverse else self._tail._right
+            current= self._tail._left if not self._reverse else self._tail._right
             for kabs in range(1, kabs):
-                current = current.right if not self._reverse else current._left
+                current = current._left if not self._reverse else current._right
 
         current._element = v
 
