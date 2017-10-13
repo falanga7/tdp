@@ -194,21 +194,32 @@ class MyList(DoubleLinkedList):
         #         else:
         #             current = current._left
 
-
-
     def __str__(self):
-        toReturn = '<'
-        current = self._head._right if (not self._reverse) else self._head._left
-        while current != self._tail:
-            toReturn += str(current._element)
-            if not self._reverse:
-                current = current._right
+
+        to_return = '<'
+        nodesIterator = self._nodes()
+        i = 0
+        while i != self._size:
+            current = next(nodesIterator)
+            if i == self._size-1:
+                to_return += str(current._element) + ">"
             else:
-                current = current._left
-            if current != self._tail:
-                toReturn += ',	'
-        toReturn += '>'
-        return toReturn
+                to_return += str(current._element) + ", "
+            i += 1
+
+        return to_return
+        # to_return = '<'
+        # current = self._head._right if (not self._reverse) else self._head._left
+        # while current != self._tail:
+        #     to_return += str(current._element)
+        #     if not self._reverse:
+        #         current = current._right
+        #     else:
+        #         current = current._left
+        #     if current != self._tail:
+        #         to_return += ',	'
+        # to_return += '>'
+        # return to_return
 
 
     def reverse(self):
@@ -258,7 +269,7 @@ class MyList(DoubleLinkedList):
         self._tail._left = self._head
         self._reverse = False
 
-    def remove(self,x):
+    def remove(self, x):
 
         i = self.index(x)
         self.__delitem__(i)
