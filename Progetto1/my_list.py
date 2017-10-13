@@ -94,13 +94,17 @@ class MyList(DoubleLinkedList):
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
         if k >= 0:
+            j = 0
             current = self._head._right if not self._reverse else self._head._left
-            for kabs in range(kabs):
-                current= current.right if not self._reverse else current._left
+            while j != kabs:
+                current = current._right if not self._reverse else current._left
+                j += 1
         else:
-            current= self._tail._left if not self._reverse else self._tail._right
-            for kabs in range(1, kabs):
+            j = 1
+            current = self._tail._left if not self._reverse else self._tail._right
+            while j != kabs:
                 current = current._left if not self._reverse else current._right
+                j += 1
 
         return current._element
 
@@ -127,15 +131,20 @@ class MyList(DoubleLinkedList):
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
         if k >= 0:
+            j = 0
             current = self._head._right if not self._reverse else self._head._left
-            for kabs in range(kabs):
-                current= current.right if not self._reverse else current._left
+            while j != kabs:
+                current = current._right if not self._reverse else current._left
+                j += 1
         else:
-            current= self._tail._left if not self._reverse else self._tail._right
-            for kabs in range(1, kabs):
+            j = 1
+            current = self._tail._left if not self._reverse else self._tail._right
+            while j != kabs:
                 current = current._left if not self._reverse else current._right
+                j += 1
 
         current._element = v
+
 
         # cnt = 0
         # if key<0: key+=self._size

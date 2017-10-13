@@ -44,7 +44,7 @@ a.append(5)
 a.append(6)
 print(a)
 
-print(a[0])
+print(a[2])
 # a.append(7)
 # print(a)
 # print(a)
