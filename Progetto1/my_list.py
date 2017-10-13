@@ -226,12 +226,13 @@ class MyList(DoubleLinkedList):
         self._head,self._tail = self._tail,self._head
         self._reverse = True if (not self._reverse) else False
 
-    def count(self,x):
+    def count(self, x):
         count = 0
-        list = iter(self)
-        for element in list:
-           if(element is x):
-               count += 1
+        list_iterator = iter(self)
+        for element in list_iterator:
+            if element is x:
+                count += 1
+
         return count
 
     def extend(self, iterable):
