@@ -53,9 +53,9 @@ class MyList(DoubleLinkedList):
         else:                                                             # inserimento all'interno della lista
             new = self._Node(x)
             position = 0
-            nodeIterator = self._nodes()
+            node_iterator = self._nodes()
             while position < i:
-                current = next(nodeIterator)
+                current = next(node_iterator)
                 position += 1
             if not self._reverse:
                 new._right = current._right
@@ -197,10 +197,10 @@ class MyList(DoubleLinkedList):
     def __str__(self):
 
         to_return = '<'
-        nodesIterator = self._nodes()
+        nodes_iterator = self._nodes()
         i = 0
         while i != self._size:
-            current = next(nodesIterator)
+            current = next(nodes_iterator)
             if i == self._size-1:
                 to_return += str(current._element) + ">"
             else:
