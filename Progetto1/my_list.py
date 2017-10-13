@@ -38,26 +38,26 @@ class MyList(DoubleLinkedList):
             new._right = prev
         self._size += 1
 
-    ##Eccezione se i
-    def insert(self,i,x):           #aggiungere eccezione se i non è compreso tra 0 e la dimensione della lista?
+    def insert(self, i, x):
 
-        if i < 0: i += self._size
-        if i < 0 or i >= self._size:
-            raise IndexError()
-        if(i==0):                   #inserimento in testa
+        i = i if i >= 0 else self._size + i
+        if i > self._size:
+            raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
+
+        if i == 0:                                                        # inserimento in testa
             self.reverse()
             self.append(x)
             self.reverse()
-        elif(i==self._size):        #inserimento in coda (append)
+        elif i == self._size:                                             # inserimento in coda
             self.append(x)
-        elif (0 < i < self._size):   #inserimento all'interno della lista
+        else:                                                             # inserimento all'interno della lista
             new = self._Node(x)
             position = 0
-            current = self._nodes()
-            while (position < i ):
-                current = next(current)
+            nodeIterator = self._nodes()
+            while position < i:
+                current = next(nodeIterator)
                 position += 1
-            if (not self._reverse):
+            if not self._reverse:
                 new._right = current._right
                 new._left = current
                 current._right._left = new
@@ -67,7 +67,37 @@ class MyList(DoubleLinkedList):
                 new._right = current
                 current._left._right = new
                 current._left = new
-            self._size += 1
+        self._size += 1
+
+
+
+        # if i < 0: i += self._size
+        # if i < 0 or i >= self._size:
+        #     raise IndexError()
+        # if(i==0):                   #inserimento in testa
+        #     self.reverse()
+        #     self.append(x)
+        #     self.reverse()
+        # elif(i==self._size):        #inserimento in coda (append)
+        #     self.append(x)
+        # elif (0 < i < self._size):   #inserimento all'interno della lista
+        #     new = self._Node(x)
+        #     position = 0
+        #     current = self._nodes()
+        #     while (position < i ):
+        #         current = next(current)
+        #         position += 1
+        #     if (not self._reverse):
+        #         new._right = current._right
+        #         new._left = current
+        #         current._right._left = new
+        #         current._right = new
+        #     else:
+        #         new._left = current._left
+        #         new._right = current
+        #         current._left._right = new
+        #         current._left = new
+        #     self._size += 1
 
     def __len__(self):
         return self._size
@@ -193,10 +223,10 @@ class MyList(DoubleLinkedList):
                count += 1
         return count
 
-    def extend(self,iterable):
+    def extend(self, iterable):
 
-        for i in iterable:
-            self.append(i)
+        for element in iterable:
+            self.append(element)
 
 
 
@@ -275,7 +305,7 @@ class MyList(DoubleLinkedList):
 
     def _nodes(self):
         current = self._head._right if (not self._reverse) else self._head._left
-        while(current!=self._tail):
+        while current != self._tail:
             yield current
             if not self._reverse:
                 current = current._right
