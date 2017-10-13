@@ -20,11 +20,11 @@ class MyList(DoubleLinkedList):
         self._size = 0                                                      # dimensione della lista
         self._reverse = False                                               # ordine di lettura default SX->DX
 
-    def append(self,x):
+    def append(self, x):
 
         new = self._Node(x)                                                 # creazione nodo
 
-        if(not  self._reverse):
+        if not self._reverse:
             new._right = self._tail
             prev = self._tail._left
             self._tail._left = new
