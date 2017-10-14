@@ -12,13 +12,23 @@ class MyList(DoubleLinkedList):
             self._element = element
             self._right = right
 
-    def __init__(self):
-        self._head = self._Node(None)                                       # nodo testa della lista
-        self._tail = self._Node(None)                                       # nodo coda della lista
+    def __init__(self, my_list=None):
+
+        self._head = self._Node(None)                                           # nodo testa della lista
+        self._tail = self._Node(None)                                           # nodo coda della lista
         self._head._right = self._tail
         self._tail._left = self._head
-        self._size = 0                                                      # dimensione della lista
-        self._reverse = False                                               # ordine di lettura default SX->DX
+        self._reverse = False                                                   # ordine di lettura default SX->DX
+        self._size = 0                                                          # dimensione della lista
+        if my_list is None:
+            return
+        else:
+            try:
+                object_iterator = iter(my_list)
+            except TypeError:
+                print(my_list, 'La sequenza passata non è iterabile o valida.')
+            for element in object_iterator:
+                self.append(element)
 
     def append(self, x):
 
