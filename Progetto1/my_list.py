@@ -318,6 +318,10 @@ class MyList(DoubleLinkedList):
         copia.extend(other)
         return copia
 
+    def __iadd__(self, other):
+        self.extend(other)
+        return self
+
     def __eq__(self, a, b):
 
         if a is not MyList:
