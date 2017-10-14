@@ -55,8 +55,14 @@ c = {'8','9','10'}
 # print(c)
 # print(a==a)
 # print(a.__contains__('f'))
-
-a += b
+print (a)
+print (b)
+b=a
+print (b)
+b += [100,200]
+print (b)
+b = b + [300,400]
+print (b)
 print(a)
 #print(a[2])
 #a.insert(3, 18)
