@@ -241,22 +241,13 @@ class MyList(DoubleLinkedList):
             self.append(element)
 
 
-
-
-    """def __contains__(self, item):
+    def __contains__(self, item):
         list = iter(self)
         for element in list:
            if(element is item):
                return True
-        return False"""
+        return False
 
-
-    """def remove(self,x):
-        list = iter(self)
-        for element in list:
-            if (element is item):
-                return True
-        return False"""
 
     def __delitem__(self, key):
         self._remove_item(key)
