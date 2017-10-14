@@ -36,14 +36,17 @@ from Progetto1.util import *
 # print(l_quattro)
 
 a = MyList()
-a.append(1)
+a.append(7)
 a.append(2)
 a.append(3)
 a.append(4)
 a.append(5)
 a.append(6)
-b = ['M','a']
-c = {'8','9','10'}
+print(a)
+a._insertion_sort()
+print(a)
+# b = ['M','a']
+# c = {'8','9','10'}
 # print(a)
 # print(b)
 # c = a + b
@@ -56,8 +59,8 @@ c = {'8','9','10'}
 # print(a==a)
 # print(a.__contains__('f'))
 
-a += b
-print(a)
+# a += b
+# print(a)
 #print(a[2])
 #a.insert(3, 18)
 #print(a)

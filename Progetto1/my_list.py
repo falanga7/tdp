@@ -119,7 +119,7 @@ class MyList(DoubleLinkedList):
     def __getitem__(self, k):
 
         kabs = k if k >= 0 else -k
-        if kabs > self._size:
+        if kabs > self._size - 1:
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
         if k >= 0:
@@ -156,7 +156,7 @@ class MyList(DoubleLinkedList):
     def __setitem__(self, k, v):
 
         kabs = k if k >= 0 else -k
-        if kabs > self._size:
+        if kabs > self._size - 1:
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
         if k >= 0:
@@ -398,3 +398,24 @@ class MyList(DoubleLinkedList):
                     return False
                 i += 1
         return True
+
+    def _insertion_sort(self):
+        ordered = MyList()
+        ordered.append(self[0])
+        i = 1
+        while i < len(self):
+            k = len(ordered) - 1
+            while True:
+                if self[i] > ordered[k]:
+                    ordered.insert(k + 1, self[i])
+                    break
+                elif self[i] == ordered[k]:
+                    ordered.insert(k + 1, self[i])
+                    break
+                elif self[i] < ordered[k]:
+                    k = k - 1
+                    if k < 0:
+                        ordered.insert(0, self[i])
+                        break
+            i += 1
+        return ordered
