@@ -196,18 +196,18 @@ class MyList(DoubleLinkedList):
 
     def __str__(self):
 
-        to_return = '<'
+        to_return = '['
         nodes_iterator = self._nodes()
         i = 0
         while i != self._size:
             current = next(nodes_iterator)
             if i == self._size-1:
-                to_return += str(current._element) + ">"
+                to_return += str(current._element)
             else:
                 to_return += str(current._element) + ", "
             i += 1
 
-        return to_return
+        return to_return + "]"
         # to_return = '<'
         # current = self._head._right if (not self._reverse) else self._head._left
         # while current != self._tail:
@@ -241,22 +241,13 @@ class MyList(DoubleLinkedList):
                 self.append(element)
 
 
-
-
-    """def __contains__(self, item):
+    def __contains__(self, item):
         list = iter(self)
         for element in list:
            if(element is item):
                return True
-        return False"""
+        return False
 
-
-    """def remove(self,x):
-        list = iter(self)
-        for element in list:
-            if (element is item):
-                return True
-        return False"""
 
     def __delitem__(self, key):
         self._remove_item(key)
@@ -265,9 +256,11 @@ class MyList(DoubleLinkedList):
 
         i = 0
         while(i < self._size):
-            self.__delitem__()
+            self.__delitem__(i)
+        self._head._left = None
         self._head._right = self._tail
         self._tail._left = self._head
+        self._tail._right = None
         self._reverse = False
 
     def remove(self, x):
@@ -276,7 +269,7 @@ class MyList(DoubleLinkedList):
         self.__delitem__(i)
 
     def clear(self):
-        del self
+        self.__del__()
 
     def pop(self,i=None):
         if i == None:
@@ -324,4 +317,16 @@ class MyList(DoubleLinkedList):
             else:
                 current = current._left
 
+    def __add__(self, other):
+        copia = self.copy()
+        copia.extend(other)
+        return copia
 
+    def __eq__(self, other):
+        if self._head == other:
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
