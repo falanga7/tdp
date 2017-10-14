@@ -43,13 +43,21 @@ a.append(4)
 a.append(5)
 a.append(6)
 b = ['M','a']
-c={'8','9','10'}
-print(a)
-print(b)
+c = {'8','9','10'}
+# print(a)
+# print(b)
+# c = a + b
+#
+#
+# a+=b
+# print(a)
+# print(b)
+# print(c)
+# print(a==a)
+# print(a.__contains__('f'))
 
-a+=b
+a += b
 print(a)
-print(b)
 #print(a[2])
 #a.insert(3, 18)
 #print(a)
