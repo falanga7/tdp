@@ -52,6 +52,17 @@ a.insert(2, 22)
 print(a)
 a.insert(-4, 999)
 print(a.count(1))
+
+a.extend("lol")
+
+print(a)
+
+a.extend("mario cantalupo")
+print(a)
+b = MyList()
+b.extend("asd")
+a.extend(b)
+print(a)
 # a.append(7)
 # print(a)
 # print(a)

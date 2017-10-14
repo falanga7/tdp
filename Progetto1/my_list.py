@@ -221,9 +221,8 @@ class MyList(DoubleLinkedList):
         # to_return += '>'
         # return to_return
 
-
     def reverse(self):
-        self._head,self._tail = self._tail,self._head
+        self._head, self._tail = self._tail, self._head
         self._reverse = True if (not self._reverse) else False
 
     def count(self, x):
@@ -238,7 +237,8 @@ class MyList(DoubleLinkedList):
     def extend(self, iterable):
 
         for element in iterable:
-            self.append(element)
+            if element is not None:
+                self.append(element)
 
 
 
