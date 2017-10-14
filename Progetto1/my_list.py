@@ -196,18 +196,18 @@ class MyList(DoubleLinkedList):
 
     def __str__(self):
 
-        to_return = '<'
+        to_return = '['
         nodes_iterator = self._nodes()
         i = 0
         while i != self._size:
             current = next(nodes_iterator)
             if i == self._size-1:
-                to_return += str(current._element) + ">"
+                to_return += str(current._element)
             else:
                 to_return += str(current._element) + ", "
             i += 1
 
-        return to_return
+        return to_return + "]"
         # to_return = '<'
         # current = self._head._right if (not self._reverse) else self._head._left
         # while current != self._tail:
@@ -257,8 +257,10 @@ class MyList(DoubleLinkedList):
         i = 0
         while(i < self._size):
             self.__delitem__(i)
+        self._head._left = None
         self._head._right = self._tail
         self._tail._left = self._head
+        self._tail._right = None
         self._reverse = False
 
     def remove(self, x):
@@ -267,7 +269,7 @@ class MyList(DoubleLinkedList):
         self.__delitem__(i)
 
     def clear(self):
-        del self
+        self.__del__()
 
     def pop(self,i=None):
         if i == None:
