@@ -116,6 +116,11 @@ class MyList(DoubleLinkedList):
 
         if end is None:
             end = self._size-1
+        elif start < 0 and end < 0:
+            start = self._size+start
+            end = self._size+end
+        elif not (start > 0 and end > 0):
+            raise ValueError("Il range inserito non è accettato.")
 
         position = 0
         nodes = self._nodes()
@@ -281,7 +286,9 @@ class MyList(DoubleLinkedList):
     def pop(self, i=None):
         if i is None:
             i = self._size-1
-        elif i >= self._size:
+        elif i < 0:
+            i = self._size + i
+        if i >= self._size:
             raise IndexError("L'indice specificato non è valido.")
         return self._remove_item(i, printable=True)
 
@@ -334,83 +341,78 @@ class MyList(DoubleLinkedList):
         self.extend(other)
         return self
 
-    def __eq__(self, a, b):
+    def __eq__(self, b):
 
-        if a is not MyList:
-            print(" a is not MyList class")
-        elif b is not MyList:
-            print(" b is not MyList class")
-        if a._size != b._size:
+        if self._size != b._size:
             return False
 
-        for nodeA, nodeB in a, b:
-            if nodeA._element != nodeB._element:
+        i = 0
+        for elementB in b:
+            if self[i] != elementB:
                 return False
+            i += 1
         return True
 
-        # if self._head == other:
-        #     return True
-        # else:
-        #     return False
 
-    def __ne__(self, a, b):
-        return not self.__eq__(a, b)
 
-    def __le__(self, a, b):
+    def __ne__(self, b):
+        return not self.__eq__(b)
+
+    def __le__(self, b):
 
         i = 0
-        min = a._size if a._size < b._size else b._size
-        if a._size == b._size:
-            for nodeA, nodeB in a, b:
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
                 if nodeA._element > nodeB._element:
                     return False
         else:
             while i != min:
-                if a[i] > b[i]:
+                if self[i] > b[i]:
                     return False
                 i += 1
         return True
 
-    def __lt__(self, a, b):
+    def __lt__(self,  b):
 
         i = 0
-        min = a._size if a._size < b._size else b._size
-        if a._size == b._size:
-            for nodeA, nodeB in a, b:
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
                 if nodeA._element >= nodeB._element:
                     return False
         else:
             while i != min:
-                if a[i] >= b[i]:
+                if self[i] >= b[i]:
                     return False
                 i += 1
         return True
 
-    def __ge__(self, a, b):
+    def __ge__(self, b):
 
         i = 0
-        min = a._size if a._size < b._size else b._size
-        if a._size == b._size:
-            for nodeA, nodeB in a, b:
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
                 if nodeA._element < nodeB._element:
                     return False
         else:
             while i != min:
-                if a[i] < b[i]:
+                if self[i] < b[i]:
                     return False
                 i += 1
         return True
 
-    def __gt__(self, a, b):
+    def __gt__(self, b):
         i = 0
-        min = a._size if a._size < b._size else b._size
-        if a._size == b._size:
-            for nodeA, nodeB in a, b:
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
                 if nodeA._element <= nodeB._element:
                     return False
         else:
             while i != min:
-                if a[i] <= b[i]:
+                if self[i] <= b[i]:
                     return False
                 i += 1
         return True
@@ -435,3 +437,6 @@ class MyList(DoubleLinkedList):
                         break
             i += 1
         return ordered
+
+    def sort(self, key=None, reverse=False):
+        pass

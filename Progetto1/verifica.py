@@ -52,6 +52,9 @@ print("Testo la insert in posizione 3: l_uno:", l_uno, "l_due: ", l_due)
 l_uno.insert(1, 50)
 l_due.insert(1, 50)
 print("Testo la insert in posizione 1: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.insert(-2, 99)
+l_due.insert(-2, 99)
+print("Testo la insert con indici negativi 1: l_uno:", l_uno, "l_due: ", l_due)
 # test remove(x)
 l_uno.remove(50)
 l_due.remove(50)
@@ -69,7 +72,6 @@ print("Estendo le due liste con una lista causale: l_uno:", l_uno, "l_due: ", l_
 l_uno.reverse()
 l_due.reverse()
 print("Ne stampo il reverse: l_uno", l_uno, "l_due: ", l_due)
-
 l_uno[0] = 3
 l_uno[2] = 3
 l_uno[4] = 3
@@ -80,6 +82,7 @@ print("Imposto tre 3 alle liste con l'operatore __setitem__: l_uno:  ", l_uno, "
 print("Stampo il numero di 3 nelle liste: l_uno: ", l_uno.count(3), "l_due: ", l_due.count(3))
 print("Stampo index(3): l_uno:", l_uno.index(3), "l_due: ", l_due.index(3))
 print("Stampo index(3,1,3): l_uno:", l_uno.index(3, 1, 3), "l_due: ", l_due.index(3, 1, 3))
+print("Stampo index(3.2, -4, -1) per indici negativi: l_uno:", l_uno.index(3.2, -4, -1), "l_due: ", l_uno.index(3.2, -4, -1))
 l_uno.pop()
 l_due.pop()
 print("Ne faccio il pop(): l_uno:", l_uno, "l_due: ", l_due)
@@ -89,78 +92,42 @@ print("Faccio il pop in posizione 0: l_uno:", l_uno, "l_due: ", l_due)
 l_uno.pop(2)
 l_due.pop(2)
 print("Faccio il pop in posizione 2: l_uno:", l_uno, "l_due: ", l_due)
-# l_uno.insert(3, 22)
-# l_due.insert(3, 22)
-# print("Testo la insert in posizione 3: l_uno:", l_uno, "l_due: ", l_due)
-# l_uno.insert(1, 50)
-# l_due.insert(1, 50)
+l_uno.pop(-2)
+l_due.pop(-2)
+print("Faccio il pop in posizione -2: l_uno:", l_uno, "l_due: ", l_due)
+# test di copy()
+l_uno.insert(0, rl)
+l_due.insert(0, rl)
+l_tre = l_uno.copy()
+l_quattro = l_due.copy()
+print("Creo due copie di l_uno e l_due: l_tre dopo aver inserito una "
+      "lista in posizione 0:\n l_tre: ", l_tre, "l_quattro: ", l_quattro)
+l_tre[2] = 44
+l_tre[0][1] = 33
+l_quattro[2] = 44
+l_quattro[0][1] = 33
 
+print("Modifico l_tre[2]e l_tre[0][1] anche su l_quattro e"
+      " stampo le sequenze: \n l_uno:", l_uno, "l_due: ", l_due, "\nl_tre:", l_tre, "l_quattro", l_quattro)
 
+# test di  len, e bool
 
+print("Restituisco la lungezza di l_uno:", len(l_uno), "l_due: ", len(l_due))
+l_tre.clear()
+print("Restituisco bool di l_uno, l_due e l_tre(dopo aver fatto il clear()): \n"
+      " l_uno:", bool(l_uno), "l_due: ", bool(l_due), "l_tre: ", bool(l_tre))
+# test di __add__ e __iadd__
+l_tre, l_quattro = l_uno, l_due
+l_tre += [10, 23]
+l_quattro += [10, 23]
+print("Faccio una copia di l_uno e l_due in l_tre e l_quattro e poi"
+      "l_tre += [10,23] = l_quattro: \n l_uno:", l_uno, "l_due: ", l_due, "\nl_tre:", l_tre, "l_quattro", l_quattro)
+l_tre = l_tre + [11, 24]
+l_quattro = l_quattro + [11, 24]
 
+print("Ora faccio l_tre = l_tre + [11, 24] = l_quattro "
+      "e stampo il risultato: \n l_uno:", l_uno, "l_due: ", l_due, "\nl_tre:", l_tre, "l_quattro", l_quattro)
 
+# test di __le__ , __lt__ , __eq__ , ___ne__, __ge__, __gt__
 
-
-# # test di extend
-# l_tre = MyList()
-# l_tre.append(3)
-# l_tre.append(None)
-# l_tre.append("g")
-# print(l_tre)
-# l_uno.extend(l_tre)
-# l_due.extend(l_tre)
-
-#
-# print(l_tre)
-# l_quattro = l_tre.copia()
-# l_quattro.append(1000)
-# print(l_tre)
-# print(l_quattro)
-#
-# a = MyList()
-# a.append(7)
-# a.append(2)
-# a.append(3)
-# a.append(4)
-# a.append(5)
-# a.append(6)
-# print(a)
-# a._insertion_sort()
-# print(a)
-# b = ['M','a']
-# c = {'8','9','10'}
-# print(a)
-# print(b)
-# c = a + b
-#
-#
-# a+=b
-# print(a)
-# print(b)
-# print(c)
-# print(a==a)
-# print(a.__contains__('f'))
-
-# a += b
-# print(a)
-#print(a[2])
-#a.insert(3, 18)
-#print(a)
-#a.reverse()
-#a.insert(2, 22)
-#print(a)
-#a.insert(-4, 999)
-#print(a.count(1))
-# a.append(7)
-# print(a)
-# print(a)
-# a.insert(1,100)
-# print(a)
-# a.remove(100)
-# b=a.copy()
-# b.append(888)
-# print(a)
-# print(b)
-# b.extend(a)
-# print(b)
-
+print("Stampo l_uno == l_due: ", l_uno == l_due)
