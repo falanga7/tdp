@@ -265,7 +265,7 @@ class MyList(DoubleLinkedList):
 
         i = 0
         while(i < self._size):
-            self.__delitem__()
+            self.__delitem__(i)
         self._head._right = self._tail
         self._tail._left = self._head
         self._reverse = False
@@ -324,4 +324,16 @@ class MyList(DoubleLinkedList):
             else:
                 current = current._left
 
+    def __add__(self, other):
+        copia = self.copy()
+        copia.extend(other)
+        return copia
 
+    def __eq__(self, other):
+        if self._head == other:
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
