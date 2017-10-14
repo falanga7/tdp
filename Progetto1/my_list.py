@@ -102,20 +102,19 @@ class MyList(DoubleLinkedList):
     def __len__(self):
         return self._size
 
-
-    def index(self,x,start=0,end=None):
+    def index(self, x, start=0, end=None):
 
         if end is None:
             end = self._size-1
 
-        position = 0
+        position = start
         nodes = self._nodes()
         for current in nodes:
-            if(position>=start and position<=end):
-                if (current._element is x):
+            if start <= position <= end:
+                if current._element is x:
                     return position
             position += 1
-        return False
+        raise ValueError("L'elemento cercato non è stato trovato.")
 
     def __getitem__(self, k):
 
@@ -248,14 +247,13 @@ class MyList(DoubleLinkedList):
                return True
         return False
 
-
-    def __delitem__(self, key):
-        self._remove_item(key)
+    def __delitem__(self, k):
+        self._remove_item(k)
 
     def __del__(self):
 
         i = 0
-        while(i < self._size):
+        while i < self._size:
             self.__delitem__(i)
         self._head._left = None
         self._head._right = self._tail
@@ -271,18 +269,18 @@ class MyList(DoubleLinkedList):
     def clear(self):
         self.__del__()
 
-    def pop(self,i=None):
-        if i == None:
+    def pop(self, i=None):
+        if i is None:
             i = self._size-1
-        return self._remove_item(i,printable=True)
+        return self._remove_item(i, printable=True)
 
-    def _remove_item(self,key,printable=False):
+    def _remove_item(self, key, printable=False):
         position = 0
         nodes = self._nodes()
         current = next(nodes)
         while current != self._tail:
-            if (position is key):
-                if (not self._reverse):
+            if position is key:
+                if not self._reverse:
                     current._left._right = current._right
                     current._right._left = current._left
                 else:
@@ -307,7 +305,6 @@ class MyList(DoubleLinkedList):
             copia.append(current._element)
         return copia
 
-
     def _nodes(self):
         current = self._head._right if (not self._reverse) else self._head._left
         while current != self._tail:
@@ -322,11 +319,24 @@ class MyList(DoubleLinkedList):
         copia.extend(other)
         return copia
 
-    def __eq__(self, other):
-        if self._head == other:
-            return True
-        else:
+    def __eq__(self, a, b):
+
+        if a is not MyList:
+            print(" a is not MyList class")
+        elif b is not MyList:
+            print(" b is not MyList class")
+        if a._size != b._size:
             return False
+
+        for nodeA, nodeB in a, b:
+            if a._element != b._element:
+                return False
+        return True
+
+        # if self._head == other:
+        #     return True
+        # else:
+        #     return False
 
     def __ne__(self, other):
         return not self.__eq__(other)
