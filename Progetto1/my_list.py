@@ -77,7 +77,7 @@ class MyList(DoubleLinkedList):
                 new._right = current
                 current._left._right = new
                 current._left = new
-        self._size += 1
+            self._size += 1
 
 
 
@@ -117,11 +117,11 @@ class MyList(DoubleLinkedList):
         if end is None:
             end = self._size-1
 
-        position = start
+        position = 0
         nodes = self._nodes()
         for current in nodes:
             if start <= position <= end:
-                if current._element is x:
+                if current._element == x:
                     return position
             position += 1
         raise ValueError("L'elemento cercato non è stato trovato.")
@@ -281,6 +281,8 @@ class MyList(DoubleLinkedList):
     def pop(self, i=None):
         if i is None:
             i = self._size-1
+        elif i >= self._size:
+            raise IndexError("L'indice specificato non è valido.")
         return self._remove_item(i, printable=True)
 
     def _remove_item(self, key, printable=False):

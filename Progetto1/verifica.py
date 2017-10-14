@@ -45,8 +45,60 @@ l_due = MyList(l_uno)
 print("Ridefinisco l_uno:", l_uno, "e l_due:", l_due)
 l_uno.insert(0, "bc")
 l_due.insert(0, "bc")
-print(l_uno)
 print("Testo la insert in posizione 0: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.insert(3, 22)
+l_due.insert(3, 22)
+print("Testo la insert in posizione 3: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.insert(1, 50)
+l_due.insert(1, 50)
+print("Testo la insert in posizione 1: l_uno:", l_uno, "l_due: ", l_due)
+# test remove(x)
+l_uno.remove(50)
+l_due.remove(50)
+print("Testo la rimozione di 50 : l_uno:", l_uno, "l_due: ", l_due)
+l_uno.remove("bc")
+l_due.remove("bc")
+print("Testo la rimozione di bc: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.remove(22)
+l_due.remove(22)
+print("Testo la rimozione di 22: l_uno:", l_uno, "l_due: ", l_due)
+# test di pop([i]) ed extend(iterable), count(x), reverse(), __setitem__,  index(x[, start[, end]])
+l_uno.extend(rl)
+l_due.extend(rl)
+print("Estendo le due liste con una lista causale: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.reverse()
+l_due.reverse()
+print("Ne stampo il reverse: l_uno", l_uno, "l_due: ", l_due)
+
+l_uno[0] = 3
+l_uno[2] = 3
+l_uno[4] = 3
+l_due[0] = 3
+l_due[2] = 3
+l_due[4] = 3
+print("Imposto tre 3 alle liste con l'operatore __setitem__: l_uno:  ", l_uno, "l_due: ", l_due)
+print("Stampo il numero di 3 nelle liste: l_uno: ", l_uno.count(3), "l_due: ", l_due.count(3))
+print("Stampo index(3): l_uno:", l_uno.index(3), "l_due: ", l_due.index(3))
+print("Stampo index(3,1,3): l_uno:", l_uno.index(3, 1, 3), "l_due: ", l_due.index(3, 1, 3))
+l_uno.pop()
+l_due.pop()
+print("Ne faccio il pop(): l_uno:", l_uno, "l_due: ", l_due)
+l_uno.pop(0)
+l_due.pop(0)
+print("Faccio il pop in posizione 0: l_uno:", l_uno, "l_due: ", l_due)
+l_uno.pop(2)
+l_due.pop(2)
+print("Faccio il pop in posizione 2: l_uno:", l_uno, "l_due: ", l_due)
+# l_uno.insert(3, 22)
+# l_due.insert(3, 22)
+# print("Testo la insert in posizione 3: l_uno:", l_uno, "l_due: ", l_due)
+# l_uno.insert(1, 50)
+# l_due.insert(1, 50)
+
+
+
+
+
 
 
 # # test di extend
