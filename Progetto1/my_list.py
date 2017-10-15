@@ -445,24 +445,20 @@ class MyList(DoubleLinkedList):
 
     #funzione 3 punto iterativa. Bozza. Rivedere output
     def returnSuffixIter(self):
-        self.reverse()
-
-
-        j = 0
+        j = 1
+        to_return_string = '[]'
+        to_return = MyList()
+        i = 0
+        current = self._tail._left if (not self._reverse) else self._tail._right
 
         while j <= self._size:
-            to_return = '['
-            nodes_iterator = self._nodes()
-            i = 0
             while i != j:
-                current = next(nodes_iterator)
-                if i == j - 1:
-                    to_return += str(current._element)
+                to_return.insert(0,current._element)
+                if not self._reverse:
+                    current = current._left
                 else:
-                    to_return += str(current._element) + ", "
-                i += 1
-            to_return += ']'
-            print (to_return)
+                    current = current._right
+                i+=1
             j += 1
-
-        self.reverse()
+            to_return_string += ',' + str(to_return)
+        print (to_return_string)

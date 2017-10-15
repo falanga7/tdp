@@ -134,4 +134,5 @@ print("Stampo l_uno == l_due: ", l_uno == l_due)
 
 l_test = MyList()
 l_test.extend("MarioCantalupo")
+print (l_test)
 l_test.returnSuffixIter()
