@@ -442,9 +442,7 @@ class MyList(DoubleLinkedList):
         pass
 
 
-
-    #funzione 3 punto iterativa. Bozza. Rivedere output
-    def returnSuffixIter(self):
+    def stampaSuffissiIterativa(self):
         j = 1
         to_return_string = '[]'
         to_return = MyList()

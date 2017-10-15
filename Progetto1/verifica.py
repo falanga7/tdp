@@ -132,7 +132,17 @@ print("Ora faccio l_tre = l_tre + [11, 24] = l_quattro "
 
 print("Stampo l_uno == l_due: ", l_uno == l_due)
 
-l_test = MyList()
-l_test.extend("MarioCantalupo")
-print (l_test)
-l_test.returnSuffixIter()
+
+print("Testo la funzione stampa suffissi (iterativa) sulla 4 liste create precedentemente")
+print("l_uno:", l_uno)
+print ("Suffissi list_uno")
+l_uno.stampaSuffissiIterativa()
+print("l_due:", l_due)
+print ("Suffissi list_due")
+l_due.stampaSuffissiIterativa()
+print("l_tre:", l_tre)
+print ("Suffissi list_tre")
+l_tre.stampaSuffissiIterativa()
+print("l_quattro:", l_quattro)
+print ("Suffissi list_quattro")
+l_quattro.stampaSuffissiIterativa()
