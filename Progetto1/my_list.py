@@ -440,3 +440,29 @@ class MyList(DoubleLinkedList):
 
     def sort(self, key=None, reverse=False):
         pass
+
+
+
+    #funzione 3 punto iterativa. Bozza. Rivedere output
+    def returnSuffixIter(self):
+        self.reverse()
+
+
+        j = 0
+
+        while j <= self._size:
+            to_return = '['
+            nodes_iterator = self._nodes()
+            i = 0
+            while i != j:
+                current = next(nodes_iterator)
+                if i == j - 1:
+                    to_return += str(current._element)
+                else:
+                    to_return += str(current._element) + ", "
+                i += 1
+            to_return += ']'
+            print (to_return)
+            j += 1
+
+        self.reverse()

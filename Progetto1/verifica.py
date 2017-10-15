@@ -131,3 +131,7 @@ print("Ora faccio l_tre = l_tre + [11, 24] = l_quattro "
 # test di __le__ , __lt__ , __eq__ , ___ne__, __ge__, __gt__
 
 print("Stampo l_uno == l_due: ", l_uno == l_due)
+
+l_test = MyList()
+l_test.extend("MarioCantalupo")
+l_test.returnSuffixIter()
