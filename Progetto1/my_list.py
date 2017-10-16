@@ -133,9 +133,16 @@ class MyList(DoubleLinkedList):
 
     def __getitem__(self, k):
 
-        if isinstance(k, slice):
-            indices = k.indices(len(self))
-            return MyList([self.__getitem__(i) for i in range(*indices)])
+        if type(k) is slice:
+            step = k.step if k.step is not None else 1
+            if (step < 0):
+                start = k.start if k.start is not None else len(self)
+                stop = k.stop if k.stop is not None else -1
+            else:
+                start = k.start if k.start is not None else 0
+                stop = k.stop if k.stop is not None else len(self)
+
+            return MyList(self.__getitem__(i) for i in range(start, stop, step))
 
         kabs = k if k >= 0 else -k
         if kabs > self._size - 1:
@@ -174,14 +181,25 @@ class MyList(DoubleLinkedList):
 
     def __setitem__(self, k, v):
 
-        if isinstance(k, slice):
-            indices = k.indices(len(self)+1)# +1 per consentire eventuale append
-            return MyList([self.__setitem__(i,v) for i in range(*indices)])
+        if type(k) is slice:
+            if(k.start == self.__len__() and k.stop is None and k.step is None):
+                self.extend(v)
+                return
+            
+            step = k.step if k.step is not None else 1
+            if (step < 0):
+                start = k.start if k.start is not None else len(self)
+                stop = k.stop if k.stop is not None else -1
+            else:
+                start = k.start if k.start is not None else 0
+                stop = k.stop if k.stop is not None else len(self)
 
+            for i in range(start, stop, step):
+                self.__setitem__(i, v)
+            return
         kabs = k if k >= 0 else -k
-        if kabs == self._size:
-            self.append(v)
-        elif kabs > self._size :
+
+        if kabs >= self._size :
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
 

@@ -147,11 +147,16 @@ print("l_quattro:", l_quattro)
 print ("Suffissi list_quattro")
 print(l_quattro.stampaSuffissiIterativa())
 
-l_test = MyList("MarioCantalupo")
+l_test = MyList("012345")
 print ("l_test = ",l_test)
 print ("Test iterativo")
 print(l_test.stampaSuffissiIterativa())
 #print ("Test ricorsivo")
 #print(l_test.stampaSuffissiRicorsiva())
-l_test[len(l_test):]=111
+#l_test[::1]='ok'
+print (l_test[1:4:1])
+l_test[len(l_test):]= ['ok']
+l_test[len(l_test):]=[1,2,3]
+print (l_test)
+l_test.reverse()
 print (l_test)
