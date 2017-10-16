@@ -133,6 +133,10 @@ class MyList(DoubleLinkedList):
 
     def __getitem__(self, k):
 
+        if isinstance(k, slice):
+            indices = k.indices(len(self))
+            return MyList([self.__getitem__(i) for i in range(*indices)])
+
         kabs = k if k >= 0 else -k
         if kabs > self._size - 1:
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
@@ -170,9 +174,16 @@ class MyList(DoubleLinkedList):
 
     def __setitem__(self, k, v):
 
+        if isinstance(k, slice):
+            indices = k.indices(len(self)+1)# +1 per consentire eventuale append
+            return MyList([self.__setitem__(i,v) for i in range(*indices)])
+
         kabs = k if k >= 0 else -k
-        if kabs > self._size - 1:
+        if kabs == self._size:
+            self.append(v)
+        elif kabs > self._size :
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
+
 
         if k >= 0:
             j = 0
@@ -441,7 +452,6 @@ class MyList(DoubleLinkedList):
     def sort(self, key=None, reverse=False):
         pass
 
-
     def stampaSuffissiIterativa(self):
         j = 1
         to_return_string = '[]'
@@ -459,4 +469,17 @@ class MyList(DoubleLinkedList):
                 i+=1
             j += 1
             to_return_string += ',' + str(to_return)
-        print (to_return_string)
+        return to_return_string
+
+    """def stampaSuffissiRicorsiva(self):
+
+            if self._size == 0:
+                return str(self)
+            else:
+                self.pop(0)
+                return str(self) + ',' + self.stampaSuffissiRicorsiva()"""
+
+
+
+
+
