@@ -185,7 +185,7 @@ class MyList(DoubleLinkedList):
             if(k.start == self.__len__() and k.stop is None and k.step is None):
                 self.extend(v)
                 return
-            
+
             step = k.step if k.step is not None else 1
             if (step < 0):
                 start = k.start if k.start is not None else len(self)
@@ -468,15 +468,15 @@ class MyList(DoubleLinkedList):
         return ordered
 
     def sort(self, key=None, reverse=False):
-        pass
+        return self._insertion_sort()
 
     def stampaSuffissiIterativa(self):
         j = 1
-        to_return_string = '[]'
         to_return = MyList()
+        my_list = MyList()
+        my_list.append(MyList())
         i = 0
         current = self._tail._left if (not self._reverse) else self._tail._right
-
         while j <= self._size:
             while i != j:
                 to_return.insert(0,current._element)
@@ -486,18 +486,17 @@ class MyList(DoubleLinkedList):
                     current = current._right
                 i+=1
             j += 1
-            to_return_string += ',' + str(to_return)
-        return to_return_string
+            my_list.append(to_return.copy())
+        return my_list
 
-    """def stampaSuffissiRicorsiva(self):
+    def stampaSuffissiRicorsiva(self,lista,output=None):
 
-            if self._size == 0:
-                return str(self)
-            else:
-                self.pop(0)
-                return str(self) + ',' + self.stampaSuffissiRicorsiva()"""
+        output = MyList()
 
+        if(lista._size == 0):
+            output.append(MyList())
+            return output
 
-
-
-
+        else:
+            output.append(lista[0:lista._size])
+            return self.stampaSuffissiRicorsiva(lista[0+output._size:lista._size]) + output
