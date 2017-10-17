@@ -51,14 +51,14 @@ class MyList(DoubleLinkedList):
     def insert(self, i, x):
 
         i = i if i >= 0 else self._size + i
-        if i > self._size:
-            raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
+        #if i > self._size:
+            #raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
         if i == 0:                                                        # inserimento in testa
             self.reverse()
             self.append(x)
             self.reverse()
-        elif i == self._size:                                             # inserimento in coda
+        elif i >= self._size:                                             # inserimento in coda
             self.append(x)
         else:                                                             # inserimento all'interno della lista
             new = self._Node(x)
@@ -470,17 +470,19 @@ class MyList(DoubleLinkedList):
     def sort(self, key=None, reverse=False):
         return self._insertion_sort()
 
-    def stampaSuffissiIterativa(self):
+    def stampaSuffissiIterativa(self,lista):
         j = 1
+
         to_return = MyList()
         my_list = MyList()
         my_list.append(MyList())
+
         i = 0
-        current = self._tail._left if (not self._reverse) else self._tail._right
-        while j <= self._size:
+        current = lista._tail._left if (not lista._reverse) else lista._tail._right
+        while j <= lista._size:
             while i != j:
                 to_return.insert(0,current._element)
-                if not self._reverse:
+                if not lista._reverse:
                     current = current._left
                 else:
                     current = current._right
@@ -489,7 +491,7 @@ class MyList(DoubleLinkedList):
             my_list.append(to_return.copy())
         return my_list
 
-    def stampaSuffissiRicorsiva(self,lista,output=None):
+    def stampaSuffissiRicorsiva(self,lista):
 
         output = MyList()
 
