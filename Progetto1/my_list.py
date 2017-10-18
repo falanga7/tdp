@@ -58,6 +58,20 @@ class MyList(DoubleLinkedList):
             self.reverse()
             self.append(x)
             self.reverse()
+            """ (DA PROVARE)
+            new = self._Node(x)
+            if not self._reverse:
+                self._head.right.left = new
+                new._right = self._head.right
+                new._left = self._head
+                self._head._right = new
+            else:
+                self._head.left.right = new
+                new._left = self._head.left
+                new._right = self._head
+                self._head._left = new
+            self._size += 1
+            """
         elif i >= self._size:                                             # inserimento in coda
             self.append(x)
         else:                                                             # inserimento all'interno della lista
