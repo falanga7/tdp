@@ -54,30 +54,13 @@ class MyList(DoubleLinkedList):
         #if i > self._size:
             #raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
-        if i == 0:                                                        # inserimento in testa
-            self.reverse()
-            self.append(x)
-            self.reverse()
-            """ (DA PROVARE)
-            new = self._Node(x)
-            if not self._reverse:
-                self._head.right.left = new
-                new._right = self._head.right
-                new._left = self._head
-                self._head._right = new
-            else:
-                self._head.left.right = new
-                new._left = self._head.left
-                new._right = self._head
-                self._head._left = new
-            self._size += 1
-            """
-        elif i >= self._size:                                             # inserimento in coda
+        if i >= self._size:                                             # inserimento in coda
             self.append(x)
         else:                                                             # inserimento all'interno della lista
             new = self._Node(x)
             position = 0
             node_iterator = self._nodes()
+            current = self._head
             while position < i:
                 current = next(node_iterator)
                 position += 1
