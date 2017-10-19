@@ -1,11 +1,13 @@
 from Progetto1.my_list import *
 
-def stampaSuffissiIterativa(lista):
+
+def ssi(lista):
+    """ Funzione che stampa i suffissi implementata in modo iterativo."""
     j = 1
 
     to_return = MyList()
     my_list = MyList()
-    my_list.append(MyList())
+    my_list.append(to_return.copy())
 
     i = 0
     current = lista._tail._left if (not lista._reverse) else lista._tail._right
@@ -22,13 +24,14 @@ def stampaSuffissiIterativa(lista):
     return my_list
 
 
-def stampaSuffissiRicorsiva(lista):
+def ssr(lista):
+    """ Funzione che stampa i suffissi implementata in modo ricorsivo."""
     output = MyList()
 
-    if (lista._size == 0):
+    if lista._size == 0:
         output.append(MyList())
         return output
 
     else:
         output.append(lista[0:lista._size])
-        return stampaSuffissiRicorsiva(lista[0 + output._size:lista._size]) + output
+        return ssr(lista[0 + output._size:lista._size]) + output
