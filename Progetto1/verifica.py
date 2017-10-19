@@ -164,3 +164,11 @@ print (l_test)
 lista = list((100,200,123))
 lista.sort()#la lista deve essere ordinata sul posto
 print(lista)
+
+m1=MyList()
+m2=MyList()
+m1.extend([10,2,2])
+m2.extend([10,3])
+print (m1)
+print (m2)
+print (m1>=m2)

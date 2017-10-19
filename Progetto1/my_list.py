@@ -208,30 +208,30 @@ class MyList(DoubleLinkedList):
 
         i = 0
         min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element > nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] > b[i]:
-                    return False
-                i += 1
+        while i != min:
+            if self[i] < b[i]:
+                return True
+            elif self[i] > b[i]:
+                return False
+            i += 1
+        if self._size < b._size:
+            return False
+
         return True
 
     def __lt__(self,  b):
 
         i = 0
         min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element >= nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] >= b[i]:
-                    return False
-                i += 1
+        while i != min:
+            if self[i] < b[i]:
+                return True
+            elif self[i] > b[i]:
+                return False
+            i += 1
+        if self._size <= b._size:
+            return False
+
         return True
 
     def __eq__(self, b):
@@ -248,29 +248,29 @@ class MyList(DoubleLinkedList):
 
         i = 0
         min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element < nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] < b[i]:
-                    return False
-                i += 1
+        while i != min:
+            if self[i] > b[i]:
+                return True
+            elif self[i] < b[i]:
+                return False
+            i += 1
+        if self._size < b._size:
+            return False
+
         return True
 
     def __gt__(self, b):
         i = 0
         min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element <= nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] <= b[i]:
-                    return False
-                i += 1
+        while i != min:
+            if self[i] > b[i]:
+                return True
+            elif self[i] < b[i]:
+                return False
+            i += 1
+        if self._size <= b._size:
+            return False
+
         return True
 
 
