@@ -165,7 +165,11 @@ class MyList(DoubleLinkedList):
 
 
     def sort(self, key=None, reverse=False):
-        return self._insertion_sort()
+
+        self._insertion_sort(key)
+
+        if reverse:
+            self.reverse()
 
 
     def reverse(self):
@@ -475,24 +479,31 @@ class MyList(DoubleLinkedList):
                 current = current._left
 
 
-    def _insertion_sort(self):
+    def _insertion_sort(self,key = None):
+
         ordered = MyList()
         ordered.append(self[0])
         i = 1
         while i < len(self):
             k = len(ordered) - 1
             while True:
-                if self[i] > ordered[k]:
+                if key != None:
+                    c_list = key(self[i])
+                    o_list = key(ordered[k])
+                else:
+                    c_list = self[i]
+                    o_list = ordered[k]
+                if c_list > o_list:
                     ordered.insert(k + 1, self[i])
                     break
-                elif self[i] == ordered[k]:
+                elif c_list == o_list:
                     ordered.insert(k + 1, self[i])
                     break
-                elif self[i] < ordered[k]:
+                elif c_list < o_list:
                     k = k - 1
                     if k < 0:
                         ordered.insert(0, self[i])
                         break
             i += 1
-        return ordered
+        self.__init__(ordered)
 
