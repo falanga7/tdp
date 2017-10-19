@@ -1,5 +1,6 @@
 from Progetto1.my_list import MyList
 from Progetto1.util import *
+from Progetto1.suffix import *
 
 
 rl = randList(1, 10, 3)
@@ -136,16 +137,16 @@ print("Stampo l_uno == l_due: ", l_uno == l_due)
 print("Testo la funzione stampa suffissi (iterativa) sulla 4 liste create precedentemente")
 print("l_uno:", l_uno)
 print ("Suffissi list_uno")
-print(l_uno.stampaSuffissiIterativa(l_uno))
+print(stampaSuffissiIterativa(l_uno))
 print("l_due:", l_due)
 print ("Suffissi list_due")
-print(l_due.stampaSuffissiIterativa(l_due))
+print(stampaSuffissiIterativa(l_due))
 print("l_tre:", l_tre)
 print ("Suffissi list_tre")
-print(l_tre.stampaSuffissiIterativa(l_tre))
+print(stampaSuffissiIterativa(l_tre))
 print("l_quattro:", l_quattro)
 print ("Suffissi list_quattro")
-print(l_quattro.stampaSuffissiIterativa(l_quattro))
+print(stampaSuffissiIterativa(l_quattro))
 
 l_test = MyList()
 l_test.extend((123,300))
@@ -153,9 +154,9 @@ l_test.reverse()
 print ("l_test = ",l_test)
 
 print ("Test iterativo")
-print(l_test.stampaSuffissiIterativa(l_test))
+print(stampaSuffissiIterativa(l_test))
 print ("Test Ricorsivo")
-print(l_test.stampaSuffissiRicorsiva(l_test))
+print(stampaSuffissiRicorsiva(l_test))
 print("Lista Test")
 l_test.insert(100,100)
 l_test.sort()
