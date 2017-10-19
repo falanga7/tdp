@@ -30,6 +30,7 @@ class MyList(DoubleLinkedList):
             for element in object_iterator:
                 self.append(element)
 
+
     def append(self, x):
 
         new = self._Node(x)                                                 # creazione nodo
@@ -47,6 +48,7 @@ class MyList(DoubleLinkedList):
             prev._left = new
             new._right = prev
         self._size += 1
+
 
     def insert(self, i, x):
 
@@ -77,45 +79,68 @@ class MyList(DoubleLinkedList):
             self._size += 1
 
 
+            # if i < 0: i += self._size
 
-        # if i < 0: i += self._size
-        # if i < 0 or i >= self._size:
-        #     raise IndexError()
-        # if(i==0):                   #inserimento in testa
-        #     self.reverse()
-        #     self.append(x)
-        #     self.reverse()
-        # elif(i==self._size):        #inserimento in coda (append)
-        #     self.append(x)
-        # elif (0 < i < self._size):   #inserimento all'interno della lista
-        #     new = self._Node(x)
-        #     position = 0
-        #     current = self._nodes()
-        #     while (position < i ):
-        #         current = next(current)
-        #         position += 1
-        #     if (not self._reverse):
-        #         new._right = current._right
-        #         new._left = current
-        #         current._right._left = new
-        #         current._right = new
-        #     else:
-        #         new._left = current._left
-        #         new._right = current
-        #         current._left._right = new
-        #         current._left = new
-        #     self._size += 1
+    # if i < 0 or i >= self._size:
+    #     raise IndexError()
+    # if(i==0):                   #inserimento in testa
+    #     self.reverse()
+    #     self.append(x)
+    #     self.reverse()
+    # elif(i==self._size):        #inserimento in coda (append)
+    #     self.append(x)
+    # elif (0 < i < self._size):   #inserimento all'interno della lista
+    #     new = self._Node(x)
+    #     position = 0
+    #     current = self._nodes()
+    #     while (position < i ):
+    #         current = next(current)
+    #         position += 1
+    #     if (not self._reverse):
+    #         new._right = current._right
+    #         new._left = current
+    #         current._right._left = new
+    #         current._right = new
+    #     else:
+    #         new._left = current._left
+    #         new._right = current
+    #         current._left._right = new
+    #         current._left = new
+    #     self._size += 1
 
-    def __len__(self):
-        return self._size
+    def extend(self, iterable):
+
+        for element in iterable:
+            if element is not None:
+                self.append(element)
+
+
+    def remove(self, x):
+
+        i = self.index(x)
+        self.__delitem__(i)
+
+
+    def pop(self, i=None):
+        if i is None:
+            i = self._size - 1
+        elif i < 0:
+            i = self._size + i
+        if i >= self._size:
+            raise IndexError("L'indice specificato non è valido.")
+        return self._remove_item(i, printable=True)
+
+    def clear(self):
+        self.__del__()
+
 
     def index(self, x, start=0, end=None):
 
         if end is None:
-            end = self._size-1
+            end = self._size - 1
         elif start < 0 and end < 0:
-            start = self._size+start
-            end = self._size+end
+            start = self._size + start
+            end = self._size + end
         elif not (start > 0 and end > 0):
             raise ValueError("Il range inserito non è accettato.")
 
@@ -127,6 +152,139 @@ class MyList(DoubleLinkedList):
                     return position
             position += 1
         raise ValueError("L'elemento cercato non è stato trovato.")
+
+
+    def count(self, x):
+        count = 0
+        list_iterator = iter(self)
+        for element in list_iterator:
+            if element is x:
+                count += 1
+
+        return count
+
+
+    def sort(self, key=None, reverse=False):
+        return self._insertion_sort()
+
+
+    def reverse(self):
+        self._head, self._tail = self._tail, self._head
+        self._reverse = True if (not self._reverse) else False
+
+
+    def copy(self):
+        copia = MyList()
+        list = self._nodes()
+        for current in list:
+            copia.append(current._element)
+        return copia
+
+
+    #Operatori
+
+
+    def __add__(self, other):
+        copia = self.copy()
+        copia.extend(other)
+        return copia
+
+
+        i = 0
+        for elementB in b:
+            if self[i] != elementB:
+                return False
+            i += 1
+        return True
+
+
+    def __iadd__(self, other):
+        self.extend(other)
+        return self
+
+
+
+    def __le__(self, b):
+
+        i = 0
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
+                if nodeA._element > nodeB._element:
+                    return False
+        else:
+            while i != min:
+                if self[i] > b[i]:
+                    return False
+                i += 1
+        return True
+
+    def __lt__(self,  b):
+
+        i = 0
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
+                if nodeA._element >= nodeB._element:
+                    return False
+        else:
+            while i != min:
+                if self[i] >= b[i]:
+                    return False
+                i += 1
+        return True
+
+    def __eq__(self, b):
+
+        if self._size != b._size:
+            return False
+
+
+    def __ne__(self, b):
+        return not self.__eq__(b)
+
+
+    def __ge__(self, b):
+
+        i = 0
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
+                if nodeA._element < nodeB._element:
+                    return False
+        else:
+            while i != min:
+                if self[i] < b[i]:
+                    return False
+                i += 1
+        return True
+
+    def __gt__(self, b):
+        i = 0
+        min = self._size if self._size < b._size else b._size
+        if self._size == b._size:
+            for nodeA, nodeB in self, b:
+                if nodeA._element <= nodeB._element:
+                    return False
+        else:
+            while i != min:
+                if self[i] <= b[i]:
+                    return False
+                i += 1
+        return True
+
+
+    def __contains__(self, a, b):
+
+        for node in a:
+            if node._element == b:
+                return True
+        return False
+
+
+    def __delitem__(self, k):
+        self._remove_item(k)
+
 
     def __getitem__(self, k):
 
@@ -234,6 +392,26 @@ class MyList(DoubleLinkedList):
         #         else:
         #             current = current._left
 
+
+    def __del__(self):
+
+        i = 0
+        while i < self._size:
+            self.__delitem__(i)
+        self._head._left = None
+        self._head._right = self._tail
+        self._tail._left = self._head
+        self._tail._right = None
+        self._reverse = False
+
+
+
+    def __len__(self):
+        """Implementando l'oparatore "len" python ci offre gratis l'operatore bool."""
+        return self._size
+
+
+
     def __str__(self):
 
         to_return = '['
@@ -261,62 +439,6 @@ class MyList(DoubleLinkedList):
         # to_return += '>'
         # return to_return
 
-    def reverse(self):
-        self._head, self._tail = self._tail, self._head
-        self._reverse = True if (not self._reverse) else False
-
-    def count(self, x):
-        count = 0
-        list_iterator = iter(self)
-        for element in list_iterator:
-            if element is x:
-                count += 1
-
-        return count
-
-    def extend(self, iterable):
-
-        for element in iterable:
-            if element is not None:
-                self.append(element)
-
-    def __contains__(self, a, b):
-
-        for node in a:
-            if node._element == b:
-                return True
-        return False
-
-    def __delitem__(self, k):
-        self._remove_item(k)
-
-    def __del__(self):
-
-        i = 0
-        while i < self._size:
-            self.__delitem__(i)
-        self._head._left = None
-        self._head._right = self._tail
-        self._tail._left = self._head
-        self._tail._right = None
-        self._reverse = False
-
-    def remove(self, x):
-
-        i = self.index(x)
-        self.__delitem__(i)
-
-    def clear(self):
-        self.__del__()
-
-    def pop(self, i=None):
-        if i is None:
-            i = self._size-1
-        elif i < 0:
-            i = self._size + i
-        if i >= self._size:
-            raise IndexError("L'indice specificato non è valido.")
-        return self._remove_item(i, printable=True)
 
     def _remove_item(self, key, printable=False):
         position = 0
@@ -342,12 +464,6 @@ class MyList(DoubleLinkedList):
             position += 1
             current = next(nodes)
 
-    def copy(self):
-        copia = MyList()
-        list = self._nodes()
-        for current in list:
-            copia.append(current._element)
-        return copia
 
     def _nodes(self):
         current = self._head._right if (not self._reverse) else self._head._left
@@ -358,90 +474,6 @@ class MyList(DoubleLinkedList):
             else:
                 current = current._left
 
-    def __add__(self, other):
-        copia = self.copy()
-        copia.extend(other)
-        return copia
-
-    def __iadd__(self, other):
-        self.extend(other)
-        return self
-
-    def __eq__(self, b):
-
-        if self._size != b._size:
-            return False
-
-        i = 0
-        for elementB in b:
-            if self[i] != elementB:
-                return False
-            i += 1
-        return True
-
-
-
-    def __ne__(self, b):
-        return not self.__eq__(b)
-
-    def __le__(self, b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element > nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] > b[i]:
-                    return False
-                i += 1
-        return True
-
-    def __lt__(self,  b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element >= nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] >= b[i]:
-                    return False
-                i += 1
-        return True
-
-    def __ge__(self, b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element < nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] < b[i]:
-                    return False
-                i += 1
-        return True
-
-    def __gt__(self, b):
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        if self._size == b._size:
-            for nodeA, nodeB in self, b:
-                if nodeA._element <= nodeB._element:
-                    return False
-        else:
-            while i != min:
-                if self[i] <= b[i]:
-                    return False
-                i += 1
-        return True
 
     def _insertion_sort(self):
         ordered = MyList()
@@ -464,5 +496,3 @@ class MyList(DoubleLinkedList):
             i += 1
         return ordered
 
-    def sort(self, key=None, reverse=False):
-        return self._insertion_sort()
