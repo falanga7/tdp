@@ -33,5 +33,5 @@ def ssr(lista):
         return output
 
     else:
-        output.append(lista[0:lista._size])
-        return ssr(lista[0 + output._size:lista._size]) + output
+        output.append(lista)
+        return ssr(lista[output._size:lista._size]) + output
