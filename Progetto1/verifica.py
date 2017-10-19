@@ -159,6 +159,8 @@ print ("Test Ricorsivo")
 print(ssr(l_test))
 print("Lista Test")
 l_test.insert(100,100)
+
+l_test.insert(200,200)
 print (l_test)
 l_test.sort()
 print("Lista Test Ordinata")
@@ -189,6 +191,9 @@ def key3(test):
     else:
         raise TypeError("Il tipo non è supportato.")
 
+
+
+"""
 lista_test = MyList()
 test_1 = Test(uno=10,due=10,tre=10)
 test_2 = Test(uno=32,due=32,tre=65)
@@ -201,7 +206,7 @@ lista_test.append(test_4)
 print (lista_test)
 lista_test.sort(key=key3,reverse=True)
 print (lista_test)
-"""
+
 m1=MyList()
 m2=MyList()
 m1.extend([10,2,2])
