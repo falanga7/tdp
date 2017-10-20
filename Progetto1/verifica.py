@@ -15,7 +15,7 @@ l_uno = MyList()
 l_uno.append("d")
 l_uno.append(2)
 l_uno.extend("abc")
-l_uno.append(4)
+l_uno[len(l_uno):] = [4]
 print("l_uno:", l_uno)
 l_due = MyList(l_uno)
 print("l_due:", l_due)
@@ -55,8 +55,8 @@ l_due.insert(1, 50)
 print("Testo la insert in posizione 1: l_uno:", l_uno, "l_due: ", l_due)
 l_uno.insert(-2, 99)
 l_due.insert(-2, 99)
-print("Testo la insert con indici negativi 1: l_uno:", l_uno, "l_due: ", l_due)
-# test remove(x)
+print("Testo la insert con indici negativi -2: l_uno:", l_uno, "l_due: ", l_due)
+# test remove(x) e __delitem__
 l_uno.remove(50)
 l_due.remove(50)
 print("Testo la rimozione di 50 : l_uno:", l_uno, "l_due: ", l_due)
@@ -65,8 +65,10 @@ l_due.remove("bc")
 print("Testo la rimozione di bc: l_uno:", l_uno, "l_due: ", l_due)
 l_uno.remove(22)
 l_due.remove(22)
-print("Testo la rimozione di 22: l_uno:", l_uno, "l_due: ", l_due)
-# test di pop([i]) ed extend(iterable), count(x), reverse(), __setitem__,  index(x[, start[, end]])
+#del l_uno[2:3]
+#del l_due[2:3]
+#print("Testo la rimozione di 3.2 con __delitem__: l_uno:", l_uno, "l_due: ", l_due)
+# test di pop([i]) ed extend(iterable), count(x), reverse(), __setitem__,  index(x[, start[, end]]) e __getitem__
 l_uno.extend(rl)
 l_due.extend(rl)
 print("Estendo le due liste con una lista causale: l_uno:", l_uno, "l_due: ", l_due)
@@ -100,9 +102,9 @@ print("Faccio il pop in posizione -2: l_uno:", l_uno, "l_due: ", l_due)
 l_uno.insert(0, rl)
 l_due.insert(0, rl)
 l_tre = l_uno.copy()
-l_quattro = l_due.copy()
+l_quattro = l_due[:]
 print("Creo due copie di l_uno e l_due: l_tre dopo aver inserito una "
-      "lista in posizione 0:\n l_tre: ", l_tre, "l_quattro: ", l_quattro)
+      "lista in posizione 0:\n l_tre = l_uno.copy(): ", l_tre, "l_quattro = l_due[:]: ", l_quattro)
 l_tre[2] = 44
 l_tre[0][1] = 33
 l_quattro[2] = 44
@@ -111,12 +113,16 @@ l_quattro[0][1] = 33
 print("Modifico l_tre[2]e l_tre[0][1] anche su l_quattro e"
       " stampo le sequenze: \n l_uno:", l_uno, "l_due: ", l_due, "\nl_tre:", l_tre, "l_quattro", l_quattro)
 
+
+print("Stampo usando getitem l_tre[0][1]:", l_tre[0][1])
+
 # test di  len, e bool
 
 print("Restituisco la lungezza di l_uno:", len(l_uno), "l_due: ", len(l_due))
 l_tre.clear()
 print("Restituisco bool di l_uno, l_due e l_tre(dopo aver fatto il clear()): \n"
       " l_uno:", bool(l_uno), "l_due: ", bool(l_due), "l_tre: ", bool(l_tre))
+print("Faccio il clear di l_quattro con del l_quattro[:] l_quattro:", l_quattro)
 # test di __add__ e __iadd__
 l_tre, l_quattro = l_uno, l_due
 l_tre += [10, 23]
@@ -131,59 +137,74 @@ print("Ora faccio l_tre = l_tre + [11, 24] = l_quattro "
 
 # test di __le__ , __lt__ , __eq__ , ___ne__, __ge__, __gt__
 
+print("Stampo l_uno != l_due: ", l_uno != l_due)
 print("Stampo l_uno == l_due: ", l_uno == l_due)
+print("Stampo l_uno >= l_due: ", l_uno >= l_due)
+print("Stampo l_uno > l_due: ", l_uno > l_due)
+print("Stampo l_uno < l_due: ", l_uno < l_due)
+print("Stampo l_uno <= l_due: ", l_uno <= l_due)
+print("Rimuovo da l_due il 3 e modifico 23 a 33 e rifaccio i test:")
+l_due.remove(3)
+l_due[3] = 33
+print("Stampo l_uno != l_due: ", l_uno != l_due)
+print("Stampo l_uno == l_due: ", l_uno == l_due)
+print("Stampo l_uno >= l_due: ", l_uno >= l_due)
+print("Stampo l_uno > l_due: ", l_uno > l_due)
+print("Stampo l_uno < l_due: ", l_uno < l_due)
+print("Stampo l_uno <= l_due: ", l_uno <= l_due)
 
-
+# test contains
+print("Testo se 3  è contenuto in l_uno")
+print(3 in l_uno)
+print("Testo se 33  è contenuto in l_uno")
+print(33 in l_uno)
 print("Testo la funzione stampa suffissi (iterativa) sulla 4 liste create precedentemente")
 print("l_uno:", l_uno)
-print ("Suffissi list_uno")
+print("Suffissi list_uno")
 print(ssi(l_uno))
 print("l_due:", l_due)
-print ("Suffissi list_due")
+print("Suffissi list_due")
 print(ssi(l_due))
 print("l_tre:", l_tre)
-print ("Suffissi list_tre")
+print("Suffissi list_tre")
 print(ssi(l_tre))
 print("l_quattro:", l_quattro)
-print ("Suffissi list_quattro")
+print("Suffissi list_quattro")
 print(ssi(l_quattro))
 
 l_test = MyList()
-l_test.extend((123,300))
+l_test.extend((123, 300))
 l_test.reverse()
-print ("l_test = ",l_test)
+print("l_test = ", l_test)
 
-print ("Test iterativo")
+print("Test iterativo")
 print(ssi(l_test))
-print ("Test Ricorsivo")
+print("Test Ricorsivo")
 print(ssr(l_test))
-print("Lista Test")
-l_test.insert(100,100)
+print("Lista Test a cui ho aggiunto 100:")
+l_test.insert(100, 100)
+print(l_test)
 
-"""l_test.insert(200,200)
-print (l_test)
-l_test.sort()
-print("Lista Test Ordinata")
-print (l_test)"""
 
-print("Lista Test Interi -- Test KEY")
+print("Lista Test Interi -- Test key=abs:")
 test = randList(-1000, 0, 100)
 rw_test = MyList()
 rw_test.extend(test)
-print (rw_test)
+print(rw_test)
 rw_test.sort(key=abs)
 print("Lista Test Ordinata")
-print (rw_test)
+print(rw_test)
 
 
-print("Lista Test Stringhe -- Test KEY")
-test = rand_words_list(100,2,22)
+print("Lista Test Stringhe preordinamento:")
+test = rand_words_list(100, 2, 22)
 rw_test = MyList()
 rw_test.extend(test)
-print (rw_test)
+print(rw_test)
 rw_test.sort()
-print("Lista Test Ordinata")
-print (rw_test)
+print("Lista Test Ordinata:")
+print(rw_test)
+
 
 class Test:
 
@@ -191,18 +212,25 @@ class Test:
         self._1 = arg.get('uno')
         self._2 = arg.get('due')
         self._3 = arg.get('tre')
+
     def __str__(self):
         return "UNO: "+str(self._1)+" - DUE: "+str(self._2)+" - TRE: "+str(self._3)
+
+
 def key1(test):
     if type(test) is Test:
         return test._1
     else:
         raise TypeError("Il tipo non è supportato.")
+
+
 def key2(test):
     if type(test) is Test:
         return test._2
     else:
         raise TypeError("Il tipo non è supportato.")
+
+
 def key3(test):
     if type(test) is Test:
         return test._3
@@ -210,25 +238,17 @@ def key3(test):
         raise TypeError("Il tipo non è supportato.")
 
 
-
 lista_test = MyList()
-test_1 = Test(uno=10,due=10,tre=10)
-test_2 = Test(uno=32,due=32,tre=65)
-test_3 = Test(uno=543,due=1,tre=43)
-test_4 = Test(uno=65,due=45,tre=7)
+test_1 = Test(uno=10, due=10, tre=10)
+test_2 = Test(uno=32, due=32, tre=65)
+test_3 = Test(uno=543, due=1, tre=43)
+test_4 = Test(uno=65, due=45, tre=7)
 lista_test.append(test_1)
 lista_test.append(test_2)
 lista_test.append(test_3)
 lista_test.append(test_4)
-print (lista_test)
+print("Stampa di lista test con nuovi elementi:")
+print(lista_test)
+print("Stampa di lista test con funzione key che ordina in base al terzo attributo:")
 lista_test.sort(key=key3)
-print (lista_test)
-"""
-m1=MyList()
-m2=MyList()
-m1.extend([10,2,2])
-m2.extend([10,3])
-print (m1)
-print (m2)
-print (m1>=m2)
-"""
+print(lista_test)
