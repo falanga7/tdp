@@ -286,6 +286,28 @@ class MyList(DoubleLinkedList):
 
 
     def __delitem__(self, k):
+
+        if type(k) is slice:
+            if(k.start == self.__len__() and k.stop is None and k.step is None):
+                return
+            step = k.step if k.step is not None else 1
+            if (step < 0):
+                start = k.start if k.start is not None else len(self)
+                stop = k.stop if k.stop is not None else -1
+            else:
+                start = k.start if k.start is not None else 0
+                stop = k.stop if k.stop is not None else len(self)
+
+            i = start
+
+            while i < stop:
+                self._remove_item(i)
+                if i>=0:
+                    stop-=step
+                else:
+                    i += step
+            return
+
         self._remove_item(k)
 
 
@@ -396,7 +418,7 @@ class MyList(DoubleLinkedList):
         #             current = current._left
 
 
-    def __del__(self):
+    def __del__(self, k=None):
 
         i = 0
         while i < self._size:
@@ -444,6 +466,9 @@ class MyList(DoubleLinkedList):
 
 
     def _remove_item(self, key, printable=False):
+
+        key = key if key >= 0 else self._size + key
+
         position = 0
         nodes = self._nodes()
         current = next(nodes)
