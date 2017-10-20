@@ -30,7 +30,6 @@ class MyList(DoubleLinkedList):
             for element in object_iterator:
                 self.append(element)
 
-
     def append(self, x):
 
         new = self._Node(x)                                                 # creazione nodo
@@ -48,7 +47,6 @@ class MyList(DoubleLinkedList):
             prev._left = new
             new._right = prev
         self._size += 1
-
 
     def insert(self, i, x):
 
@@ -78,48 +76,16 @@ class MyList(DoubleLinkedList):
                 current._left = new
             self._size += 1
 
-
-            # if i < 0: i += self._size
-
-    # if i < 0 or i >= self._size:
-    #     raise IndexError()
-    # if(i==0):                   #inserimento in testa
-    #     self.reverse()
-    #     self.append(x)
-    #     self.reverse()
-    # elif(i==self._size):        #inserimento in coda (append)
-    #     self.append(x)
-    # elif (0 < i < self._size):   #inserimento all'interno della lista
-    #     new = self._Node(x)
-    #     position = 0
-    #     current = self._nodes()
-    #     while (position < i ):
-    #         current = next(current)
-    #         position += 1
-    #     if (not self._reverse):
-    #         new._right = current._right
-    #         new._left = current
-    #         current._right._left = new
-    #         current._right = new
-    #     else:
-    #         new._left = current._left
-    #         new._right = current
-    #         current._left._right = new
-    #         current._left = new
-    #     self._size += 1
-
     def extend(self, iterable):
 
         for element in iterable:
             if element is not None:
                 self.append(element)
 
-
     def remove(self, x):
 
         i = self.index(x)
         self.__delitem__(i)
-
 
     def pop(self, i=None):
         if i is None:
@@ -132,7 +98,6 @@ class MyList(DoubleLinkedList):
 
     def clear(self):
         self.__del__()
-
 
     def index(self, x, start=0, end=None):
 
@@ -153,7 +118,6 @@ class MyList(DoubleLinkedList):
             position += 1
         raise ValueError("L'elemento cercato non è stato trovato.")
 
-
     def count(self, x):
         count = 0
         list_iterator = iter(self)
@@ -163,18 +127,15 @@ class MyList(DoubleLinkedList):
 
         return count
 
-
     def sort(self, key=None, reverse=False):
 
         _merge_sort(self, key)
         if reverse:
             self.reverse()
 
-
     def reverse(self):
         self._head, self._tail = self._tail, self._head
         self._reverse = True if (not self._reverse) else False
-
 
     def copy(self):
         copia = MyList()
@@ -186,26 +147,14 @@ class MyList(DoubleLinkedList):
 
     #Operatori
 
-
     def __add__(self, other):
         copia = self.copy()
         copia.extend(other)
         return copia
 
-
-        i = 0
-        for elementB in b:
-            if self[i] != elementB:
-                return False
-            i += 1
-        return True
-
-
     def __iadd__(self, other):
         self.extend(other)
         return self
-
-
 
     def __le__(self, b):
 
@@ -242,10 +191,8 @@ class MyList(DoubleLinkedList):
         if self._size != b._size:
             return False
 
-
     def __ne__(self, b):
         return not self.__eq__(b)
-
 
     def __ge__(self, b):
 
@@ -276,7 +223,6 @@ class MyList(DoubleLinkedList):
 
         return True
 
-
     def __contains__(self, item):
 
         nodes = self._nodes()
@@ -286,14 +232,13 @@ class MyList(DoubleLinkedList):
                 return True
         return False
 
-
     def __delitem__(self, k):
 
         if type(k) is slice:
-            if(k.start == self.__len__() and k.stop is None and k.step is None):
+            if k.start == self.__len__() and k.stop is None and k.step is None:
                 return
             step = k.step if k.step is not None else 1
-            if (step < 0):
+            if  step < 0:
                 start = k.start if k.start is not None else len(self)
                 stop = k.stop if k.stop is not None else -1
             else:
@@ -304,20 +249,19 @@ class MyList(DoubleLinkedList):
 
             while i < stop:
                 self._remove_item(i)
-                if i>=0:
-                    stop-=step
+                if i >= 0:
+                    stop -= step
                 else:
                     i += step
             return
 
         self._remove_item(k)
 
-
     def __getitem__(self, k):
 
         if type(k) is slice:
             step = k.step if k.step is not None else 1
-            if (step < 0):
+            if step < 0:
                 start = k.start if k.start is not None else len(self)
                 stop = k.stop if k.stop is not None else -1
             else:
@@ -345,31 +289,15 @@ class MyList(DoubleLinkedList):
 
         return current._element
 
-
-        # cnt = 0
-        # if j<0: j+=self._size
-        # if j<0 or j>=self._size:
-        #     raise IndexError()
-        # current = self._head._right if (not self._reverse) else self._head._left
-        # while(current!=self._tail):
-        #     if cnt==j:
-        #         return current._element
-        #     else:
-        #         cnt += 1
-        #         if not self._reverse:
-        #             current = current._right
-        #         else:
-        #             current = current._left
-
     def __setitem__(self, k, v):
 
         if type(k) is slice:
-            if(k.start == self.__len__() and k.stop is None and k.step is None):
+            if k.start == self.__len__() and k.stop is None and k.step is None :
                 self.extend(v)
                 return
 
             step = k.step if k.step is not None else 1
-            if (step < 0):
+            if step < 0:
                 start = k.start if k.start is not None else len(self)
                 stop = k.stop if k.stop is not None else -1
             else:
@@ -383,7 +311,6 @@ class MyList(DoubleLinkedList):
 
         if kabs >= self._size :
             raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
-
 
         if k >= 0:
             j = 0
@@ -400,26 +327,6 @@ class MyList(DoubleLinkedList):
 
         current._element = v
 
-
-        # cnt = 0
-        # if key<0: key+=self._size
-        # if key==self._size:
-        #     self.append(value)
-        # if key<0 or key>=self._size:
-        #     raise IndexError()
-        # current = self._head._right if (not self._reverse) else self._head._left
-        # while(current!=self._tail):
-        #     if cnt==key:
-        #         current._element = value
-        #         return
-        #     else:
-        #         cnt += 1
-        #         if not self._reverse:
-        #             current = current._right
-        #         else:
-        #             current = current._left
-
-
     def __del__(self, k=None):
 
         i = 0
@@ -431,13 +338,9 @@ class MyList(DoubleLinkedList):
         self._tail._right = None
         self._reverse = False
 
-
-
     def __len__(self):
         """Implementando l'oparatore "len" python ci offre gratis l'operatore bool."""
         return self._size
-
-
 
     def __str__(self):
 
@@ -453,19 +356,6 @@ class MyList(DoubleLinkedList):
             i += 1
 
         return to_return + "]"
-        # to_return = '<'
-        # current = self._head._right if (not self._reverse) else self._head._left
-        # while current != self._tail:
-        #     to_return += str(current._element)
-        #     if not self._reverse:
-        #         current = current._right
-        #     else:
-        #         current = current._left
-        #     if current != self._tail:
-        #         to_return += ',	'
-        # to_return += '>'
-        # return to_return
-
 
     def _remove_item(self, key, printable=False):
 
@@ -493,7 +383,6 @@ class MyList(DoubleLinkedList):
                     return
             position += 1
             current = next(nodes)
-
 
     def _nodes(self):
         current = self._head._right if (not self._reverse) else self._head._left
@@ -525,6 +414,7 @@ def _merge(list1, list2, list, key = None):
             list.append(list1.pop(0))
         while len(list2) != 0:
             list.append(list2.pop(0))
+
 
 def _merge_sort(list, key=None):
 
