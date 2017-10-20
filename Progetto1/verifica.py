@@ -160,12 +160,30 @@ print(ssr(l_test))
 print("Lista Test")
 l_test.insert(100,100)
 
-l_test.insert(200,200)
+"""l_test.insert(200,200)
 print (l_test)
 l_test.sort()
 print("Lista Test Ordinata")
-print (l_test)
+print (l_test)"""
 
+print("Lista Test Interi -- Test KEY")
+test = randList(-1000, 0, 100)
+rw_test = MyList()
+rw_test.extend(test)
+print (rw_test)
+rw_test.sort(key=abs)
+print("Lista Test Ordinata")
+print (rw_test)
+
+
+print("Lista Test Stringhe -- Test KEY")
+test = rand_words_list(100,2,22)
+rw_test = MyList()
+rw_test.extend(test)
+print (rw_test)
+rw_test.sort()
+print("Lista Test Ordinata")
+print (rw_test)
 
 class Test:
 
@@ -193,7 +211,6 @@ def key3(test):
 
 
 
-"""
 lista_test = MyList()
 test_1 = Test(uno=10,due=10,tre=10)
 test_2 = Test(uno=32,due=32,tre=65)
@@ -204,9 +221,9 @@ lista_test.append(test_2)
 lista_test.append(test_3)
 lista_test.append(test_4)
 print (lista_test)
-lista_test.sort(key=key3,reverse=True)
+lista_test.sort(key=key3)
 print (lista_test)
-
+"""
 m1=MyList()
 m2=MyList()
 m1.extend([10,2,2])
