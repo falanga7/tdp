@@ -122,6 +122,7 @@ print("Restituisco la lungezza di l_uno:", len(l_uno), "l_due: ", len(l_due))
 l_tre.clear()
 print("Restituisco bool di l_uno, l_due e l_tre(dopo aver fatto il clear()): \n"
       " l_uno:", bool(l_uno), "l_due: ", bool(l_due), "l_tre: ", bool(l_tre))
+del l_quattro[:]
 print("Faccio il clear di l_quattro con del l_quattro[:] l_quattro:", l_quattro)
 # test di __add__ e __iadd__
 l_tre, l_quattro = l_uno, l_due

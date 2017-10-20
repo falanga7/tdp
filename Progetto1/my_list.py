@@ -279,7 +279,9 @@ class MyList(DoubleLinkedList):
 
     def __contains__(self, item):
 
-        for node in self:
+        nodes = self._nodes()
+
+        for node in nodes:
             if node._element == item:
                 return True
         return False
