@@ -277,10 +277,10 @@ class MyList(DoubleLinkedList):
         return True
 
 
-    def __contains__(self, a, b):
+    def __contains__(self, item):
 
-        for node in a:
-            if node._element == b:
+        for node in self:
+            if node._element == item:
                 return True
         return False
 
