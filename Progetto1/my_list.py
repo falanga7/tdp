@@ -1,4 +1,5 @@
 from .double_linked_list import DoubleLinkedList
+from .tim_sort import *
 
 
 class MyList(DoubleLinkedList):
@@ -129,7 +130,7 @@ class MyList(DoubleLinkedList):
 
     def sort(self, key=None, reverse=False):
 
-        _merge_sort(self, key)
+        merge_sort(self, key)
         if reverse:
             self.reverse()
 
@@ -394,74 +395,5 @@ class MyList(DoubleLinkedList):
                 current = current._left
 
 
-def _merge(list1, list2, list, key = None):
-
-        while len(list1) != 0 and len(list2) != 0:
-
-            if key != None:
-                elem_1 = key(list1[0])
-                elem_2 = key(list2[0])
-            else:
-                elem_1 = list1[0]
-                elem_2 = list2[0]
-
-            if elem_1 < elem_2:
-                list.append(list1.pop(0))
-            else:
-                list.append(list2.pop(0))
-
-        while len(list1) != 0:
-            list.append(list1.pop(0))
-        while len(list2) != 0:
-            list.append(list2.pop(0))
-
-
-def _merge_sort(list, key=None):
-
-        n = len(list)
-
-        if n < 2:
-            return
-
-        list1 = MyList()
-        list2 = MyList()
-
-        while len(list1) < n // 2:
-            list1.append(list.pop(0))
-        while len(list) != 0:
-            list2.append(list.pop(0))
-
-        _merge_sort(list1,key)
-        _merge_sort(list2,key)
-
-        _merge(list1, list2, list, key)
-
-"""def _insertion_sort(lista, key = None):
-
-        ordered = MyList()
-        ordered.append(lista[0])
-        i = 1
-        while i < len(lista):
-            k = len(ordered) - 1
-            while True:
-                if key != None:
-                    c_list = key(lista[i])
-                    o_list = key(ordered[k])
-                else:
-                    c_list = lista[i]
-                    o_list = ordered[k]
-                if c_list > o_list:
-                    ordered.insert(k + 1, lista[i])
-                    break
-                elif c_list == o_list:
-                    ordered.insert(k + 1, lista[i])
-                    break
-                elif c_list < o_list:
-                    k = k - 1
-                    if k < 0:
-                        ordered.insert(0, lista[i])
-                        break
-            i += 1
-        return ordered"""
 
 
