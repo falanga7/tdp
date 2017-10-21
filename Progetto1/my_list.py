@@ -129,7 +129,7 @@ class MyList(DoubleLinkedList):
 
     def sort(self, key=None, reverse=False):
 
-        _tim_sort(self, key)
+        self.__init__(_tim_sort(self, key))
         if reverse:
             self.reverse()
 
@@ -462,9 +462,7 @@ def _insertion_sort(my_list, key=None):
                         ordered.insert(0, my_list[i])
                         break
             i += 1
-        my_list.clear()
-        for element in ordered:
-            my_list.append(element)
+        return ordered
 
 
 def _compute_minrun(n):
@@ -514,8 +512,8 @@ def _tim_sort(my_list, key=None):
     runs = _find_runs(my_list, key)
     sorted_runs = MyList()
     for run in runs:
-        _insertion_sort(run, key)
-        sorted_runs.append(run)
+        sorted_runs.append(_insertion_sort(run, key))
+
     while len(sorted_runs) > 1:
         temp = MyList()
         i = 0
@@ -526,9 +524,6 @@ def _tim_sort(my_list, key=None):
             j += 2
         sorted_runs = temp
 
-    my_list.clear()
-    for element in sorted_runs[0]:
-        my_list.append(element)
-
+    return sorted_runs[0]
 
 
