@@ -1,5 +1,4 @@
 from .double_linked_list import DoubleLinkedList
-from .tim_sort import *
 
 
 class MyList(DoubleLinkedList):
@@ -130,7 +129,7 @@ class MyList(DoubleLinkedList):
 
     def sort(self, key=None, reverse=False):
 
-        merge_sort(self, key)
+        _tim_sort(self, key)
         if reverse:
             self.reverse()
 
@@ -394,6 +393,142 @@ class MyList(DoubleLinkedList):
             else:
                 current = current._left
 
+
+def _merge(my_list1, my_list2, my_list, key=None):
+    while len(my_list1) != 0 and len(my_list2) != 0:
+
+        if key is not None:
+            elem_1 = key(my_list1[0])
+            elem_2 = key(my_list2[0])
+        else:
+            elem_1 = my_list1[0]
+            elem_2 = my_list2[0]
+
+        if elem_1 < elem_2:
+            my_list.append(my_list1.pop(0))
+        else:
+            my_list.append(my_list2.pop(0))
+
+    while len(my_list1) != 0:
+        my_list.append(my_list1.pop(0))
+    while len(my_list2) != 0:
+        my_list.append(my_list2.pop(0))
+
+
+def _merge_sort(my_list, key=None):
+    n = len(my_list)
+
+    if n < 2:
+        return
+
+    my_list1 = MyList()
+    my_list2 = MyList()
+
+    while len(my_list1) < n // 2:
+        my_list1.append(my_list.pop(0))
+    while len(my_list) != 0:
+        my_list2.append(my_list.pop(0))
+
+    _merge_sort(my_list1, key)
+    _merge_sort(my_list2, key)
+
+    _merge(my_list1, my_list2, my_list, key)
+    return my_list
+
+
+def _insertion_sort(my_list, key=None):
+
+        ordered = MyList()
+        ordered.append(my_list[0])
+        i = 1
+        while i < len(my_list):
+            k = len(ordered) - 1
+            while True:
+                if key is not None:
+                    u_list = key(my_list[i])
+                    o_list = key(ordered[k])
+                else:
+                    u_list = my_list[i]
+                    o_list = ordered[k]
+                if u_list > o_list:
+                    ordered.insert(k + 1, my_list[i])
+                    break
+                elif u_list == o_list:
+                    ordered.insert(k + 1, my_list[i])
+                    break
+                elif u_list < o_list:
+                    k = k - 1
+                    if k < 0:
+                        ordered.insert(0, my_list[i])
+                        break
+            i += 1
+        my_list.clear()
+        for element in ordered:
+            my_list.append(element)
+
+
+def _compute_minrun(n):
+    if n >= 64:
+        minrun = int(bin(n)[0:8], 2) + 1
+    else:
+        minrun = n
+    return minrun
+
+
+def _find_runs(my_list, key=None):
+    minrun = _compute_minrun(len(my_list))
+    if key is None:
+        def key(x): return x
+    runs = MyList()
+    run = MyList()
+    newrun = True
+    asc = 0
+    des = 0
+    i = 0
+    j = 0
+    while i < len(my_list):
+        if j >= minrun:
+            if des > asc:
+                run.reverse()
+            runs.append(run)
+            run = MyList()
+            newrun = True
+            j = 0
+        if newrun:
+            run.append(my_list[i])
+            newrun = False
+            j += 1
+        else:
+            run.append(my_list[i])
+            if key(my_list[i]) >= key(my_list[i-1]):
+                asc += 1
+            else:
+                des += 1
+            j += 1
+        i += 1
+    runs.append(run)
+    return runs
+
+
+def _tim_sort(my_list, key=None):
+    runs = _find_runs(my_list, key)
+    sorted_runs = MyList()
+    for run in runs:
+        _insertion_sort(run, key)
+        sorted_runs.append(run)
+    while len(sorted_runs) > 1:
+        temp = MyList()
+        i = 0
+        j = 1
+        while j < len(sorted_runs):
+            temp.append(_merge_sort(sorted_runs[i] + sorted_runs[j], key))
+            i += 2
+            j += 2
+        sorted_runs = temp
+
+    my_list.clear()
+    for element in sorted_runs[0]:
+        my_list.append(element)
 
 
 

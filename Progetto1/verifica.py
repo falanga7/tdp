@@ -1,6 +1,6 @@
-from Progetto1.my_list import MyList
 from Progetto1.util import *
 from Progetto1.suffix import *
+from Progetto1.my_list import *
 
 
 rl = randList(1, 10, 3)
@@ -183,7 +183,7 @@ print(ssi(l_test))
 print("Test Ricorsivo")
 print(ssr(l_test))
 print("Lista Test a cui ho aggiunto 100:")
-l_test.insert(100, 100)
+l_test.insert(1, 100)
 print(l_test)
 
 
@@ -209,7 +209,7 @@ print(rw_test)
 
 class Test:
 
-    def __init__(self,**arg):
+    def __init__(self, **arg):
         self._1 = arg.get('uno')
         self._2 = arg.get('due')
         self._3 = arg.get('tre')
@@ -253,3 +253,4 @@ print(lista_test)
 print("Stampa di lista test con funzione key che ordina in base al terzo attributo:")
 lista_test.sort(key=key3)
 print(lista_test)
+
