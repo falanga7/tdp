@@ -32,7 +32,7 @@ class MyList(DoubleLinkedList):
 
     def append(self, x):
 
-        new = self._Node(x)                                                 # creazione nodo
+        new = self._Node(x)                                                    # creazione nodo
 
         if not self._reverse:
             new._right = self._tail
@@ -48,13 +48,24 @@ class MyList(DoubleLinkedList):
             new._right = prev
         self._size += 1
 
+    def extend(self, iterable):
+
+        try:
+            iter(iterable)
+        except TypeError:
+            print("L'oggetto passato non è iterabile.")
+
+        for element in iterable:
+            if element is not None:
+                self.append(element)
+
     def insert(self, i, x):
 
         i = i if i >= 0 else self._size + i
         #if i > self._size:
             #raise IndexError("L'indice scelto non risulta essere nel range della sequenza")
 
-        if i >= self._size:                                             # inserimento in coda
+        if i >= self._size:                                               # inserimento in coda
             self.append(x)
         else:                                                             # inserimento all'interno della lista
             new = self._Node(x)
@@ -75,12 +86,6 @@ class MyList(DoubleLinkedList):
                 current._left._right = new
                 current._left = new
             self._size += 1
-
-    def extend(self, iterable):
-
-        for element in iterable:
-            if element is not None:
-                self.append(element)
 
     def remove(self, x):
 
@@ -129,7 +134,7 @@ class MyList(DoubleLinkedList):
 
     def sort(self, key=None, reverse=False):
 
-        self.__init__(_tim_sort(self, key))
+        _merge_sort(self, key)
         if reverse:
             self.reverse()
 
@@ -157,70 +162,78 @@ class MyList(DoubleLinkedList):
         return self
 
     def __le__(self, b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        while i != min:
-            if self[i] < b[i]:
-                return True
-            elif self[i] > b[i]:
+        try:
+            i = 0
+            min = self._size if self._size < b._size else b._size
+            while i != min:
+                if self[i] < b[i]:
+                    return True
+                elif self[i] > b[i]:
+                    return False
+                i += 1
+            if self._size < b._size:
                 return False
-            i += 1
-        if self._size < b._size:
-            return False
-
+        except AttributeError:
+            raise TypeError("Non puoi confrontare due tipi diversi.")
         return True
 
     def __lt__(self,  b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        while i != min:
-            if self[i] < b[i]:
-                return True
-            elif self[i] > b[i]:
+        try:
+            i = 0
+            min = self._size if self._size < b._size else b._size
+            while i != min:
+                if self[i] < b[i]:
+                    return True
+                elif self[i] > b[i]:
+                    return False
+                i += 1
+            if self._size <= b._size:
                 return False
-            i += 1
-        if self._size <= b._size:
-            return False
-
+        except AttributeError:
+            raise TypeError("Non puoi confrontare due tipi diversi.")
         return True
 
     def __eq__(self, b):
-
-        if self._size != b._size:
-            return False
+        try:
+            if self._size != b._size:
+                return False
+        except AttributeError:
+            raise TypeError("Non puoi confrontare due tipi diversi.")
 
     def __ne__(self, b):
         return not self.__eq__(b)
 
     def __ge__(self, b):
-
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        while i != min:
-            if self[i] > b[i]:
-                return True
-            elif self[i] < b[i]:
+        try:
+            i = 0
+            min = self._size if self._size < b._size else b._size
+            while i != min:
+                if self[i] > b[i]:
+                    return True
+                elif self[i] < b[i]:
+                    return False
+                i += 1
+            if self._size < b._size:
                 return False
-            i += 1
-        if self._size < b._size:
-            return False
 
-        return True
+            return True
+        except AttributeError:
+            raise TypeError("Non puoi confrontare due tipi diversi.")
 
     def __gt__(self, b):
-        i = 0
-        min = self._size if self._size < b._size else b._size
-        while i != min:
-            if self[i] > b[i]:
-                return True
-            elif self[i] < b[i]:
+        try:
+            i = 0
+            min = self._size if self._size < b._size else b._size
+            while i != min:
+                if self[i] > b[i]:
+                    return True
+                elif self[i] < b[i]:
+                    return False
+                i += 1
+            if self._size <= b._size:
                 return False
-            i += 1
-        if self._size <= b._size:
-            return False
-
+        except AttributeError:
+            raise TypeError("Non puoi confrontare due tipi diversi.")
         return True
 
     def __contains__(self, item):
@@ -238,7 +251,7 @@ class MyList(DoubleLinkedList):
             if k.start == self.__len__() and k.stop is None and k.step is None:
                 return
             step = k.step if k.step is not None else 1
-            if  step < 0:
+            if step < 0:
                 start = k.start if k.start is not None else len(self)
                 stop = k.stop if k.stop is not None else -1
             else:
@@ -329,9 +342,11 @@ class MyList(DoubleLinkedList):
 
     def __del__(self, k=None):
 
+
         i = 0
         while i < self._size:
             self.__delitem__(i)
+
         self._head._left = None
         self._head._right = self._tail
         self._tail._left = self._head
@@ -339,7 +354,7 @@ class MyList(DoubleLinkedList):
         self._reverse = False
 
     def __len__(self):
-        """Implementando l'oparatore "len" python ci offre gratis l'operatore bool."""
+        """Implementato l'operatore "len" python ci offre gratis l'operatore bool."""
         return self._size
 
     def __str__(self):
@@ -359,30 +374,33 @@ class MyList(DoubleLinkedList):
 
     def _remove_item(self, key, printable=False):
 
-        key = key if key >= 0 else self._size + key
+        try:
+            key = key if key >= 0 else self._size + key
 
-        position = 0
-        nodes = self._nodes()
-        current = next(nodes)
-        while current != self._tail:
-            if position is key:
-                if not self._reverse:
-                    current._left._right = current._right
-                    current._right._left = current._left
-                else:
-                    current._right._left = current._left
-                    current._left._right = current._right
-                value = current._element
-                current._element = None
-                current._left = None
-                current._right = None
-                self._size -= 1
-                if printable:
-                    return value
-                else:
-                    return
-            position += 1
+            position = 0
+            nodes = self._nodes()
             current = next(nodes)
+            while current != self._tail:
+                if position is key:
+                    if not self._reverse:
+                        current._left._right = current._right
+                        current._right._left = current._left
+                    else:
+                        current._right._left = current._left
+                        current._left._right = current._right
+                    value = current._element
+                    current._element = None
+                    current._left = None
+                    current._right = None
+                    self._size -= 1
+                    if printable:
+                        return value
+                    else:
+                        return
+                position += 1
+                current = next(nodes)
+        except StopIteration:
+                raise IndexError("L'indice dell'element che vuoi cancellare non esiste.")
 
     def _nodes(self):
         current = self._head._right if (not self._reverse) else self._head._left

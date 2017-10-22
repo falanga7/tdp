@@ -188,7 +188,7 @@ print(l_test)
 
 
 print("Lista Test Interi -- Test key=abs:")
-test = randList(-1000, 0, 100)
+test = randList(-20000, 0, 10000)
 rw_test = MyList()
 rw_test.extend(test)
 print(rw_test)
