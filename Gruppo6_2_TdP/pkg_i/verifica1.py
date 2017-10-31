@@ -34,7 +34,7 @@ def test_trees_insertion(n):
 test_trees_insertion(1000)
 test_trees_insertion(10000)
 test_trees_insertion(100000)
-test_trees_insertion(1000000)
+#test_trees_insertion(1000000)
 
 
 
