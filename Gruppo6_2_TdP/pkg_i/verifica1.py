@@ -7,7 +7,7 @@ import time
 def test_trees_insertion(n):
 
     # genero una lista casuale di n valori che poi inserirò in entrambi gli alberi
-    rwl = rand_words_list(n, 1, 10)
+    rwl = rand_words_list(n, 10, 10)
 
     # istanzio un albero AVL ed un albero RB
     avl_tree = AVLTreeMap()
