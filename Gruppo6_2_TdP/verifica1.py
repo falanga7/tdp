@@ -1,7 +1,8 @@
-from Gruppo6_2_TdP.TdP_collections.map.avl_tree import AVLTreeMap
-from Gruppo6_2_TdP.pkg_i.util import rand_words_list
-from Gruppo6_2_TdP.TdP_collections.map.red_black_tree import RedBlackTreeMap
 import time
+
+from Gruppo6_2_TdP.TdP_collections.map.avl_tree import AVLTreeMap
+from Gruppo6_2_TdP.TdP_collections.map.red_black_tree import RedBlackTreeMap
+from util import rand_words_list
 
 
 def test_trees_insertion(n):

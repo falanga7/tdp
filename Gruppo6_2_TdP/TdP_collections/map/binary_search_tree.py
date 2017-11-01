@@ -120,7 +120,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
     if self.left(p) and self.right(p):           # p has two children
       replacement = self._subtree_last_position(self.left(p))
       self._replace(p, replacement.element())    # from LinkedBinaryTree
-      p =  replacement
+      p = replacement
     # now p has at most one child
     parent = self.parent(p)
     self._delete(p)                              # inherited from LinkedBinaryTree

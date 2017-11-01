@@ -146,6 +146,8 @@ class LinkedBinaryTree(BinaryTree):
         if not self.is_root(p):
             if node._predecessor is not None:
                 node._predecessor._successor = node._left
+        if node._predecessor is None:
+            self._min = node._left
         node._predecessor = node._left
 
         return self._make_position(node._left)
@@ -164,6 +166,8 @@ class LinkedBinaryTree(BinaryTree):
         if not self.is_root(p):
             if node._successor is not None:
                 node._successor._predecessor = node._right
+        if node._successor is None:
+            node._max = node._right
         node._successor = node._right
         return self._make_position(node._right)
 
@@ -184,6 +188,8 @@ class LinkedBinaryTree(BinaryTree):
         if self.num_children(p) == 2:
             raise ValueError('Position has two children')
         child = node._left if node._left else node._right  # might be None
+        node._predecessor._successor = node._successor
+        node._successor._predecessor = node._predecessor
         if child is not None:
             child._parent = node._parent   # child's grandparent becomes parent
         if node is self._root:
@@ -205,6 +211,7 @@ class LinkedBinaryTree(BinaryTree):
         Raise TypeError if trees t1 and t2 do not match type of this alberi.
         Raise ValueError if Position p is invalid or not external.
         """
+
         node = self._validate(p)
         if not self.is_leaf(p):
             raise ValueError('position must be leaf')
@@ -212,11 +219,15 @@ class LinkedBinaryTree(BinaryTree):
             raise TypeError('Tree types must match')
         self._size += len(t1) + len(t2)
         if not t1.is_empty():         # attached t1 as left subtree of node
+            t1._max._successor = node
+            node._predecessor = t1._max
             t1._root._parent = node
             node._left = t1._root
             t1._root = None             # set t1 instance to empty
             t1._size = 0
         if not t2.is_empty():         # attached t2 as right subtree of node
+            t2._min._predecessor = node
+            node._successor = t2._min
             t2._root._parent = node
             node._right = t2._root
             t2._root = None             # set t2 instance to empty
