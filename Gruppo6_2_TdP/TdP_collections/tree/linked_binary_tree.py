@@ -28,15 +28,13 @@ class LinkedBinaryTree(BinaryTree):
     # -------------------------- nested _Node class --------------------------
     class _Node:
         """Lightweight, nonpublic class for storing a node."""
-        __slots__ = '_element', '_parent', '_left', '_right', '_successor', '_predecessor'  # streamline memory usage
+        __slots__ = '_element', '_parent', '_left', '_right'  # streamline memory usage
 
-        def __init__(self, element, parent=None, left=None, right=None, successor=None, predecessor=None):
+        def __init__(self, element, parent=None, left=None, right=None):
             self._element = element
             self._parent = parent
             self._left = left
             self._right = right
-            self._successor = successor
-            self._predecessor = predecessor
 
     # -------------------------- nested Position class --------------------------
     class Position(BinaryTree.Position):
@@ -100,16 +98,6 @@ class LinkedBinaryTree(BinaryTree):
         node = self._validate(p)
         return self._make_position(node._right)
 
-    def successor(self, p):
-        """Return the Position of p's successor (or None if no successor exists)."""
-        node = self._validate(p)
-        return self._make_position(node._successor)
-
-    def predecessor(self, p):
-        """Return the Position of p's predecessor (or None if no predecessor exists)."""
-        node = self._validate(p)
-        return self._make_position(node._predecessor)
-
     def num_children(self, p):
         """Return the number of children of Position p."""
         node = self._validate(p)
@@ -142,14 +130,7 @@ class LinkedBinaryTree(BinaryTree):
         if node._left is not None:
             raise ValueError('Left child exists')
         self._size += 1
-        node._left = self._Node(e, node, predecessor=node._predecessor, successor=node)                  # node is its parent
-        if not self.is_root(p):
-            if node._predecessor is not None:
-                node._predecessor._successor = node._left
-        if node._predecessor is None:
-            self._min = node._left
-        node._predecessor = node._left
-
+        node._left = self._Node(e, node)                  # node is its parent
         return self._make_position(node._left)
 
     def _add_right(self, p, e):
@@ -162,13 +143,7 @@ class LinkedBinaryTree(BinaryTree):
         if node._right is not None:
             raise ValueError('Right child exists')
         self._size += 1
-        node._right = self._Node(e, node, predecessor=node, successor=node._successor)                 # node is its parent
-        if not self.is_root(p):
-            if node._successor is not None:
-                node._successor._predecessor = node._right
-        if node._successor is None:
-            node._max = node._right
-        node._successor = node._right
+        node._right = self._Node(e, node)                 # node is its parent
         return self._make_position(node._right)
 
     def _replace(self, p, e):
@@ -188,8 +163,6 @@ class LinkedBinaryTree(BinaryTree):
         if self.num_children(p) == 2:
             raise ValueError('Position has two children')
         child = node._left if node._left else node._right  # might be None
-        node._predecessor._successor = node._successor
-        node._successor._predecessor = node._predecessor
         if child is not None:
             child._parent = node._parent   # child's grandparent becomes parent
         if node is self._root:
@@ -219,15 +192,11 @@ class LinkedBinaryTree(BinaryTree):
             raise TypeError('Tree types must match')
         self._size += len(t1) + len(t2)
         if not t1.is_empty():         # attached t1 as left subtree of node
-            t1._max._successor = node
-            node._predecessor = t1._max
             t1._root._parent = node
             node._left = t1._root
             t1._root = None             # set t1 instance to empty
             t1._size = 0
         if not t2.is_empty():         # attached t2 as right subtree of node
-            t2._min._predecessor = node
-            node._successor = t2._min
             t2._root._parent = node
             node._right = t2._root
             t2._root = None             # set t2 instance to empty
