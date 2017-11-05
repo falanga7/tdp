@@ -1,4 +1,5 @@
 from ..TdP_collections.map.binary_search_tree import TreeMap
+from ..TdP_collections.queue.array_queue import ArrayQueue
 
 
 class MyTreeMap(TreeMap):
@@ -12,31 +13,21 @@ class MyTreeMap(TreeMap):
             self._successor = successor
             self._predecessor = predecessor
 
-    def successor(self, p):
-        """Return the Position of p's successor (or None if no successor exists)."""
-        node = self._validate(p)
-        return self._make_position(node._successor)
-
-    def predecessor(self, p):
-        """Return the Position of p's predecessor (or None if no predecessor exists)."""
-        node = self._validate(p)
-        return self._make_position(node._predecessor)
-
     def before(self, p):
         """Return the Position just before p in the natural order.
 
         Return None if p is the first position.
         """
-        self._validate(p)  # inherited from LinkedBinaryTree
-        return self.predecessor(p)
+        node = self._validate(p)
+        return self._make_position(node._predecessor)
 
     def after(self, p):
         """Return the Position just after p in the natural order.
 
         Return None if p is the last position.
         """
-        self._validate(p)  # inherited from LinkedBinaryTree
-        return self.successor(p)
+        node = self._validate(p)
+        return self._make_position(node._successor)
 
     def _add_left(self, p, e):
         """Create a new left child for Position p, storing element e.
@@ -100,8 +91,6 @@ class MyTreeMap(TreeMap):
             t2._min._predecessor = node
             node._successor = t2._min
 
-
-
     def LCA(self, p, q):
         """Return the position of the common ancestor."""
         self._validate(p)
@@ -115,5 +104,17 @@ class MyTreeMap(TreeMap):
                 root = root.right()
             else:
                 return root
+
+    def breadthfirst(self):
+        """Iterator breadth first of Tree Positions"""
+        if not self.is_empty():
+            fringe = ArrayQueue()
+        fringe.enqueue(self.root())
+        while not fringe.is_empty():
+            p = fringe.enqueue()
+            yield p
+            for c in self.children(p):
+                fringe.enqueue(c)
+
 
 
