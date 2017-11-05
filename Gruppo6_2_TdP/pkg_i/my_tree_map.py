@@ -3,12 +3,12 @@ from ..TdP_collections.map.binary_search_tree import TreeMap
 
 class MyTreeMap(TreeMap):
 
-    class _Node:
+    class _Node(TreeMap._Node):
         """Lightweight, nonpublic class for storing a node."""
         __slots__ = '_successor', '_predecessor'  # streamline memory usage
 
-        def __init__(self, successor=None, predecessor=None):
-            super()
+        def __init__(self, element, parent=None, left=None, right=None, successor=None, predecessor=None):
+            super().__init__(element, parent, left, right)
             self._successor = successor
             self._predecessor = predecessor
 
