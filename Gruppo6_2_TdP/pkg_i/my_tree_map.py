@@ -1,5 +1,5 @@
-from ..TdP_collections.map.binary_search_tree import TreeMap
-from ..TdP_collections.queue.array_queue import ArrayQueue
+from TdP_collections.map.binary_search_tree import TreeMap
+from TdP_collections.queue.array_queue import ArrayQueue
 
 
 class MyTreeMap(TreeMap):
@@ -59,7 +59,7 @@ class MyTreeMap(TreeMap):
             if node._successor is not None:
                 node._successor._predecessor = node._right
         if node._successor is None:
-            node._max = node._right
+            self._max = node._right
         node._successor = node._right
         return new
 
@@ -111,7 +111,7 @@ class MyTreeMap(TreeMap):
             fringe = ArrayQueue()
         fringe.enqueue(self.root())
         while not fringe.is_empty():
-            p = fringe.enqueue()
+            p = fringe.dequeue()
             yield p
             for c in self.children(p):
                 fringe.enqueue(c)
