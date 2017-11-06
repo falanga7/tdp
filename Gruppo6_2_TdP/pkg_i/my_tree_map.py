@@ -113,8 +113,9 @@ class MyTreeMap(TreeMap):
         while not fringe.is_empty():
             p = fringe.dequeue()
             yield p
-            for c in self.children(p):
-                fringe.enqueue(c)
+            if p is not None:
+                fringe.enqueue(self.left(p))
+                fringe.enqueue(self.right(p))
 
 
 
