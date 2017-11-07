@@ -124,11 +124,3 @@ del avl_tree4[elem15]
 del avl_tree4[elem25]
 draw_level_order(str(avl_tree4))
 printsp(avl_tree4)
-
-print("Stampa del quarto albero di test con successori e predecessori e attach ad un elemento casuale:")
-
-p = avl_tree2.right(avl_tree2.root())
-p = avl_tree2.right(avl_tree2.right(p))
-avl_tree2._attach(p, avl_tree3, avl_tree4)
-draw_level_order(str(avl_tree2))
-printsp(avl_tree2)

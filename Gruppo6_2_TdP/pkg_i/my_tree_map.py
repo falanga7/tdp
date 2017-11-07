@@ -102,7 +102,6 @@ class MyTreeMap(TreeMap):
             node._successor = t2._min
         super()._attach(p, t1, t2)
 
-
     def LCA(self, p, q):
         """Return the position of the common ancestor."""
         self._validate(p)
@@ -111,9 +110,9 @@ class MyTreeMap(TreeMap):
 
         while not self.is_leaf(root):
             if root.key() > p.key() and root.key() > q.key():
-                root = root.left()
-            elif root.key() < p.key() and root.key() < q.key:
-                root = root.right()
+                root = self.left(root)
+            elif root.key() < p.key() and root.key() < q.key():
+                root = self.right(root)
             else:
                 return root
 
