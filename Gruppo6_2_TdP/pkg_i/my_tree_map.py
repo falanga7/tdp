@@ -13,6 +13,11 @@ class MyTreeMap(TreeMap):
             self._successor = successor
             self._predecessor = predecessor
 
+    def __init__(self):
+        super().__init__()
+        self._max = None
+        self._min = None
+
     def before(self, p):
         """Return the Position just before p in the natural order.
 
@@ -71,8 +76,10 @@ class MyTreeMap(TreeMap):
         """
         element = super()._delete(p)
         node = p._node
-        node._predecessor._successor = node._successor
-        node._successor._predecessor = node._predecessor
+        if node._predecessor is not None:
+            node._predecessor._successor = node._successor
+        if node._successor is not None:
+            node._successor._predecessor = node._predecessor
         return element
 
     def _attach(self, p, t1, t2):
@@ -82,14 +89,19 @@ class MyTreeMap(TreeMap):
         Raise TypeError if trees t1 and t2 do not match type of this alberi.
         Raise ValueError if Position p is invalid or not external.
         """
-        node = p._node
-        super()._attach(p, t1, t2)
-        if not t1.is_empty():         # attached t1 as left subtree of node
+        node = self._validate(p)
+        if not t1.is_empty():
+            if t1._max is None:
+                t1._max = t1.root()._node
             t1._max._successor = node
             node._predecessor = t1._max
-        if not t2.is_empty():         # attached t2 as right subtree of node
+        if not t2.is_empty():
+            if t2._min is None:
+                t2._min = t1.root()._node
             t2._min._predecessor = node
             node._successor = t2._min
+        super()._attach(p, t1, t2)
+
 
     def LCA(self, p, q):
         """Return the position of the common ancestor."""
@@ -117,5 +129,17 @@ class MyTreeMap(TreeMap):
                 fringe.enqueue(self.left(p))
                 fringe.enqueue(self.right(p))
 
+    def __str__(self):
+        if self.is_empty():
+            raise ValueError("L'abero è vuoto.")
+        for p in self.breadthfirst():
+            if p is None:
+                to_print += ",#"
+            elif self.is_root(p):
+                to_print = '{' + str(p.key())
+            else:
+                to_print += "," + str(p.key())
+        to_print += "}"
+        return to_print
 
 
