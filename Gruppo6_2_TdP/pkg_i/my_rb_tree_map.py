@@ -104,7 +104,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             elif self.is_root(p):
                 to_print = '{' + str(p.key())
             elif self._is_red(p):
-                to_print += ",\033[1;31;0m" + str(p.key())
+                to_print += ",\033[1;31;0m" + str(p.key()) + "\033[0m"
             else:
                 to_print += "," + str(p.key())
         to_print += "}"

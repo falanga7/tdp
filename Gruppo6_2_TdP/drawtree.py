@@ -118,7 +118,7 @@ def build_ascii_tree_recursive(t):
 
     node.label = '{}'.format(t.val)
     if '[1;31;0m' in node.label:
-        node.lablen = len(node.label) - 9
+        node.lablen = len(node.label) - 13
     else:
         node.lablen = len(node.label)
     return node
