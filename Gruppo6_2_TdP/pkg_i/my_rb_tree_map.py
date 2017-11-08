@@ -1,5 +1,5 @@
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
-
+from TdP_collections.queue.array_queue import ArrayQueue
 
 class MyRBTreeMap(RedBlackTreeMap):
 
@@ -94,6 +94,18 @@ class MyRBTreeMap(RedBlackTreeMap):
         self._root = None
         self._size = 0
         return t1, t2
+
+    def breadthfirst(self):
+        """Iterator breadth first of Tree Positions"""
+        if not self.is_empty():
+            fringe = ArrayQueue()
+        fringe.enqueue(self.root())
+        while not fringe.is_empty():
+            p = fringe.dequeue()
+            yield p
+            if p is not None:
+                fringe.enqueue(self.left(p))
+                fringe.enqueue(self.right(p))
 
     def __str__(self):
         if self.is_empty():
