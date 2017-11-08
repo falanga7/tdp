@@ -42,23 +42,24 @@ class MyRBTreeMap(RedBlackTreeMap):
     def fusion(self, t1):
         maxt = self.last()                               # O(logn)
         mint1 = t1.first()                               # O(logm)
-        if mint1 < maxt:
+        if mint1.key() < maxt.key():
             raise ValueError("Le chiavi dell'albero passato non sono maggiori delle chiavi di quest'albero.")
         bd_t = self._black_depth()                        # O(logn)
         bd_t1 = t1._black_depth()                         # O(logm)
         len1 = len(self)
         len2 = len(t1)
         self._size = len1 + len2
-        node = self._validate(mint1)
-        del t1[mint1]                                     # O(logm)
+        node = t1._validate(mint1)
+        del t1[mint1.key()]                                # O(logm)
         node._parent = None
 
         if bd_t == bd_t1:
             self._root._parent = node
             node._left = self._root
             self._root = node
-            t1._root._parent = node
-            node._right = t1._root
+            if not t1.is_empty():
+                t1._root._parent = node
+                node._right = t1._root
 
         elif bd_t > bd_t1:
             bp = self._validate(self._find_black_parent_right(bd_t1))           # O(log(m))
