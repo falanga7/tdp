@@ -117,7 +117,10 @@ def build_ascii_tree_recursive(t):
         node.right.parent_dir = 1
 
     node.label = '{}'.format(t.val)
-    node.lablen = len(node.label)
+    if '[1;31;0m' in node.label:
+        node.lablen = len(node.label) - 9
+    else:
+        node.lablen = len(node.label)
     return node
 
 
@@ -296,7 +299,7 @@ def drawtree(t):
 def deserialize(string):
     if string == '{}':
         return None
-    nodes = [None if val == '#' else TreeNode(int(val))
+    nodes = [None if val == '#' else TreeNode(str(val))
              for val in string.strip('[]{}').split(',')]
     kids = nodes[::-1]
     root = kids.pop()

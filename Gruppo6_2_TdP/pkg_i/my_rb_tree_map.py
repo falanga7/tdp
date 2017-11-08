@@ -1,4 +1,4 @@
-from ..TdP_collections.map.red_black_tree import RedBlackTreeMap
+from TdP_collections.map.red_black_tree import RedBlackTreeMap
 
 
 class MyRBTreeMap(RedBlackTreeMap):
@@ -95,4 +95,18 @@ class MyRBTreeMap(RedBlackTreeMap):
         self._size = 0
         return t1, t2
 
+    def __str__(self):
+        if self.is_empty():
+            raise ValueError("L'abero è vuoto.")
+        for p in self.breadthfirst():
+            if p is None:
+                to_print += ",#"
+            elif self.is_root(p):
+                to_print = '{' + str(p.key())
+            elif self._is_red(p):
+                to_print += ",\033[1;31;0m" + str(p.key())
+            else:
+                to_print += "," + str(p.key())
+        to_print += "}"
+        return to_print
 
