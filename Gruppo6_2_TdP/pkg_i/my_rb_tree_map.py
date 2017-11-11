@@ -13,51 +13,70 @@ class MyRBTreeMap(RedBlackTreeMap):
             self._left_size = 0
             self._right_size = 0
 
+    def __delitem__(self, k):
+        """Remove item associated with key k (raise KeyError if not found)."""
+        if not self.is_empty():
+            p = self._subtree_search(self.root(), k)
+            walk = p
+            parent = self.parent(walk)
+            while parent is not None:  # keep walking parent
+                if self.left(parent) == walk:
+                    parent._node._left_size -= 1
+                else:
+                    parent._node._right_size -= 1
+                walk = parent
+                parent = self.parent(walk)
+            if k == p.key():
+                self.delete(p)  # rely on positional version
+                return  # successful deletion complete
+            self._rebalance_access(p)  # hook for balanced tree subclasses
+        raise KeyError('Key Error: ' + repr(k))
+
+    def _rotate(self, p):
+        """Rotate Position p above its parent.
+
+        Switches between these configurations, depending on whether p==a or p==b.
+
+              b                  a
+             / \                /  \
+            a  t2             t0   b
+           / \                     / \
+          t0  t1                  t1  t2
+
+        Caller should ensure that p is not the root.
+        """
+        """Rotate Position p above its parent."""
+        x = p._node
+        y = x._parent  # we assume this exists
+        z = y._parent  # grandparent (possibly None)
+        if z is None:
+            self._root = x  # x becomes root
+            x._parent = None
+        else:
+            self._relink(z, x, y == z._left)  # x becomes a direct child of z
+        # now rotate x and y, including transfer of middle subtree
+        if x == y._left:
+            self._relink(y, x._right, True)  # x._right becomes left child of y
+            self._relink(x, y, False)  # y becomes right child of x
+            y._left_size = x._right_size
+            x._right_size = y._left_size + y._left_size + 1
+        else:
+            self._relink(y, x._left, False)  # x._left becomes right child of y
+            self._relink(x, y, True)  # y becomes left child of x
+            y._right_size = x._left_size
+            x._left_size = y._left_size + y._left_size + 1
+
     def _rebalance_insert(self, p):
-        self._resolve_red(p)  # new node is always red
-        parent = self.parent(p)
+        walk = p
+        parent = self.parent(walk)
         while parent is not None:  # keep walking parent
-            if self.left(parent) == p:
+            if self.left(parent) == walk:
                 parent._node._left_size += 1
             else:
                 parent._node._right_size += 1
-            p = parent
-            parent = self.parent(p)
-
-    def _resolve_red(self, p):
-        if self.is_root(p):
-            self._set_black(p)  # make root black
-        else:
-            parent = self.parent(p)
-            if self._is_red(parent):  # double red problem
-                uncle = self.sibling(parent)
-                if not self._is_red(uncle):  # Case 1: misshapen 4-node
-                    middle = self._restructure(p)  # do trinode restructuring
-                    self._set_black(middle)  # and then fix colors
-                    self._set_red(self.left(middle))
-                    self._set_red(self.right(middle))
-                    left = self.left(middle)._node
-                    right = self.right(middle)._node
-                    if p == middle:
-                        left._right_size = p._node._left_size
-                        right._left_size = p._node._right_size
-                        p._node._left_size = left._right_size + left._left_size + 1
-                        p._node._right_size = right._right_size + right._left_size + 1
-
-                    else:
-                        if left == p:
-                            right._left_size = middle._node._right_size
-                            middle._node._right_size = right._left_size + right._right_size + 1
-                        else:
-                            left._right_size = middle._node._left_size
-                            middle._node._left_size = left._left_size + left._right_size + 1
-                else:  # Case 2: overfull 5-node
-                    grand = self.parent(parent)
-                    self._set_red(grand)  # grandparent becomes red
-                    self._set_black(self.left(grand))  # its children become black
-                    self._set_black(self.right(grand))
-                    self._resolve_red(grand)  # recur at red grandparent
-
+            walk = parent
+            parent = self.parent(walk)
+        self._resolve_red(p)  # new node is always red
 
     def _black_depth(self):
         """Return black depth of RB Tree."""
