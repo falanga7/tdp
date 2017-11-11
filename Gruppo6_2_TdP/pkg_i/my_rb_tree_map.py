@@ -198,3 +198,29 @@ class MyRBTreeMap(RedBlackTreeMap):
         to_print += "}"
         return to_print
 
+    def _attach(self, p, t1, t2):
+        """Attach trees t1 and t2, respectively, as the left and right subtrees of the external Position p.
+
+        As a side effect, set t1 and t2 to empty.
+        Raise TypeError if trees t1 and t2 do not match type of this alberi.
+        Raise ValueError if Position p is invalid or not external.
+        """
+
+        node = self._validate(p)
+        if not self.is_leaf(p):
+            raise ValueError('position must be leaf')
+        if not type(self) is type(t1) is type(t2):    # all 3 trees must be same type
+            raise TypeError('Tree types must match')
+        self._size += len(t1) + len(t2)
+        if not t1.is_empty():         # attached t1 as left subtree of node
+            t1._root._parent = node
+            node._left = t1._root
+            node._left_size = len(t1)
+            t1._root = None             # set t1 instance to empty
+            t1._size = 0
+        if not t2.is_empty():         # attached t2 as right subtree of node
+            t2._root._parent = node
+            node._right = t2._root
+            node._right_size = len(t2)
+            t2._root = None             # set t2 instance to empty
+            t2._size = 0
