@@ -1,7 +1,63 @@
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
 from TdP_collections.queue.array_queue import ArrayQueue
 
+
 class MyRBTreeMap(RedBlackTreeMap):
+    # -------------------------- nested _Node class --------------------------
+    class _Node(RedBlackTreeMap._Node):
+        """Node class for red-black tree maintains bit that denotes color."""
+        __slots__ = '_left_size', '_right_size'  # add additional data member to the Node class
+
+        def __init__(self, element, parent=None, left=None, right=None):
+            super().__init__(element, parent, left, right)
+            self._left_size = 0
+            self._right_size = 0
+
+    def _rebalance_insert(self, p):
+        self._resolve_red(p)  # new node is always red
+        parent = self.parent(p)
+        while parent is not None:  # keep walking parent
+            if self.left(parent) == p:
+                parent._node._left_size += 1
+            else:
+                parent._node._right_size += 1
+            p = parent
+            parent = self.parent(p)
+
+    def _resolve_red(self, p):
+        if self.is_root(p):
+            self._set_black(p)  # make root black
+        else:
+            parent = self.parent(p)
+            if self._is_red(parent):  # double red problem
+                uncle = self.sibling(parent)
+                if not self._is_red(uncle):  # Case 1: misshapen 4-node
+                    middle = self._restructure(p)  # do trinode restructuring
+                    self._set_black(middle)  # and then fix colors
+                    self._set_red(self.left(middle))
+                    self._set_red(self.right(middle))
+                    left = self.left(middle)._node
+                    right = self.right(middle)._node
+                    if p == middle:
+                        left._right_size = p._node._left_size
+                        right._left_size = p._node._right_size
+                        p._node._left_size = left._right_size + left._left_size + 1
+                        p._node._right_size = right._right_size + right._left_size + 1
+
+                    else:
+                        if left == p:
+                            right._left_size = middle._node._right_size
+                            middle._node._right_size = right._left_size + right._right_size + 1
+                        else:
+                            left._right_size = middle._node._left_size
+                            middle._node._left_size = left._left_size + left._right_size + 1
+                else:  # Case 2: overfull 5-node
+                    grand = self.parent(parent)
+                    self._set_red(grand)  # grandparent becomes red
+                    self._set_black(self.left(grand))  # its children become black
+                    self._set_black(self.right(grand))
+                    self._resolve_red(grand)  # recur at red grandparent
+
 
     def _black_depth(self):
         """Return black depth of RB Tree."""
