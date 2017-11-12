@@ -17,15 +17,16 @@ class MyRBTreeMap(RedBlackTreeMap):
         """Remove item associated with key k (raise KeyError if not found)."""
         if not self.is_empty():
             p = self._subtree_search(self.root(), k)
-            walk = p
-            parent = self.parent(walk)
-            while parent is not None:  # keep walking parent
-                if self.left(parent) == walk:
-                    parent._node._left_size -= 1
-                else:
-                    parent._node._right_size -= 1
-                walk = parent
-                parent = self.parent(walk)
+            self._update_sizes(p, -1)
+            # walk = p
+            # parent = self.parent(walk)
+            # while parent is not None:  # keep walking parent
+            #     if self.left(parent) == walk:
+            #         parent._node._left_size -= 1
+            #     else:
+            #         parent._node._right_size -= 1
+            #     walk = parent
+            #     parent = self.parent(walk)
             if k == p.key():
                 self.delete(p)  # rely on positional version
                 return  # successful deletion complete
@@ -67,15 +68,16 @@ class MyRBTreeMap(RedBlackTreeMap):
             x._left_size = y._left_size + y._left_size + 1
 
     def _rebalance_insert(self, p):
-        walk = p
-        parent = self.parent(walk)
-        while parent is not None:  # keep walking parent
-            if self.left(parent) == walk:
-                parent._node._left_size += 1
-            else:
-                parent._node._right_size += 1
-            walk = parent
-            parent = self.parent(walk)
+        # walk = p
+        # parent = self.parent(walk)
+        # while parent is not None:  # keep walking parent
+        #     if self.left(parent) == walk:
+        #         parent._node._left_size += 1
+        #     else:
+        #         parent._node._right_size += 1
+        #     walk = parent
+        #     parent = self.parent(walk)
+        self._update_sizes(p, 1)
         self._resolve_red(p)  # new node is always red
 
     def _black_depth(self):
@@ -126,47 +128,92 @@ class MyRBTreeMap(RedBlackTreeMap):
         self._size = len1 + len2
         node = t1._validate(mint1)
         del t1[mint1.key()]                                # O(logm)
+        len2 -= 1
         node._parent = None
 
         if bd_t == bd_t1:
             self._root._parent = node
             node._left = self._root
+            node._left_size = len1
             self._root = node
             if not t1.is_empty():
                 t1._root._parent = node
+                node._right_size = len2
                 node._right = t1._root
-
         elif bd_t > bd_t1:
             bp = self._validate(self._find_black_parent_right(bd_t1))           # O(log(m))
             node._left = bp._right
+            node._left_size = bp._right_size
             bp._right = node
+            bp._right_size += 1 + len2
             node._parent = bp
             node._right = t1._root
+            node._right_size = len2
             node._red = True
+            self._update_sizes(self._make_position(bp), bp._right_size)
             child = self._make_position(node._left)
-            self._rebalance_insert(child)               # O(logn)
+            if child is not None:
+                self._rebalance_insert(child)               # O(logn)
         else:
             bp = t1._validate(t1._find_black_parent_left(bd_t))                 # O(log(n))
             node._right = bp._left
+            node._right_size = bp._left_size
             bp._left = node
+            bp._left_size += 1 + len1
             node._parent = bp
             node._left = self._root
+            node._right_size = len1
             node._red = True
             self._root = t1._root
+            self._update_sizes(self._make_position(bp), bp._left_size)
             child = self._make_position(node._right)
-            self._rebalance_insert(child)               # O(logm)
+            if child is not None:
+                self._rebalance_insert(child)               # O(logm)
         t1._root = None
         t1._size = 0
+
+    def _update_sizes(self, p, size):
+        walk = p
+        parent = self.parent(walk)
+        while parent is not None:  # keep walking parent
+            if self.left(parent) == walk:
+                parent._node._left_size += size
+            else:
+                parent._node._right_size += size
+            walk = parent
+            parent = self.parent(walk)
 
     def split(self, k):
         p = self.find_position(k)                       # O(logn)
         if p is None or p.key() != k:
             raise ValueError("La chiave k non appartiene all'albero.")
-        node = self.validate(p)
-        t1 = node._left
-        t2 = node._right
-
-
+        node = self._validate(p)
+        t1 = MyRBTreeMap()
+        t2 = MyRBTreeMap()
+        t1._root = node._left
+        t1._size = node._left_size
+        t2._root = node._right
+        t2._size = node._right_size
+        walk = p
+        parent = self.parent(walk)
+        while parent is not None:  # keep walking parent
+            if self.left(parent) == walk:
+                parentTree = MyRBTreeMap()
+                parentTree._root = parent._node
+                parentTree._size = parent._node._right_size + 1
+                parent._node._left = None
+                t2.fusion(parentTree)
+            else:
+                parentTree = MyRBTreeMap()
+                parentTree._root = parent._node
+                parentTree._size = parent._node._left_size + 1
+                parent._node._right = None
+                parentTree.fusion(t1)
+                t1 = parentTree
+            walk = parent
+            parent = self.parent(walk)
+        t1._root._parent = None
+        t2._root._parent = None
         self._root = None
         self._size = 0
         return t1, t2
@@ -224,3 +271,4 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._right_size = len(t2)
             t2._root = None             # set t2 instance to empty
             t2._size = 0
+        self._update_sizes(p, len(t1) + len(t2))
