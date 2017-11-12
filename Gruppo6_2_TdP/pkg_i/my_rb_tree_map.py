@@ -148,6 +148,8 @@ class MyRBTreeMap(RedBlackTreeMap):
             bp._right_size += 1 + len2
             node._parent = bp
             node._right = t1._root
+            if t1._root is not None:
+                t1._root._parent = node
             node._right_size = len2
             node._red = True
             self._update_sizes(self._make_position(bp), bp._right_size)
@@ -162,6 +164,8 @@ class MyRBTreeMap(RedBlackTreeMap):
             bp._left_size += 1 + len1
             node._parent = bp
             node._left = self._root
+            if self._root is not None:
+                self._root._parent = node
             node._right_size = len1
             node._red = True
             self._root = t1._root
