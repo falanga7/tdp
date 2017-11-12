@@ -60,12 +60,12 @@ class MyRBTreeMap(RedBlackTreeMap):
             self._relink(y, x._right, True)  # x._right becomes left child of y
             self._relink(x, y, False)  # y becomes right child of x
             y._left_size = x._right_size
-            x._right_size = y._left_size + y._left_size + 1
+            x._right_size = y._left_size + y._right_size + 1
         else:
             self._relink(y, x._left, False)  # x._left becomes right child of y
             self._relink(x, y, True)  # y becomes left child of x
             y._right_size = x._left_size
-            x._left_size = y._left_size + y._left_size + 1
+            x._left_size = y._left_size + y._right_size + 1
 
     def _rebalance_insert(self, p):
         # walk = p
