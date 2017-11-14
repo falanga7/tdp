@@ -131,11 +131,10 @@ print("T21:")
 draw_level_order(str(rb_tree911))
 print("T22:")
 draw_level_order(str(rb_tree912))
-rb_treet922 = RedBlackTreeMap()
-rb_treet922[7] = "test"
-rb_treet922[8] = "test"
-rb_treet922[4] = "test"
-rb_treet922[2] = "test"
-rb_treet922[5] = "test"
-rb_treet922[3] = "test"
-rb_treet922[6] = "test"
+print("Albero RB T1.split(2):")
+
+rb_tree9121, rb_tree9122 = rb_tree912.split(4) #NON FUNZIONA.. NON VEDE IL GENITORE , SPLITTANDO SU UN FIGLIO SENZXA FRATELLO ERRORE!!!
+print("T21:")
+draw_level_order(str(rb_tree9121))
+print("T22:")
+draw_level_order(str(rb_tree9122))

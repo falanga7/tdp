@@ -160,17 +160,19 @@ class MyRBTreeMap(RedBlackTreeMap):
                 self._rebalance_insert(child)               # O(logn)
             else:
                 node._red = False
+
         else:
             bp = t1._validate(t1._find_black_parent_left(bd_t))                 # O(log(n))
             node._right = bp._left
             node._right_size = bp._left_size
             bp._left = node
             bp._left_size += 1 + len1
+            bp._right_size = node._right_size + 1
             node._parent = bp
             node._left = self._root
             if self._root is not None:
                 self._root._parent = node
-            node._right_size = len1
+            node._left_size = len1
             node._red = True
             self._root = t1._root
             self._update_sizes(self._make_position(bp), bp._left_size)
@@ -209,6 +211,7 @@ class MyRBTreeMap(RedBlackTreeMap):
         t1._root._parent = None
         t2._root._parent = None
         while parent is not None:  # keep walking parent
+            print("ok")
             if self.left(parent) == walk:
                 parentTree = MyRBTreeMap()
                 parentTree._root = parent._node
