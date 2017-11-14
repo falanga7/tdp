@@ -113,29 +113,3 @@ class RedBlackTreeMap(TreeMap):
       else:
         self._fix_deficit(z, self.right(z))
 
-  def breadthfirst(self):
-    """Iterator breadth first of Tree Positions"""
-    if not self.is_empty():
-        fringe = ArrayQueue()
-    fringe.enqueue(self.root())
-    while not fringe.is_empty():
-        p = fringe.dequeue()
-        yield p
-        if p is not None:
-            fringe.enqueue(self.left(p))
-            fringe.enqueue(self.right(p))
-
-  def __str__(self):
-    if self.is_empty():
-        raise ValueError("L'abero è vuoto.")
-    for p in self.breadthfirst():
-        if p is None:
-            to_print += ",#"
-        elif self.is_root(p):
-            to_print = '{' + str(p.key())
-        elif self._is_red(p):
-            to_print += ",\033[1;31;0m" + str(p.key()) + "\033[0m"
-        else:
-            to_print += "," + str(p.key())
-    to_print += "}"
-    return to_print
