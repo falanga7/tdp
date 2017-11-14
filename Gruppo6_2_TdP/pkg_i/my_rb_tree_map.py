@@ -84,8 +84,10 @@ class MyRBTreeMap(RedBlackTreeMap):
         """Return black depth of RB Tree."""
         walk = self.root()
         black_depth = 1
-        while self.left(walk) is not None:  # keep walking left
-            walk = self.left(walk)
+        while self.left(walk) is not None or self.right(walk) is not None:  # keep walking left
+            left = self.left(walk)
+            right = self.right(walk)
+            walk = left if left is not None else right
             if not super()._is_red(walk):
                 black_depth += 1
         return black_depth
@@ -204,6 +206,8 @@ class MyRBTreeMap(RedBlackTreeMap):
         t2._size = node._right_size
         walk = p
         parent = self.parent(walk)
+        t1._root._parent = None
+        t2._root._parent = None
         while parent is not None:  # keep walking parent
             if self.left(parent) == walk:
                 parentTree = MyRBTreeMap()
