@@ -1,13 +1,17 @@
 from pkg_i.my_rb_tree_map import MyRBTreeMap
 from drawtree import draw_level_order
 from util import randList
+from TdP_collections.map.red_black_tree import RedBlackTreeMap
 
 print("Albero RB casuale:")
 rb_tree = MyRBTreeMap()
+rb_treet = RedBlackTreeMap()
+
 rl = randList(1, 100, 30)
 i = 0
 for element in rl:
     rb_tree[element] = "test"
+    rb_treet[element] = "test"
     i += 1
     if i == 20:
         elem20 = element
@@ -16,6 +20,8 @@ for element in rl:
     if i == 25:
         elem25 = element
 draw_level_order(str(rb_tree))
+print("Albero RB casuale non My:")
+draw_level_order(str(rb_treet))
 print("Albero RB T:")
 rb_tree1 = MyRBTreeMap()
 rb_tree1[1] = "test"
