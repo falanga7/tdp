@@ -222,6 +222,7 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parent._node._right = None
                 parentTree.fusion(t1)
                 t1 = parentTree
+            self._root._parent = None
             walk = parent
             parent = self.parent(walk)
         t1._root._parent = None
