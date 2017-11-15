@@ -115,7 +115,15 @@ class MyRBTreeMap(RedBlackTreeMap):
                 d_bd -= 1
         return walk
 
-    def fusion(self, t1, mint1 = None):
+    def fusion(self, t1):
+        if t1.is_empty():
+            return
+        elif self.is_empty():
+            self._root = t1._root
+            self._size = t1._size
+            t1._root = None
+            t1._size = 0
+            return
         maxt = self.last()                               # O(logn)
         mint1 = t1.first()                               # O(logm)
         if mint1.key() < maxt.key() or mint1 is None:
@@ -157,6 +165,7 @@ class MyRBTreeMap(RedBlackTreeMap):
         elif bd_t < bd_t1:
             bp = t1._validate(t1._find_black_parent_left(bd_t))  # O(log(m))
             node._right = bp._left
+            bp._left._parent = node
             bp._left = node
             node._right_size = bp._left_size
             bp._left_size += len1 + 1
@@ -209,6 +218,7 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._size = parent._node._right_size + 1
                 parentTree._root._parent = None
                 parentTree._root._left_size = 0
+                parentTree._root._left = None
                 parent._node._left = None
                 parentTree[t1.root().key()] = t1.root().value()
                 del t1[t1.root().key()]
@@ -218,16 +228,23 @@ class MyRBTreeMap(RedBlackTreeMap):
                     t2 = parentTree
             else:
                 parentTree = MyRBTreeMap()
+                ancestor = parent._node._parent
                 parentTree._root = parent._node
                 parentTree._size = parent._node._left_size + 1
                 parentTree._root._parent = None
                 parentTree._root._right_size = 0
+                parentTree._root._right = None
                 parent._node._right = None
                 t1[parentTree.root().key()] = parentTree.root().value()
                 del parentTree[parentTree.root().key()]
                 if t1._root is not None:
                     parentTree.fusion(t1)
-                t1 = parentTree
+                    t1 = parentTree
+                else:
+                    t1 = parentTree._root
+                    t1._size = parentTree._size
+                parent._node._parent = ancestor
+
             self._root._parent = None
             walk = parent
             parent = self.parent(walk)
