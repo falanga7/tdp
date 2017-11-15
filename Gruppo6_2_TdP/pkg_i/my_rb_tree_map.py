@@ -18,15 +18,6 @@ class MyRBTreeMap(RedBlackTreeMap):
         if not self.is_empty():
             p = self._subtree_search(self.root(), k)
             self._update_sizes(p, -1)
-            # walk = p
-            # parent = self.parent(walk)
-            # while parent is not None:  # keep walking parent
-            #     if self.left(parent) == walk:
-            #         parent._node._left_size -= 1
-            #     else:
-            #         parent._node._right_size -= 1
-            #     walk = parent
-            #     parent = self.parent(walk)
             if k == p.key():
                 self.delete(p)  # rely on positional version
                 return  # successful deletion complete
