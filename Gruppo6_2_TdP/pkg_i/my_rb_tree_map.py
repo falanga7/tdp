@@ -137,7 +137,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             t1._root._parent = node
             node._right_size = len2
             node._right = t1._root
-        elif t1.is_empty():
+        elif t1._root is None:
             self[mint1.key()] = mint1.value()
             self._set_black(self.find_position(mint1.key()))
         elif bd_t > bd_t1:
@@ -152,24 +152,20 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._right_size = len2 -1
             node._red = True
             self._update_sizes(self._make_position(bp), bp._right_size)
-            child = self._make_position(node._right)
-            self._rebalance_insert(child)               # O(logn)
-
-        else:
+        elif bd_t < bd_t1:
             bp = t1._validate(t1._find_black_parent_left(bd_t))  # O(log(m))
             node._right = bp._left
             bp._left = node
-            bp._left_size += len2
+            bp._left_size += len1
             node._right_size = bp._left_size
             node._parent = bp
             node._left = self._root
             self._root._parent = node
-            node._left_size = len2 - 1
+            node._left_size = len1 - 1
             node._red = True
             t1._update_sizes(t1._make_position(bp), bp._left_size)
-            child = t1._make_position(node._left)
-            t1._rebalance_insert(child)  # O(logn)
             self._root = t1._root
+
         t1._root = None
         t1._size = 0
 
@@ -191,14 +187,18 @@ class MyRBTreeMap(RedBlackTreeMap):
         node = self._validate(p)
         t1 = MyRBTreeMap()
         t2 = MyRBTreeMap()
-        t1._root = node._left
-        t1._size = node._left_size
-        t2._root = node._right
-        t2._size = node._right_size
+        if node._left is not None:
+            t1._root = node._left
+            t1._size = node._left_size
+        if node._right is not None:
+            t2._root = node._right
+            t2._size = node._right_size
         walk = p
         parent = self.parent(walk)
-        t1._root._parent = None
-        t2._root._parent = None
+        if t1._root is not None:
+            t1._root._parent = None
+        if t2.root() is not None:
+            t2._root._parent = None
         while parent is not None:  # keep walking parent
             if self.left(parent) == walk:
                 parentTree = MyRBTreeMap()
@@ -206,20 +206,26 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._size = parent._node._right_size + 1
                 parentTree._root._parent = None
                 parent._node._left = None
-                t2.fusion(parentTree)
+                if t2._root is not None:
+                    t2.fusion(parentTree)
+                else:
+                    t2 = parentTree
             else:
                 parentTree = MyRBTreeMap()
                 parentTree._root = parent._node
                 parentTree._size = parent._node._left_size + 1
                 parentTree._root._parent = None
                 parent._node._right = None
-                parentTree.fusion(t1)
+                if t1._root is not None:
+                    parentTree.fusion(t1)
                 t1 = parentTree
             self._root._parent = None
             walk = parent
             parent = self.parent(walk)
-        t1._root._parent = None
-        t2._root._parent = None
+        if t1._root is not None:
+            t1._root._parent = None
+        if t2._root is not None:
+            t2._root._parent = None
         self._root = None
         self._size = 0
         return t1, t2
