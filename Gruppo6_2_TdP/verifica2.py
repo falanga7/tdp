@@ -1,6 +1,7 @@
-from pkg_i.my_tree_map import MyTreeMap
-from pkg_i.my_avl_tree_map import MyAVLTreeMap
+from pkg_2.my_avl_tree_map import MyAVLTreeMap
+
 from drawtree import draw_level_order
+from pkg_3.my_tree_map import MyTreeMap
 from util import randList
 
 

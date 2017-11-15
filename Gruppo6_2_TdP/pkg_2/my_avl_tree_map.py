@@ -1,5 +1,5 @@
-from .my_tree_map import MyTreeMap
 from TdP_collections.map.avl_tree import AVLTreeMap
+from pkg_3.my_tree_map import MyTreeMap
 
 
 class MyAVLTreeMap(MyTreeMap, AVLTreeMap):

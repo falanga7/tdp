@@ -1,4 +1,4 @@
-from pkg_i.my_rb_tree_map import MyRBTreeMap
+from pkg_4.my_rb_tree_map import MyRBTreeMap
 from drawtree import draw_level_order
 from util import randList
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
@@ -113,7 +113,7 @@ rb_tree9.fusion(rb_tree10)
 print("Albero RB T.fusion(T1):")
 draw_level_order(str(rb_tree9))
 print("Albero RB T.split(9):")
-rb_tree91, rb_tree92 = rb_tree9.split(9)
+rb_tree91, rb_tree92 = rb_tree9.split(11)
 print("T1:")
 draw_level_order(str(rb_tree91))
 print("T2:")
@@ -133,8 +133,8 @@ draw_level_order(str(rb_tree911))
 print("T22:")
 draw_level_order(str(rb_tree912))
 print("Albero RB T22.split(6)")
-rb_tree9121, rb_tree9122 = rb_tree912.split(6)
+rb_tree9121, rb_tree9122 = rb_tree911.split(6)
 print("T121:")
-#draw_level_order(str(rb_tree9121))
+draw_level_order(str(rb_tree9121))
 print("T122:")
 draw_level_order(str(rb_tree9122))
