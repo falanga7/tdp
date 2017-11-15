@@ -1,7 +1,6 @@
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
 from TdP_collections.queue.array_queue import ArrayQueue
 
-
 class MyRBTreeMap(RedBlackTreeMap):
     # -------------------------- nested _Node class --------------------------
     class _Node(RedBlackTreeMap._Node):
@@ -90,6 +89,8 @@ class MyRBTreeMap(RedBlackTreeMap):
         bd = self._black_depth()
         if bd < bd1:
             raise ValueError("La profondità specificata è più grande di quella dell'albero.")
+        if bd1 == 0:
+            return self.root()
         walk = self.root()
         d_bd = bd - bd1 - 1
         while d_bd != 0:
@@ -103,6 +104,8 @@ class MyRBTreeMap(RedBlackTreeMap):
         bd = self._black_depth()
         if bd < bd1:
             raise ValueError("La profondità specificata è più grande di quella dell'albero.")
+        if bd1 == 0:
+            return self.root()
         walk = self.root()
         d_bd = bd - bd1 - 1
         while d_bd != 0:
@@ -114,7 +117,7 @@ class MyRBTreeMap(RedBlackTreeMap):
     def fusion(self, t1):
         maxt = self.last()                               # O(logn)
         mint1 = t1.first()                               # O(logm)
-        if mint1.key() < maxt.key():
+        if mint1.key() < maxt.key() or mint1 is None:
             raise ValueError("Le chiavi dell'albero passato non sono maggiori delle chiavi di quest'albero.")
         len1 = len(self)
         len2 = len(t1)
@@ -131,49 +134,39 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._left = self._root
             node._left_size = len1
             self._root = node
-            if not t1.is_empty():
-                t1._root._parent = node
-                node._right_size = len2
-                node._right = t1._root
+            t1._root._parent = node
+            node._right_size = len2
+            node._right = t1._root
+        elif t1.is_empty():
+            self[mint1.key()] = mint1.value()
         elif bd_t > bd_t1:
-            bp = self._validate(self._find_black_parent_right(bd_t1))           # O(log(m))
+            bp = self._validate(self._find_black_parent_right(bd_t1))  # O(log(m))
             node._left = bp._right
-            node._left_size = bp._right_size
             bp._right = node
-            bp._right_size += 1 + len2
+            bp._right_size += len2
+            node._left_size = bp._right_size
             node._parent = bp
             node._right = t1._root
-            if t1._root is not None:
-                t1._root._parent = node
-            node._right_size = len2
+            node._right_size = len2 -1
             node._red = True
             self._update_sizes(self._make_position(bp), bp._right_size)
-            child = self._make_position(node._left)
-            if child is not None:
-                self._rebalance_insert(child)               # O(logn)
-            else:
-                self._rebalance_insert(self._make_position(node))
+            child = self._make_position(node._right)
+            self._rebalance_insert(child)               # O(logn)
 
         else:
-            bp = t1._validate(t1._find_black_parent_left(bd_t))                 # O(log(n))
+            bp = t1._validate(t1._find_black_parent_left(bd_t))  # O(log(m))
             node._right = bp._left
-            node._right_size = bp._left_size
             bp._left = node
-            bp._left_size += 1 + len1
-            bp._right_size = node._right_size + 1
+            bp._left_size += len2
+            node._right_size = bp._left_size
             node._parent = bp
             node._left = self._root
-            if self._root is not None:
-                self._root._parent = node
-            node._left_size = len1
+            node._left_size = len2 - 1
             node._red = True
+            t1._update_sizes(t1._make_position(bp), bp._left_size)
+            child = t1._make_position(node._left)
+            t1._rebalance_insert(child)  # O(logn)
             self._root = t1._root
-            self._update_sizes(self._make_position(bp), bp._left_size)
-            child = self._make_position(node._right)
-            if child is not None:
-                self._rebalance_insert(child)               # O(logm)
-            else:
-                node._red = False
         t1._root = None
         t1._size = 0
 
@@ -204,7 +197,6 @@ class MyRBTreeMap(RedBlackTreeMap):
         t1._root._parent = None
         t2._root._parent = None
         while parent is not None:  # keep walking parent
-            print("ok")
             if self.left(parent) == walk:
                 parentTree = MyRBTreeMap()
                 parentTree._root = parent._node
