@@ -21,7 +21,7 @@ for element in rl:
         elem25 = element
 draw_level_order(str(rb_tree))
 print("Albero RB casuale non My:")
-draw_level_order(str(rb_treet))
+print(str(rb_treet))
 print("Albero RB T:")
 rb_tree1 = MyRBTreeMap()
 rb_tree1[1] = "test"
@@ -109,13 +109,6 @@ rb_tree10[13] = 444
 rb_tree10[14] = 888
 rb_tree10[15] = 343
 draw_level_order(str(rb_tree10))
-print ("Test")
-test = MyRBTreeMap()
-test[11] = 12
-test[10] = 11
-test[12] = 44
-
-draw_level_order(str(test))
 rb_tree9.fusion(rb_tree10)
 print("Albero RB T.fusion(T1):")
 draw_level_order(str(rb_tree9))
@@ -133,16 +126,9 @@ print("T22:")
 draw_level_order(str(rb_tree922))
 print("T1:")
 draw_level_order(str(rb_tree91))
-print("Albero RB T1.split(1):")
-rb_tree911, rb_tree912 = rb_tree91.split(1)
+print("Albero RB T1.split(7):")
+rb_tree911, rb_tree912 = rb_tree91.split(4)
 print("T21:")
 draw_level_order(str(rb_tree911))
 print("T22:")
 draw_level_order(str(rb_tree912))
-print("Albero RB T1.split(2):")
-
-rb_tree9121, rb_tree9122 = rb_tree912.split(4) #NON FUNZIONA.. NON VEDE IL GENITORE , SPLITTANDO SU UN FIGLIO SENZXA FRATELLO ERRORE!!!
-print("T21:")
-draw_level_order(str(rb_tree9121))
-print("T22:")
-draw_level_order(str(rb_tree9122))
