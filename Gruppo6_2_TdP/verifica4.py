@@ -109,7 +109,13 @@ rb_tree10[13] = 444
 rb_tree10[14] = 888
 rb_tree10[15] = 343
 draw_level_order(str(rb_tree10))
+print ("Test")
+test = MyRBTreeMap()
+test[11] = 12
+test[10] = 11
+test[12] = 44
 
+draw_level_order(str(test))
 rb_tree9.fusion(rb_tree10)
 print("Albero RB T.fusion(T1):")
 draw_level_order(str(rb_tree9))
@@ -125,6 +131,8 @@ print("T21:")
 draw_level_order(str(rb_tree921))
 print("T22:")
 draw_level_order(str(rb_tree922))
+print("T1:")
+draw_level_order(str(rb_tree91))
 print("Albero RB T1.split(1):")
 rb_tree911, rb_tree912 = rb_tree91.split(1)
 print("T21:")

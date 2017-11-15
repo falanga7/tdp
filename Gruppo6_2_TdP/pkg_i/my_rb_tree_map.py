@@ -147,6 +147,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._left_size = bp._right_size
             node._parent = bp
             node._right = t1._root
+            t1._root._parent = node
             node._right_size = len2 -1
             node._red = True
             self._update_sizes(self._make_position(bp), bp._right_size)
@@ -161,6 +162,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._right_size = bp._left_size
             node._parent = bp
             node._left = self._root
+            self._root._parent = node
             node._left_size = len2 - 1
             node._red = True
             t1._update_sizes(t1._make_position(bp), bp._left_size)
@@ -201,12 +203,14 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree = MyRBTreeMap()
                 parentTree._root = parent._node
                 parentTree._size = parent._node._right_size + 1
+                parentTree._root._parent = None
                 parent._node._left = None
                 t2.fusion(parentTree)
             else:
                 parentTree = MyRBTreeMap()
                 parentTree._root = parent._node
                 parentTree._size = parent._node._left_size + 1
+                parentTree._root._parent = None
                 parent._node._right = None
                 parentTree.fusion(t1)
                 t1 = parentTree
