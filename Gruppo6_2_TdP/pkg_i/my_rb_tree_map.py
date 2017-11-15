@@ -139,6 +139,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             node._right = t1._root
         elif t1.is_empty():
             self[mint1.key()] = mint1.value()
+            self._set_black(self.find_position(mint1.key()))
         elif bd_t > bd_t1:
             bp = self._validate(self._find_black_parent_right(bd_t1))  # O(log(m))
             node._left = bp._right
