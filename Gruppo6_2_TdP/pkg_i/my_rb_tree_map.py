@@ -1,6 +1,5 @@
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
 from TdP_collections.queue.array_queue import ArrayQueue
-from drawtree import draw_level_order
 
 
 class MyRBTreeMap(RedBlackTreeMap):
@@ -141,7 +140,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             self._size = len1 + len2 + 1
         elif t1._root is None:
             self[mint1.key()] = mint1.value()
-            self._set_black(self.find_position(mint1.key()))
+           # self._set_black(self.find_position(mint1.key()))
         elif bd_t > bd_t1:
             bp = self._validate(self._find_black_parent_right(bd_t1))  # O(log(m))
             node._left = bp._right
@@ -157,7 +156,6 @@ class MyRBTreeMap(RedBlackTreeMap):
             self._update_sizes(self._make_position(bp), bp._right_size)
         elif bd_t < bd_t1:
             bp = t1._validate(t1._find_black_parent_left(bd_t))  # O(log(m))
-            draw_level_order(str(t1))
             node._right = bp._left
             bp._left = node
             node._right_size = bp._left_size
