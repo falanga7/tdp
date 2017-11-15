@@ -115,7 +115,7 @@ class MyRBTreeMap(RedBlackTreeMap):
                 d_bd -= 1
         return walk
 
-    def fusion(self, t1):
+    def fusion(self, t1, mint1 = None):
         maxt = self.last()                               # O(logn)
         mint1 = t1.first()                               # O(logm)
         if mint1.key() < maxt.key() or mint1 is None:
@@ -210,6 +210,8 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._root._parent = None
                 parentTree._root._left_size = 0
                 parent._node._left = None
+                parentTree[t1.root().key()] = t1.root().value()
+                del t1[t1.root().key()]
                 if t2._root is not None:
                     t2.fusion(parentTree)
                 else:
@@ -221,6 +223,8 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._root._parent = None
                 parentTree._root._right_size = 0
                 parent._node._right = None
+                t1[parentTree.root().key()] = parentTree.root().value()
+                del parentTree[parentTree.root().key()]
                 if t1._root is not None:
                     parentTree.fusion(t1)
                 t1 = parentTree
