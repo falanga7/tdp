@@ -1,5 +1,7 @@
 from TdP_collections.map.red_black_tree import RedBlackTreeMap
 from TdP_collections.queue.array_queue import ArrayQueue
+from drawtree import draw_level_order
+
 
 class MyRBTreeMap(RedBlackTreeMap):
     # -------------------------- nested _Node class --------------------------
@@ -121,7 +123,6 @@ class MyRBTreeMap(RedBlackTreeMap):
             raise ValueError("Le chiavi dell'albero passato non sono maggiori delle chiavi di quest'albero.")
         len1 = len(self)
         len2 = len(t1)
-        self._size = len1 + len2
         node = t1._validate(mint1)
         del t1[mint1.key()]                                # O(logm)
         bd_t = self._black_depth()  # O(logn)
@@ -137,6 +138,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             t1._root._parent = node
             node._right_size = len2
             node._right = t1._root
+            self._size = len1 + len2 + 1
         elif t1._root is None:
             self[mint1.key()] = mint1.value()
             self._set_black(self.find_position(mint1.key()))
@@ -144,25 +146,28 @@ class MyRBTreeMap(RedBlackTreeMap):
             bp = self._validate(self._find_black_parent_right(bd_t1))  # O(log(m))
             node._left = bp._right
             bp._right = node
-            bp._right_size += len2
             node._left_size = bp._right_size
+            bp._right_size += len2 + 1
             node._parent = bp
             node._right = t1._root
             t1._root._parent = node
             node._right_size = len2 -1
             node._red = True
+            self._size = len1 + len2 + 1
             self._update_sizes(self._make_position(bp), bp._right_size)
         elif bd_t < bd_t1:
             bp = t1._validate(t1._find_black_parent_left(bd_t))  # O(log(m))
+            draw_level_order(str(t1))
             node._right = bp._left
             bp._left = node
-            bp._left_size += len1
             node._right_size = bp._left_size
+            bp._left_size += len1 + 1
             node._parent = bp
             node._left = self._root
             self._root._parent = node
-            node._left_size = len1 - 1
+            node._left_size = len1
             node._red = True
+            self._size = len1 + len2 + 1
             t1._update_sizes(t1._make_position(bp), bp._left_size)
             self._root = t1._root
 
@@ -205,6 +210,7 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._root = parent._node
                 parentTree._size = parent._node._right_size + 1
                 parentTree._root._parent = None
+                parentTree._root._left_size = 0
                 parent._node._left = None
                 if t2._root is not None:
                     t2.fusion(parentTree)
@@ -215,6 +221,7 @@ class MyRBTreeMap(RedBlackTreeMap):
                 parentTree._root = parent._node
                 parentTree._size = parent._node._left_size + 1
                 parentTree._root._parent = None
+                parentTree._root._right_size = 0
                 parent._node._right = None
                 if t1._root is not None:
                     parentTree.fusion(t1)
