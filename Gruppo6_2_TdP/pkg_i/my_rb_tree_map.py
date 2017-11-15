@@ -74,6 +74,8 @@ class MyRBTreeMap(RedBlackTreeMap):
     def _black_depth(self):
         """Return black depth of RB Tree."""
         walk = self.root()
+        if walk is None:
+            return 0
         black_depth = 1
         while self.left(walk) is not None or self.right(walk) is not None:  # keep walking left
             left = self.left(walk)
@@ -114,13 +116,13 @@ class MyRBTreeMap(RedBlackTreeMap):
         mint1 = t1.first()                               # O(logm)
         if mint1.key() < maxt.key():
             raise ValueError("Le chiavi dell'albero passato non sono maggiori delle chiavi di quest'albero.")
-        bd_t = self._black_depth()                        # O(logn)
-        bd_t1 = t1._black_depth()                         # O(logm)
         len1 = len(self)
         len2 = len(t1)
         self._size = len1 + len2
         node = t1._validate(mint1)
         del t1[mint1.key()]                                # O(logm)
+        bd_t = self._black_depth()  # O(logn)
+        bd_t1 = t1._black_depth()  # O(logm)
         len2 -= 1
         node._parent = None
 
@@ -150,7 +152,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             if child is not None:
                 self._rebalance_insert(child)               # O(logn)
             else:
-                node._red = False
+                self._rebalance_insert(self._make_position(node))
 
         else:
             bp = t1._validate(t1._find_black_parent_left(bd_t))                 # O(log(n))
