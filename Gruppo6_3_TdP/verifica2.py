@@ -35,3 +35,15 @@ print(count)
 print("Nono test:count_kmp(\"aba\",\"\")=")
 count = count_kmp("aba", "")
 print(count)
+
+print("Decimo test:count_kmp(\"atcamalgamationlolasdamalgamationprovaieuueueeuuwuewuii\",\"amalgamation\")=")
+count = count_kmp("atcamalgamationlolasdamalgamationprovaieuueueeuuwuewuii", "amalgamation")
+print(count)
+
+print("Undicesimo test:count_kmp(\"abaabxababxab\",\"ab\")=")
+count = count_kmp("abaabxababxab", "ab")
+print(count)
+
+print("Dodicesimo test:count_kmp(\"abacaabaccabacabaabb\",\"abacab\")=")
+count = count_kmp("abacaabaccabacabaabb", "abacab")
+print(count)

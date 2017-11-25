@@ -7,9 +7,13 @@ def count_kmp(t, p):
     if not isinstance(p, str):
         raise TypeError("Il pattern deve essere una stringa.")
 
-    m = len(p)
-    if m == 0:
+    m, n = len(p), len(t)
+    if m == 0 and n == 0:
+        return 1
+    elif n == 0 and m != 0:
         return 0
+    elif n != 0 and m == 0:
+        return n+1
     j = find_kmp(t, p)
     count = 0
     while j != -1:
