@@ -37,7 +37,7 @@ class ProbeHashMap(HashMapBase):
     If no match found, success is False and index denotes first available slot.
     """
     firstAvail = None
-    while True:                               
+    while True:
       if self._is_available(j):
         if firstAvail is None:
           firstAvail = j                      # mark this as first avail
