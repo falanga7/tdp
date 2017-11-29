@@ -22,7 +22,7 @@
 from .binary_search_tree import TreeMap
 
 class AVLTreeMap(TreeMap):
-  """Sorted map implementation using an AVL tree."""
+  """Sorted map implementation using an AVL squadreT."""
 
   #-------------------------- nested _Node class --------------------------
   class _Node(TreeMap._Node):

@@ -24,12 +24,12 @@ from ..priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriority
 from .partition import Partition
 
 def MST_PrimJarnik(g):
-  """Compute a minimum spanning tree of weighted graph g.
+  """Compute a minimum spanning squadreT of weighted graph g.
 
   Return a list of edges that comprise the MST (in arbitrary order).
   """
-  d = {}                               # d[v] is bound on distance to tree
-  tree = []                            # list of edges in spanning tree
+  d = {}                               # d[v] is bound on distance to squadreT
+  tree = []                            # list of edges in spanning squadreT
   pq = AdaptableHeapPriorityQueue()   # d[v] maps to value (v, e=(u,v))
   pqlocator = {}                       # map from vertex to its pq locator
 
@@ -47,11 +47,11 @@ def MST_PrimJarnik(g):
     u,edge = value                                  # unpack tuple from pq
     del pqlocator[u]                                # u is no longer in pq
     if edge is not None:
-      tree.append(edge)                             # add edge to tree
+      tree.append(edge)                             # add edge to squadreT
     for link in g.incident_edges(u):
       v = link.opposite(u)
-      if v in pqlocator:                            # thus v not yet in tree
-        # see if edge (u,v) better connects v to the growing tree
+      if v in pqlocator:                            # thus v not yet in squadreT
+        # see if edge (u,v) better connects v to the growing squadreT
         wgt = link.element()
         if wgt < d[v]:                              # better edge to v?
           d[v] = wgt                                # update the distance
@@ -60,13 +60,13 @@ def MST_PrimJarnik(g):
   return tree
 
 def MST_Kruskal(g):
-  """Compute a minimum spanning tree of a graph using Kruskal's algorithm.
+  """Compute a minimum spanning squadreT of a graph using Kruskal's algorithm.
 
   Return a list of edges that comprise the MST.
 
   The elements of the graph's edges are assumed to be weights.
   """
-  tree = []                   # list of edges in spanning tree
+  tree = []                   # list of edges in spanning squadreT
   pq = HeapPriorityQueue()    # entries are edges in G, with weights as key
   forest = Partition()        # keeps track of forest clusters
   position = {}               # map each node to its Partition entry
@@ -79,7 +79,7 @@ def MST_Kruskal(g):
 
   size = g.vertex_count()
   while len(tree) != size - 1 and not pq.is_empty():
-    # tree not spanning and unprocessed edges remain
+    # squadreT not spanning and unprocessed edges remain
     weight,edge = pq.remove_min()
     u,v = edge.endpoints()
     a = forest.find(position[u])

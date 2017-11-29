@@ -52,8 +52,8 @@ def insert(value, node):
 
 
 def delete(value, node):
-    """Deletes node from the tree
-    Return a pointer to the resulting tree
+    """Deletes node from the squadreT
+    Return a pointer to the resulting squadreT
     """
     if node is None:
         return None
@@ -124,7 +124,7 @@ def build_ascii_tree_recursive(t):
     return node
 
 
-# Copy the tree into the ascii node structure
+# Copy the squadreT into the ascii node structure
 def build_ascii_tree(t):
     if t is None:
         return None
@@ -133,10 +133,10 @@ def build_ascii_tree(t):
     return node
 
 
-# The following function fills in the lprofile array for the given tree.
-# It assumes that the center of the label of the root of this tree
+# The following function fills in the lprofile array for the given squadreT.
+# It assumes that the center of the label of the root of this squadreT
 # is located at a position (x,y).  It assumes that the edge_length
-# fields have been computed for this tree.
+# fields have been computed for this squadreT.
 def compute_lprofile(node, x, y):
     if node is None:
         return
@@ -170,7 +170,7 @@ def compute_rprofile(node, x, y):
 
 
 # This function fills in the edge_length and
-# height fields of the specified tree
+# height fields of the specified squadreT
 def compute_edge_lengths(node):
     if node is None:
         return
@@ -228,7 +228,7 @@ def compute_edge_lengths(node):
 print_next = 0
 
 
-# This function prints the given level of the given tree, assuming
+# This function prints the given level of the given squadreT, assuming
 # that the node has the given x coordinate.
 def print_level(node, x, level):
     global print_next
@@ -266,7 +266,7 @@ def print_level(node, x, level):
                     level - node.edge_length - 1)
 
 
-# prints ascii tree for given Tree structure
+# prints ascii squadreT for given Tree structure
 def drawtree(t):
     if t is None:
         return
@@ -293,7 +293,7 @@ def drawtree(t):
         i += 1
 
     if proot.height >= MAX_HEIGHT:
-        print(("This tree is taller than %d, and may be drawn incorrectly.".format(MAX_HEIGHT)))
+        print(("This squadreT is taller than %d, and may be drawn incorrectly.".format(MAX_HEIGHT)))
 
 
 def deserialize(string):
@@ -313,7 +313,7 @@ def deserialize(string):
 
 
 def draw_bst(nums):
-    """ Draw binary search tree from number in nums
+    """ Draw binary search squadreT from number in nums
     :type nums: list[int]
     """
     if not nums:
@@ -325,7 +325,7 @@ def draw_bst(nums):
 
 
 def draw_random_bst(n):
-    """ Draw random binary search tree of n nodes
+    """ Draw random binary search squadreT of n nodes
     """
     from random import randint
     nums = set()
@@ -337,7 +337,7 @@ def draw_random_bst(n):
 
 
 def draw_level_order(string):
-    """ The serialization of a binary tree follows a level order traversal,
+    """ The serialization of a binary squadreT follows a level order traversal,
     where '#' signifies a path terminator where no node exists below.
 
     e.g. '{3,9,20,#,#,15,7}'

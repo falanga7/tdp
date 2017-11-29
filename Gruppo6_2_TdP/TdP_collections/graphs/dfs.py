@@ -29,7 +29,7 @@ def DFS(g, u, discovered):
   for e in g.incident_edges(u):    # for every outgoing edge from u
     v = e.opposite(u)
     if v not in discovered:        # v is an unvisited vertex
-      discovered[v] = e            # e is the tree edge that discovered v
+      discovered[v] = e            # e is the squadreT edge that discovered v
       DFS(g, v, discovered)        # recursively explore from v
 
 def construct_path(u, v, discovered):
@@ -56,11 +56,11 @@ def DFS_complete(g):
   """Perform DFS for entire graph and return forest as a dictionary.
 
   Result maps each vertex v to the edge that was used to discover it.
-  (Vertices that are roots of a DFS tree are mapped to None.)
+  (Vertices that are roots of a DFS squadreT are mapped to None.)
   """
   forest = {}
   for u in g.vertices():
     if u not in forest:
-      forest[u] = None             # u will be the root of a tree
+      forest[u] = None             # u will be the root of a squadreT
       DFS(g, u, forest)
   return forest

@@ -23,7 +23,7 @@ from ..tree.linked_binary_tree import LinkedBinaryTree
 from .map_base import MapBase
 
 class TreeMap(LinkedBinaryTree, MapBase):
-  """Sorted map implementation using a binary search tree."""
+  """Sorted map implementation using a binary search squadreT."""
 
   #---------------------------- override Position class ----------------------------
   class Position(LinkedBinaryTree.Position):
@@ -64,11 +64,11 @@ class TreeMap(LinkedBinaryTree, MapBase):
 
   #--------------------- public methods providing "positional" support ---------------------
   def first(self):
-    """Return the first Position in the tree (or None if empty)."""
+    """Return the first Position in the squadreT (or None if empty)."""
     return self._subtree_first_position(self.root()) if len(self) > 0 else None
 
   def last(self):
-    """Return the last Position in the tree (or None if empty)."""
+    """Return the last Position in the squadreT (or None if empty)."""
     return self._subtree_last_position(self.root()) if len(self) > 0 else None
 
   def before(self, p):
@@ -110,7 +110,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
       return None
     else:
       p = self._subtree_search(self.root(), k)
-      self._rebalance_access(p)                  # hook for balanced tree subclasses
+      self._rebalance_access(p)                  # hook for balanced squadreT subclasses
       return p
 
   def delete(self, p):
@@ -132,7 +132,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
       raise KeyError('Key Error: ' + repr(k))
     else:
       p = self._subtree_search(self.root(), k)
-      self._rebalance_access(p)                  # hook for balanced tree subclasses
+      self._rebalance_access(p)                  # hook for balanced squadreT subclasses
       if k != p.key():
         raise KeyError('Key Error: ' + repr(k))
       return p.value()
@@ -145,7 +145,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
       p = self._subtree_search(self.root(), k)
       if p.key() == k:
         p.element()._value = v                   # replace existing item's value
-        self._rebalance_access(p)                # hook for balanced tree subclasses
+        self._rebalance_access(p)                # hook for balanced squadreT subclasses
         return
       else:
         item = self._Item(k,v)
@@ -153,7 +153,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
           leaf = self._add_right(p, item)        # inherited from LinkedBinaryTree
         else:
           leaf = self._add_left(p, item)         # inherited from LinkedBinaryTree
-    self._rebalance_insert(leaf)                 # hook for balanced tree subclasses
+    self._rebalance_insert(leaf)                 # hook for balanced squadreT subclasses
 
   def __delitem__(self, k):
     """Remove item associated with key k (raise KeyError if not found)."""
@@ -162,7 +162,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
       if k == p.key():
         self.delete(p)                           # rely on positional version
         return                                   # successful deletion complete
-      self._rebalance_access(p)                  # hook for balanced tree subclasses
+      self._rebalance_access(p)                  # hook for balanced squadreT subclasses
     raise KeyError('Key Error: ' + repr(k))
 
   def __iter__(self):
@@ -266,7 +266,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
         yield (p.key(), p.value())
         p = self.after(p)
 
-  #--------------------- hooks used by subclasses to balance a tree ---------------------
+  #--------------------- hooks used by subclasses to balance a squadreT ---------------------
   def _rebalance_insert(self, p):
     """Call to indicate that position p is newly added."""
     pass
@@ -279,7 +279,7 @@ class TreeMap(LinkedBinaryTree, MapBase):
     """Call to indicate that position p was recently accessed."""
     pass
 
-  #--------------------- nonpublic methods to support tree balancing ---------------------
+  #--------------------- nonpublic methods to support squadreT balancing ---------------------
 
   def _relink(self, parent, child, make_left_child):
     """Relink parent node with child node (we allow child to be None)."""

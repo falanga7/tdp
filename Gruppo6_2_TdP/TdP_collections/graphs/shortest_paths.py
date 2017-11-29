@@ -59,10 +59,10 @@ def shortest_path_lengths(g, src):
   return cloud                                  # only includes reachable vertices
 
 def shortest_path_tree(g, s, d):
-  """Reconstruct shortest-path tree rooted at vertex s, given distance map d.
+  """Reconstruct shortest-path squadreT rooted at vertex s, given distance map d.
 
-  Return tree as a map from each reachable vertex v (other than s) to the
-  edge e=(u,v) that is used to reach v from its parent u in the tree.
+  Return squadreT as a map from each reachable vertex v (other than s) to the
+  edge e=(u,v) that is used to reach v from its parent u in the squadreT.
   """
   tree = {}
   for v in d:

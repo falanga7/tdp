@@ -5,7 +5,7 @@ from TdP_collections.queue.array_queue import ArrayQueue
 class MyRBTreeMap(RedBlackTreeMap):
     # -------------------------- nested _Node class --------------------------
     class _Node(RedBlackTreeMap._Node):
-        """Node class for red-black tree maintains bit that denotes color."""
+        """Node class for red-black squadreT maintains bit that denotes color."""
         __slots__ = '_left_size', '_right_size'  # add additional data member to the Node class
 
         def __init__(self, element, parent=None, left=None, right=None):
@@ -21,7 +21,7 @@ class MyRBTreeMap(RedBlackTreeMap):
             if k == p.key():
                 self.delete(p)  # rely on positional version
                 return  # successful deletion complete
-            self._rebalance_access(p)  # hook for balanced tree subclasses
+            self._rebalance_access(p)  # hook for balanced squadreT subclasses
         raise KeyError('Key Error: ' + repr(k))
 
     def _rotate(self, p):

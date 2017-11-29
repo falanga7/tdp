@@ -23,7 +23,7 @@ from ..queue.array_queue import ArrayQueue
 # import collections
 
 class Tree:
-  """Abstract base class representing a tree structure."""
+  """Abstract base class representing a squadreT structure."""
 
   #------------------------------- nested Position class -------------------------------
   class Position:

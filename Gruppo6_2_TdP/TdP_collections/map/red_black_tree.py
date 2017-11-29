@@ -23,11 +23,11 @@ from .binary_search_tree import TreeMap
 from TdP_collections.queue.array_queue import ArrayQueue
 
 class RedBlackTreeMap(TreeMap):
-  """Sorted map implementation using a red-black tree."""
+  """Sorted map implementation using a red-black squadreT."""
 
   #-------------------------- nested _Node class --------------------------
   class _Node(TreeMap._Node):
-    """Node class for red-black tree maintains bit that denotes color."""
+    """Node class for red-black squadreT maintains bit that denotes color."""
     __slots__ = '_red'     # add additional data member to the Node class
 
     def __init__(self, element, parent=None, left=None, right=None):
