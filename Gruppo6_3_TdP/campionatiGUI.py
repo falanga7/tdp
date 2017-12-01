@@ -18,14 +18,16 @@ def dispatcher(file, cl):
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
         ng = (ns - 1) * 2
         squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
-        n = 0
-        for row_idx in range(1, x_sheet.nrows):
-            if not n == ns:
-                home_team = x_sheet.cell(row_idx, 2).value
-                away_team = x_sheet.cell(row_idx, 3).value
+        n = 1
+        try:
+            while not squadre._n == ns or not n == x_sheet.nrows:
+                home_team = x_sheet.cell(n, 2).value
+                away_team = x_sheet.cell(n, 3).value
                 squadre[home_team] = home_team
                 squadre[away_team] = away_team
-                n = squadre._n
+                n += 1
+        except IndexError:
+            print(n)
         campionato = Campionato(campionatoe, squadre)
         campionati[campionatoe] = campionato
     return campionati
