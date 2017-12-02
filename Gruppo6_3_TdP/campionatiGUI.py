@@ -7,6 +7,8 @@ from math import sqrt
 from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
+from Gruppo6_3_TdP.squadra import Squadra
+from Gruppo6_3_TdP.partita import Partita
 
 
 def dispatcher(file, cl):
@@ -18,16 +20,35 @@ def dispatcher(file, cl):
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
         ng = (ns - 1) * 2
         squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
+        giornate = [None] * (ng + 1)
         n = 1
         try:
             while not squadre._n == ns or not n == x_sheet.nrows:
                 home_team = x_sheet.cell(n, 2).value
                 away_team = x_sheet.cell(n, 3).value
-                squadre[home_team] = home_team
-                squadre[away_team] = away_team
+                squadre[home_team] = Squadra(home_team)
+                squadre[away_team] = Squadra(away_team)
                 n += 1
         except IndexError:
-            print(n)
+            print("Il campionato in questione non supporta il nostro algoritmo.")
+        n = 0
+        for row_idx in range(1, nrows):
+            home_team = x_sheet._cell(row_idx, 2)
+            away_team = x_sheet._cell(row_idx, 3)
+            partita = Partita(x_sheet._cell(row_idx, 1), home_team, away_team, x_sheet._cell(row_idx, 4),
+                              x_sheet._cell(row_idx, 5), x_sheet._cell(row_idx, 6), x_sheet._cell(row_idx, 7), x_sheet._cell(row_idx, 8),
+                              x_sheet._cell(row_idx, 9))
+            sht = squadre[home_team]
+            sat = squadre[away_team]
+            sht + 1
+            sat + 1
+            if sht.partite == n +1:
+                n += 1
+
+
+
+
+
         campionato = Campionato(campionatoe, squadre)
         campionati[campionatoe] = campionato
     return campionati

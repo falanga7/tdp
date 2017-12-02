@@ -1,4 +1,6 @@
 from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
+
+
 class Campionato:
     __slots__ = '_codice', '_squadre'
 
