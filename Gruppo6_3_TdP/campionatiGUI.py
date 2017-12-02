@@ -7,7 +7,36 @@ from math import sqrt
 from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
+from Gruppo6_3_TdP.partita  import Partita
 
+def dispatcher_partite(file, campionato):
+    x_workbook = xlrd.open_workbook(file)
+    x_sheet = x_workbook.sheet_by_name(campionato)
+    nrows = x_sheet.nrows
+    partite = ProbeHashMap(cap=int(nrows/ 0.5 + 1))
+    n = 1
+    try:
+        while not n == nrows:
+            date = xlrd.xldate_as_tuple(x_sheet.cell(n, 1).value, x_workbook.datemode)
+            home_team = x_sheet.cell(n, 2).value
+            away_team = x_sheet.cell(n, 3).value
+            FTHG = int(x_sheet.cell(n, 4).value)
+            if x_sheet.cell(n, 5).value != '':
+                FTAG = int(x_sheet.cell(n, 5).value)
+            if x_sheet.cell(n, 6).value != '':
+                FTR = x_sheet.cell(n, 6).value
+            if x_sheet.cell(n,7).value != '':
+                HTHG = int(x_sheet.cell(n, 7).value)
+            if x_sheet.cell(n, 8).value != '':
+                HTAG = int(x_sheet.cell(n, 8).value)
+            if x_sheet.cell(n, 9).value != '':
+                HTR = x_sheet.cell(n, 9).value
+            partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
+            partite[date] = partita
+            n += 1
+    except IndexError:
+        print(n)
+    return partite
 
 def dispatcher(file, cl):
     x_workbook = xlrd.open_workbook(file)
@@ -28,7 +57,6 @@ def dispatcher(file, cl):
                 n += 1
         except IndexError:
             print(n)
-        print(campionatoe,"_",cl[campionatoe])
         campionato = Campionato(campionatoe,cl[campionatoe], squadre)
         campionati[campionatoe] = campionato
     return campionati
@@ -64,6 +92,9 @@ ac.add(f2, text='Two')
 ac.pack()
 squadreT = ttk.Treeview(root, height=33)
 campionati = dispatcher("all-euro-data-2016-2017.xls", oc)
+partite = {}
+for key in campionati.keys():
+    partite[key] = dispatcher_partite("all-euro-data-2016-2017.xls", key)
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
