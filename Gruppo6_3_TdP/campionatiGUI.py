@@ -64,18 +64,18 @@ def dispatcher(file, cl):
     return campionati
 
 
-def oncschange(index, value, op):
-    for squadraR in squadreT.get_children():
-        squadreT.delete(squadraR)
-    squadreT.heading("#0").clear()
-    squadreT.heading("#0", text=campionati[ocn[comboC.get()]].nome())
-    squadreT.column("#0")
+def onsb_click():
+    squadre_t = ttk.Treeview(root, selectmode="extended", height=33)
+    squadre_t.grid(row=1, column=1, columnspan=4, rowspan=10)
+    squadre_t.heading("#0").clear()
+    squadre_t.heading("#0", text=campionati[ocn[comboC.get()]].nome())
+    squadre_t.column("#0")
     squadred = campionati[ocn[comboC.get()]].squadre()
     for squadra in squadred:
-        squadreT.insert("", 0, text=squadra)
+        squadre_t.insert("", 0, text=squadra)
+
 
 root = Tk()
-
 root.title("Campionati")
 root.resizable(0, 0)
 root.grid_columnconfigure(0, weight=1)
@@ -90,7 +90,7 @@ root.grid_columnconfigure(4, weight=1)
 ke = ttk.Label(root, text="Inserisci un numero k:").grid(row=0, column=4)
 root.grid_columnconfigure(5, weight=1)
 root.grid_rowconfigure(3, weight=1)
-bps = ttk.Button(root, text="Squadre", command=None)
+bps = ttk.Button(root, text="Squadre", command=onsb_click)
 bps.grid(row=3, column=5)
 root.grid_rowconfigure(4, weight=1)
 bpht = ttk.Button(root, text="Classifica primo tempo \nalla giornata indicata", command=None)
@@ -126,7 +126,6 @@ ocl = {"E0": 'Premier League', "SC0": 'Scottish Premiership', "D1": 'Bundesliga'
       "T1": 'Super Lig', "G1": 'Souper Ligka Ellada'}
 csv = StringVar()
 comboC = ttk.Combobox(root, textvariable=csv, values=list(ocn))
-csv.trace("w", oncschange)
 comboC.grid(row=2, column=0)
 gsv = StringVar()
 comboG = ttk.Combobox(root, textvariable=gsv, value=None)
@@ -139,8 +138,6 @@ comboD = ttk.Combobox(root, textvariable=dsv, value=None)
 comboD.grid(row=2, column=3)
 k = Entry()
 k.grid(row=2, column=4)
-squadreT = ttk.Treeview(root, selectmode="extended", height=33)
-squadreT.grid(row=1, column=1, columnspan=4, rowspan=10)
 campionati = dispatcher("all-euro-data-2016-2017.xls", ocl)
 partite = {}
 for key in campionati.keys():
