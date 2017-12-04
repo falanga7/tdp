@@ -8,6 +8,7 @@ from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
 from Gruppo6_3_TdP.partita import Partita
+from Gruppo6_3_TdP.record_classifica import RecordClassifica
 from datetime import datetime
 
 
@@ -73,6 +74,7 @@ def dispatcher(cl):
         except IndexError:
             print(n)
         campionato = Campionato(campionatoe, cl[campionatoe], squadre)
+        campionato.set_giornate([None] * ng)
         campionati[campionatoe] = campionato
     return campionati
 
@@ -187,6 +189,8 @@ x_workbook = xlrd.open_workbook("all-euro-data-2016-2017.xls")
 campionati = dispatcher(ocl)
 for key in campionati.keys():
     campionati[key].set_partite(dispatcher_partite(key))
+
+campionati['I1'].calcolo_giornate()
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
