@@ -24,3 +24,4 @@ class Campionato:
 
     def squadre(self):
         return self._squadre
+

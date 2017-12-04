@@ -8,17 +8,22 @@ from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
 from Gruppo6_3_TdP.partita import Partita
+from datetime import datetime
 
 
 def dispatcher_partite(file, campionato):
     x_workbook = xlrd.open_workbook(file)
     x_sheet = x_workbook.sheet_by_name(campionato)
     nrows = x_sheet.nrows
-    partite = ProbeHashMap(cap=int(nrows/0.5 + 1))
+    partite = ChainHashMap(cap=int(nrows/0.9 + 1))
     n = 1
+    first = True
     try:
         while not n == nrows:
-            date = xlrd.xldate_as_tuple(x_sheet.cell(n, 1).value, x_workbook.datemode)
+            if first is False:
+                prev_data = date
+            date = xlrd.xldate_as_datetime(x_sheet.cell(n, 1).value, x_workbook.datemode)
+            date = str(format(date.date(),"%d/%m/%Y"))
             home_team = x_sheet.cell(n, 2).value
             away_team = x_sheet.cell(n, 3).value
             FTHG = int(x_sheet.cell(n, 4).value)
@@ -33,8 +38,18 @@ def dispatcher_partite(file, campionato):
             if x_sheet.cell(n, 9).value != '':
                 HTR = x_sheet.cell(n, 9).value
             partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
-            partite[date] = partita
+            if first:
+                lista_partite = list()
+                lista_partite.append(partita)
+            elif prev_data != date:
+                lista_partite = list()
+                lista_partite.append(partita)
+            else:
+                lista_partite.append(partita)
+
+            partite[date] = lista_partite
             n += 1
+            first = False
     except IndexError:
         print(n)
     return partite
@@ -66,13 +81,31 @@ def dispatcher(file, cl):
 
 def onsb_click():
     squadre_t = ttk.Treeview(root, selectmode="extended", height=33)
-    squadre_t.grid(row=1, column=1, columnspan=4, rowspan=10)
+    squadre_t.grid(row=2, column=1, columnspan=4, rowspan=10)
     squadre_t.heading("#0").clear()
     squadre_t.heading("#0", text=campionati[ocn[comboC.get()]].nome())
     squadre_t.column("#0")
     squadred = campionati[ocn[comboC.get()]].squadre()
     for squadra in squadred:
         squadre_t.insert("", 0, text=squadra)
+
+
+def onp_click():
+    lista_partite = ttk.Treeview(root, selectmode="extended", height=33)
+    lista_partite.grid(row=2, column=1, columnspan=4, rowspan=10)
+    lista_partite.heading("#0").clear()
+    lista_partite.heading("#0", text="Partite")
+    lista_partite.column("#0")
+    data = comboD.get()
+    for key in campionati.keys():
+        partite_campionato = partite[key]
+        try:
+            partite_giorno = partite_campionato[data]
+            for partita in partite_giorno:
+                lista_partite.insert("", 0, text=partita._hometeam+partita._awayteam)
+        except KeyError:
+            print("Nel giorno non si sono giocate partite nel campionato",key)
+
 
 
 root = Tk()
@@ -102,7 +135,7 @@ root.grid_rowconfigure(6, weight=1)
 bpfr = ttk.Button(root, text="Ultimi 5 risultati per la squadra indicata", command=None)
 bpfr.grid(row=6, column=5)
 root.grid_rowconfigure(7, weight=1)
-bppdi = ttk.Button(root, text="Partite alla data indicata", command=None)
+bppdi = ttk.Button(root, text="Partite alla data indicata", command=onp_click)
 bppdi.grid(row=7, column=5)
 root.grid_rowconfigure(8, weight=1)
 bpksp = ttk.Button(root, text="k squadre che hanno segnato \npiù goal alla giornata indicata", command=None)

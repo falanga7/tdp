@@ -5,10 +5,10 @@ class Partita:
     __slots__ = '_date', '_hometeam', '_awayteam', '_fthg', '_ftag', '_ftr', '_hthg', '_htag', '_htr'
 
     def __init__(self, date, hometeam, awayteam, fthg, ftag, ftr, hthg, htag, htr):
-        """try:
+        try:
             datetime.datetime.strptime(date,'%d/%m/%Y')
         except ValueError:
-            raise ValueError("La data non è in un formato valido, dovrebbe essere DD/MM/YYYYY")"""
+            raise ValueError("La data non è in un formato valido, dovrebbe essere DD/MM/YYYYY")
         if not isinstance(fthg, int):
             raise ValueError("I goal della squadra locale alla fine della partita non sono in un formato valido.")
         elif not isinstance(ftag, int):
@@ -59,4 +59,4 @@ class Partita:
         return self._htr
 
     def __str__(self):
-        return ("(",self.date,"-",self._hometeam,"-",self.awayteam(),")")
+        return ("(",self._hometeam,"-",self.awayteam(),")")
