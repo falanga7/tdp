@@ -11,8 +11,7 @@ from Gruppo6_3_TdP.partita import Partita
 from datetime import datetime
 
 
-def dispatcher_partite(file, campionato):
-    x_workbook = xlrd.open_workbook(file)
+def dispatcher_partite(campionato):
     x_sheet = x_workbook.sheet_by_name(campionato)
     nrows = x_sheet.nrows
     partite = ChainHashMap(cap=int(nrows/0.9 + 1))
@@ -55,8 +54,7 @@ def dispatcher_partite(file, campionato):
     return partite
 
 
-def dispatcher(file, cl):
-    x_workbook = xlrd.open_workbook(file)
+def dispatcher(cl):
     campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
     for campionatoe in cl.keys():
         x_sheet = x_workbook.sheet_by_name(campionatoe)
@@ -93,18 +91,31 @@ def onsb_click():
 def onp_click():
     lista_partite = ttk.Treeview(root, selectmode="extended", height=33)
     lista_partite.grid(row=2, column=1, columnspan=4, rowspan=10)
-    lista_partite.heading("#0").clear()
-    lista_partite.heading("#0", text="Partite")
+    #lista_partite.heading().clear()
+    #lista_partite.heading("#0", text="Lista partite giocate in data " + comboD.get())
+    lista_partite["columns"] = ("one", "two","three","four","five")
     lista_partite.column("#0")
+    lista_partite.column("one")
+    lista_partite.column("two")
+    lista_partite.column("three")
+    lista_partite.column("four")
+    lista_partite.column("five")
+    lista_partite.heading("#0", text="Campionato")
+    lista_partite.heading("one", text="Squadra casa")
+    lista_partite.heading("two", text="Squadra ospite")
+    lista_partite.heading("three", text="FTHG")
+    lista_partite.heading("four", text="FTAG")
+    lista_partite.heading("five", text="FTR")
+
     data = comboD.get()
-    for key in campionati.keys():
-        partite_campionato = partite[key]
+    for campionato in campionati.values():
+        partite_campionato = campionato.partite()
         try:
             partite_giorno = partite_campionato[data]
             for partita in partite_giorno:
-                lista_partite.insert("", 0, text=partita._hometeam+partita._awayteam)
+                lista_partite.insert("", 0, text=campionato.nome(),values=[partita.hometeam(),partita.awayteam(),partita.fthg(),partita.ftag(),partita.ftr()])
         except KeyError:
-            print("Nel giorno non si sono giocate partite nel campionato",key)
+            print("Nel giorno non si sono giocate partite nel campionato",campionato.nome())
 
 
 
@@ -171,10 +182,11 @@ comboD = ttk.Combobox(root, textvariable=dsv, value=None)
 comboD.grid(row=2, column=3)
 k = Entry()
 k.grid(row=2, column=4)
-campionati = dispatcher("all-euro-data-2016-2017.xls", ocl)
-partite = {}
+#Apro il file e passo il workbook al dispatcher per ottenere le strutture dati
+x_workbook = xlrd.open_workbook("all-euro-data-2016-2017.xls")
+campionati = dispatcher(ocl)
 for key in campionati.keys():
-    partite[key] = dispatcher_partite("all-euro-data-2016-2017.xls", key)
+    campionati[key].set_partite(dispatcher_partite(key))
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
