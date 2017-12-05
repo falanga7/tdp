@@ -6,19 +6,21 @@ from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
 from Gruppo6_3_TdP.partita import Partita
+from Gruppo6_3_TdP.giornata import Giornata
+from Gruppo6_3_TdP.classifica import Classifica
 from Gruppo6_3_TdP.record_classifica import RecordClassifica
+from Gruppo6_3_TdP.squadra import Squadra
 
 
 def dispatcher(cl, file):
     x_workbook = xlrd.open_workbook(file)
     campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
-    for campionatoe in cl.keys():
-        x_sheet = x_workbook.sheet_by_name(campionatoe)
+    for codice_campionato in cl.keys():
+        x_sheet = x_workbook.sheet_by_name(codice_campionato)
         nrows = x_sheet.nrows
         partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
         ng = (ns - 1) * 2
-        
         squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
         n = 1
         g = 0
@@ -26,17 +28,25 @@ def dispatcher(cl, file):
             while not squadre._n == ns or not n == x_sheet.nrows:
                 home_team = x_sheet.cell(n, 2).value
                 away_team = x_sheet.cell(n, 3).value
-                squadre[home_team] = home_team
-                squadre[away_team] = away_team
+                squadre[home_team] = Squadra(home_team)
+                squadre[away_team] = Squadra(away_team)
                 n += 1
         except IndexError:
             print("Il campionato considerato non supporta il nostro algoritmo.")
 
+        campionato = Campionato(codice_campionato, cl[codice_campionato], squadre)
+        # creo le giornate del campionato: una lista di liste di date. Per convenzione la lista all'indice 0 indica
+        # la giornata numero 1, 1 la giornata 2 etc.
+        giornate_campionato = [Giornata] * ng
+        #inizializzazione classifica per la prima giornata
+        classifica = Classifica()
+        classifica_ht = Classifica()
         # ricomincio a leggere il foglio di calcolo dalla prima riga
         n = 1
         lista_partite = list()
         prev_date = None
         date = None
+        rinviata = False
         while not n == nrows:
             prev_data = date
             date = xlrd.xldate_as_datetime(x_sheet.cell(n, 1).value, x_workbook.datemode)
@@ -45,11 +55,34 @@ def dispatcher(cl, file):
             away_team = x_sheet.cell(n, 3).value
             FTHG = int(x_sheet.cell(n, 4).value)
             FTAG = int(x_sheet.cell(n, 5).value)
+
             FTR = x_sheet.cell(n, 6).value
+            #calcolo punti,vittorie,pareggi e sconfitte
+            punti_squadra_casa = 0
+            punti_squadra_ospite = 0
+            vittoria_squadra_casa = 0
+            vittoria_squadra_ospite = 0
+            pareggio_squadra_casa = 0
+            pareggio_squadra_ospite = 0
+            sconfitta_squadra_casa = 0
+            sconfitta_squadra_ospite = 0
+
+            if FTR == "H":
+                punti_squadra_casa = 3
+                vittoria_squadra_casa = 1
+                sconfitta_squadra_ospite = 1
+            elif FTR == "D":
+                punti_squadra_casa = 1
+                punti_squadra_ospite = 1
+                pareggio_squadra_casa = 1
+                pareggio_squadra_ospite = 1
+            elif FTR == "A":
+                punti_squadra_ospite = 3
+                vittoria_squadra_ospite = 1
+                sconfitta_squadra_casa = 1
 
             # verifico la presenza dei dati nelle celle successive
             # ( se la partita è vinta a tavolino le celle risultano essere vuote)
-
             if x_sheet.cell(n, 7).value != '':
                 HTHG = int(x_sheet.cell(n, 7).value)
             if x_sheet.cell(n, 8).value != '':
@@ -58,17 +91,38 @@ def dispatcher(cl, file):
                 HTR = x_sheet.cell(n, 9).value
             partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
 
-#            record_home = RecordClassifica(home_team, g + 1, )
+            record_home = squadre[home_team].record()
+
+            record_ospite = squadre[away_team].record()
+
+            if record_home.partite() > g or record_ospite.partite() > g:
+                if not rinviata:
+                    classifica = Classifica()
+                    giornate_campionato[g] = Giornata(classifica)
+                else:
+                    rinviata = False
+                g += 1
+            elif record_home.partite() < g and record_ospite.partite() < g:
+                classifica = Classifica()
+                giornate_campionato[g+1] = Giornata(classifica)
+                rinviata = True
+            record_home + RecordClassifica(home_team, g + 1, vittoria_squadra_casa, pareggio_squadra_casa,
+                                           sconfitta_squadra_casa, HTHG, FTAG, (FTHG - FTAG), punti_squadra_casa)
+            record_ospite + RecordClassifica(away_team, g+1, vittoria_squadra_ospite, pareggio_squadra_ospite,
+                                           sconfitta_squadra_ospite, FTAG, HTHG, (FTAG - FTHG), punti_squadra_ospite)
+
+            classifica.aggiungi_record(record_home)
+            classifica.aggiungi_record(record_ospite)
+
+            #            record_home = RecordClassifica(home_team, g + 1, )
             if date != prev_data:
                 lista_partite = list()
 
             lista_partite.append(partita)
             partite[date] = lista_partite
             n += 1
-
-        campionato = Campionato(campionatoe, cl[campionatoe], squadre, partite)
-        campionato.set_giornate([None] * ng)
-        campionati[campionatoe] = campionato
+        campionato.set_partite(partite)
+        campionati[codice_campionato] = campionato
     return campionati
 
 
@@ -180,7 +234,8 @@ k.grid(row=2, column=4)
 
 #Apro il file e passo npome del file excel al dispatcher per ottenere le strutture dati
 campionati = dispatcher(ocl, "all-euro-data-2016-2017.xls")
-
+giornate  = campionati['I1'].giornate()
+print(giornate[37].classifica())
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()

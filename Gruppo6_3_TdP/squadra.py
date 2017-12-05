@@ -1,27 +1,27 @@
+from Gruppo6_3_TdP.record_classifica import RecordClassifica
+
 class Squadra:
-    __slots__ = '_nome', '_partite'
+    __slots__ = '_nome', '_record_classifica'
 
     def __init__(self, nome):
 
         if not isinstance(nome, str):
             raise ValueError("Il nome passato non è una stringa.")
         self._nome = nome
-        self._partite = 0
+        """Oggetto utilizzato per la definizione delle giornate e l'aggiornamento della Classifica"""
+        self._record_classifica = RecordClassifica(nome, 0, 0, 0, 0, 0, 0, 0, 0)
 
     def squadra(self):
         return self._nome
 
-    def __add__(self, b):
-        self._partite = self._partite + b
-        return self._partite
 
-    def __iadd__(self, b):
-        self._partite = self._partite + b
-        return self._partite
+    def update_record(self, record):
+        self._record_classifica + record
 
-    def __radd__(self, b):
-        self._partite = self._partite + b
-        return self._partite
+
+    def record(self):
+        return self._record_classifica
+
 
     def __str__(self):
         return self._nome

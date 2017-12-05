@@ -2,8 +2,7 @@ class RecordClassifica:
 
     __slots__ = '_squadra','_partite','_vittorie','_pareggi','_sconfitte','_goalfatti','_goalsubiti','_differenzareti','_punti'
 
-
-    def __init__(self,squadra,partite,vittorie,pareggi,sconfitte,goalfatti,goalsubiti,differenzareti,punti):
+    def __init__(self, squadra, partite = 0, vittorie = 0, pareggi = 0, sconfitte = 0, goalfatti = 0, goalsubiti = 0, differenzareti = 0, punti = 0):
         self._squadra = squadra
         self._partite = partite
         self._vittorie = vittorie
@@ -14,12 +13,23 @@ class RecordClassifica:
         self._differenzareti = differenzareti
         self._punti = punti
 
+    def __add__(self, other):
+        if not isinstance(other,RecordClassifica):
+            raise ValueError("La somma può essere effettuata solo su oggetti di tipo RecordClassifica")
+        self._partite += other._partite
+        self._vittorie += other._vittorie
+        self._pareggi += other._pareggi
+        self._sconfitte += other._sconfitte
+        self._goalfatti += other._goalfatti
+        self._goalsubiti += other._goalsubiti
+        self._differenzareti += other._differenzareti
+        self._punti += other._punti
 
     def squadra(self):
         return self._squadra
 
     def partite(self):
-        return self.partite
+        return self._partite
 
     def vittorie(self):
         return self._vittorie
