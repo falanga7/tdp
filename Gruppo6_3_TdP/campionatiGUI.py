@@ -16,6 +16,8 @@ def dispatcher(cl, file):
     x_workbook = xlrd.open_workbook(file)
     campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
     for codice_campionato in cl.keys():
+        if codice_campionato == 'SC0':
+            continue
         x_sheet = x_workbook.sheet_by_name(codice_campionato)
         nrows = x_sheet.nrows
         partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
@@ -39,7 +41,7 @@ def dispatcher(cl, file):
         # la giornata numero 1, 1 la giornata 2 etc.
         giornate_campionato = [Giornata] * ng
         #inizializzazione classifica per la prima giornata
-        classifica = Classifica()
+        giornate_campionato[g] = Giornata(Classifica())
         classifica_ht = Classifica()
         # ricomincio a leggere il foglio di calcolo dalla prima riga
         n = 1
@@ -96,23 +98,22 @@ def dispatcher(cl, file):
             record_ospite = squadre[away_team].record()
 
             if record_home.partite() > g or record_ospite.partite() > g:
+                g += 1
                 if not rinviata:
-                    classifica = Classifica()
-                    giornate_campionato[g] = Giornata(classifica)
+                    giornate_campionato[g] = Giornata(Classifica())
                 else:
                     rinviata = False
-                g += 1
-            elif record_home.partite() < g and record_ospite.partite() < g:
-                classifica = Classifica()
-                giornate_campionato[g+1] = Giornata(classifica)
-                rinviata = True
-            record_home + RecordClassifica(home_team, g + 1, vittoria_squadra_casa, pareggio_squadra_casa,
-                                           sconfitta_squadra_casa, HTHG, FTAG, (FTHG - FTAG), punti_squadra_casa)
-            record_ospite + RecordClassifica(away_team, g+1, vittoria_squadra_ospite, pareggio_squadra_ospite,
-                                           sconfitta_squadra_ospite, FTAG, HTHG, (FTAG - FTHG), punti_squadra_ospite)
 
-            classifica.aggiungi_record(record_home)
-            classifica.aggiungi_record(record_ospite)
+            elif record_home.partite() < g and record_ospite.partite() < g:
+                giornate_campionato[g+1] = Giornata(Classifica())
+                rinviata = True
+            record_home += RecordClassifica(home_team, 1, vittoria_squadra_casa, pareggio_squadra_casa,
+                                           sconfitta_squadra_casa, FTHG, FTAG, (FTHG - FTAG), punti_squadra_casa)
+            record_ospite += RecordClassifica(away_team, 1, vittoria_squadra_ospite, pareggio_squadra_ospite,
+                                           sconfitta_squadra_ospite, FTAG, FTHG, (FTAG - FTHG), punti_squadra_ospite)
+
+            giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
+            giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
 
             #            record_home = RecordClassifica(home_team, g + 1, )
             if date != prev_data:
@@ -122,6 +123,7 @@ def dispatcher(cl, file):
             partite[date] = lista_partite
             n += 1
         campionato.set_partite(partite)
+        campionato.set_giornate(giornate_campionato)
         campionati[codice_campionato] = campionato
     return campionati
 
@@ -232,10 +234,15 @@ comboD.grid(row=2, column=3)
 k = Entry()
 k.grid(row=2, column=4)
 
+
+def punti(qualcosa):
+    return qualcosa.punti()
 #Apro il file e passo npome del file excel al dispatcher per ottenere le strutture dati
 campionati = dispatcher(ocl, "all-euro-data-2016-2017.xls")
-giornate  = campionati['I1'].giornate()
-print(giornate[37].classifica())
+giornate  = campionati['F1'].giornate()
+giornate[15].classifica()._lista.sort(key=punti,reverse=True)
+for squadra in giornate[15].classifica()._lista:
+    print(squadra.squadra(),squadra.partite(),squadra.goalfatti(),squadra.goalsubiti(),squadra.punti())
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
@@ -245,3 +252,4 @@ root.focus_set()
 root.bind("<Escape>", lambda e: e.widget.quit())
 
 root.mainloop()
+

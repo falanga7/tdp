@@ -13,7 +13,7 @@ class RecordClassifica:
         self._differenzareti = differenzareti
         self._punti = punti
 
-    def __add__(self, other):
+    def __iadd__(self, other):
         if not isinstance(other,RecordClassifica):
             raise ValueError("La somma può essere effettuata solo su oggetti di tipo RecordClassifica")
         self._partite += other._partite
@@ -24,6 +24,10 @@ class RecordClassifica:
         self._goalsubiti += other._goalsubiti
         self._differenzareti += other._differenzareti
         self._punti += other._punti
+        return self
+
+    def copy(self):
+        return RecordClassifica(self._squadra,self._partite,self._vittorie,self._pareggi,self._sconfitte,self._goalfatti,self._goalsubiti,self._differenzareti,self._punti)
 
     def squadra(self):
         return self._squadra
