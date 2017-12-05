@@ -16,9 +16,9 @@ def dispatcher(cl, file):
         x_sheet = x_workbook.sheet_by_name(campionatoe)
         nrows = x_sheet.nrows
         partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
-        first = True
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
         ng = (ns - 1) * 2
+        
         squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
         n = 1
         g = 0
@@ -34,10 +34,11 @@ def dispatcher(cl, file):
 
         # ricomincio a leggere il foglio di calcolo dalla prima riga
         n = 1
-
+        lista_partite = list()
+        prev_date = None
+        date = None
         while not n == nrows:
-            if first is False:
-                prev_data = date
+            prev_data = date
             date = xlrd.xldate_as_datetime(x_sheet.cell(n, 1).value, x_workbook.datemode)
             date = str(format(date.date(), "%d/%m/%Y"))
             home_team = x_sheet.cell(n, 2).value
@@ -57,21 +58,15 @@ def dispatcher(cl, file):
                 HTR = x_sheet.cell(n, 9).value
             partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
 
-            record_home = RecordClassifica(home_team, g + 1, )
-            if first:
+#            record_home = RecordClassifica(home_team, g + 1, )
+            if date != prev_data:
                 lista_partite = list()
-                lista_partite.append(partita)
-            elif prev_data != date:
-                lista_partite = list()
-                lista_partite.append(partita)
-            else:
-                lista_partite.append(partita)
 
+            lista_partite.append(partita)
             partite[date] = lista_partite
             n += 1
-            first = False
 
-        campionato = Campionato(campionatoe, cl[campionatoe], squadre)
+        campionato = Campionato(campionatoe, cl[campionatoe], squadre, partite)
         campionato.set_giornate([None] * ng)
         campionati[campionatoe] = campionato
     return campionati

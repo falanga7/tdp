@@ -4,7 +4,7 @@ from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 class Campionato:
     __slots__ = '_codice','_nome','_squadre','_partite','_giornate'
 
-    def __init__(self, codice, nome, squadre, partite=None, giornate=None):
+    def __init__(self, codice, nome, squadre, partite, giornate=None):
 
         if not isinstance(codice, str):
             raise ValueError("Il codice passato non è una stringa.")
@@ -12,6 +12,8 @@ class Campionato:
             raise ValueError("Il nome passato non è una stringa.")
         elif not isinstance(squadre, ChainHashMap):
             raise ValueError("Le squadre devono essere strutturate secondo una ChainHashMap.")
+        elif not isinstance(giornate, list):
+            raise ValueError("Le giornate devono essere strutturate secondo una Lista.")
         self._codice = codice
         self._nome = nome
         self._squadre = squadre
