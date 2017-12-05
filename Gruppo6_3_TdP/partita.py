@@ -4,9 +4,9 @@ import datetime
 class Partita:
     __slots__ = '_date', '_hometeam', '_awayteam', '_fthg', '_ftag', '_ftr', '_hthg', '_htag', '_htr'
 
-    def __init__(self, date, hometeam, awayteam, fthg, ftag, ftr, hthg, htag, htr):
+    def __init__(self, date, hometeam, awayteam, fthg, ftag, ftr, hthg=None, htag=None, htr=None):
         try:
-            datetime.datetime.strptime(date,'%d/%m/%Y')
+            datetime.datetime.strptime(date, '%d/%m/%Y')
         except ValueError:
             raise ValueError("La data non è in un formato valido, dovrebbe essere DD/MM/YYYYY")
         if not isinstance(fthg, int):
@@ -57,6 +57,3 @@ class Partita:
 
     def htr(self):
         return self._htr
-
-    def __str__(self):
-        return ("(",self._hometeam,"-",self.awayteam(),")")

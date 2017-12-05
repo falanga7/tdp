@@ -1,43 +1,63 @@
-import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from Gruppo6_3_TdP import xlrd
-from Gruppo6_3_TdP.xlrd.sheet import ctype_text
 from math import sqrt
 from Gruppo6_3_TdP.TdP_collections.hash_table.chain_hash_map import ChainHashMap
 from Gruppo6_3_TdP.TdP_collections.hash_table.probe_hash_map import ProbeHashMap
 from Gruppo6_3_TdP.campionato import Campionato
 from Gruppo6_3_TdP.partita import Partita
 from Gruppo6_3_TdP.record_classifica import RecordClassifica
-from datetime import datetime
 
 
-def dispatcher_partite(campionato):
-    x_sheet = x_workbook.sheet_by_name(campionato)
-    nrows = x_sheet.nrows
-    partite = ChainHashMap(cap=int(nrows/0.9 + 1))
-    n = 1
-    first = True
-    try:
+def dispatcher(cl, file):
+    x_workbook = xlrd.open_workbook(file)
+    campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
+    for campionatoe in cl.keys():
+        x_sheet = x_workbook.sheet_by_name(campionatoe)
+        nrows = x_sheet.nrows
+        partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
+        first = True
+        ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
+        ng = (ns - 1) * 2
+        squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
+        n = 1
+        g = 0
+        try:
+            while not squadre._n == ns or not n == x_sheet.nrows:
+                home_team = x_sheet.cell(n, 2).value
+                away_team = x_sheet.cell(n, 3).value
+                squadre[home_team] = home_team
+                squadre[away_team] = away_team
+                n += 1
+        except IndexError:
+            print("Il campionato considerato non supporta il nostro algoritmo.")
+
+        # ricomincio a leggere il foglio di calcolo dalla prima riga
+        n = 1
+
         while not n == nrows:
             if first is False:
                 prev_data = date
             date = xlrd.xldate_as_datetime(x_sheet.cell(n, 1).value, x_workbook.datemode)
-            date = str(format(date.date(),"%d/%m/%Y"))
+            date = str(format(date.date(), "%d/%m/%Y"))
             home_team = x_sheet.cell(n, 2).value
             away_team = x_sheet.cell(n, 3).value
             FTHG = int(x_sheet.cell(n, 4).value)
-            if x_sheet.cell(n, 5).value != '':
-                FTAG = int(x_sheet.cell(n, 5).value)
-            if x_sheet.cell(n, 6).value != '':
-                FTR = x_sheet.cell(n, 6).value
-            if x_sheet.cell(n,7).value != '':
+            FTAG = int(x_sheet.cell(n, 5).value)
+            FTR = x_sheet.cell(n, 6).value
+
+            # verifico la presenza dei dati nelle celle successive
+            # ( se la partita è vinta a tavolino le celle risultano essere vuote)
+
+            if x_sheet.cell(n, 7).value != '':
                 HTHG = int(x_sheet.cell(n, 7).value)
             if x_sheet.cell(n, 8).value != '':
                 HTAG = int(x_sheet.cell(n, 8).value)
             if x_sheet.cell(n, 9).value != '':
                 HTR = x_sheet.cell(n, 9).value
             partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
+
+            record_home = RecordClassifica(home_team, g + 1, )
             if first:
                 lista_partite = list()
                 lista_partite.append(partita)
@@ -50,29 +70,7 @@ def dispatcher_partite(campionato):
             partite[date] = lista_partite
             n += 1
             first = False
-    except IndexError:
-        print(n)
-    return partite
 
-
-def dispatcher(cl):
-    campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
-    for campionatoe in cl.keys():
-        x_sheet = x_workbook.sheet_by_name(campionatoe)
-        nrows = x_sheet.nrows
-        ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
-        ng = (ns - 1) * 2
-        squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
-        n = 1
-        try:
-            while not squadre._n == ns or not n == x_sheet.nrows:
-                home_team = x_sheet.cell(n, 2).value
-                away_team = x_sheet.cell(n, 3).value
-                squadre[home_team] = home_team
-                squadre[away_team] = away_team
-                n += 1
-        except IndexError:
-            print(n)
         campionato = Campionato(campionatoe, cl[campionatoe], squadre)
         campionato.set_giornate([None] * ng)
         campionati[campionatoe] = campionato
@@ -120,7 +118,7 @@ def onp_click():
             print("Nel giorno non si sono giocate partite nel campionato",campionato.nome())
 
 
-
+# creazione della GUI
 root = Tk()
 root.title("Campionati")
 root.resizable(0, 0)
@@ -184,13 +182,10 @@ comboD = ttk.Combobox(root, textvariable=dsv, value=None)
 comboD.grid(row=2, column=3)
 k = Entry()
 k.grid(row=2, column=4)
-#Apro il file e passo il workbook al dispatcher per ottenere le strutture dati
-x_workbook = xlrd.open_workbook("all-euro-data-2016-2017.xls")
-campionati = dispatcher(ocl)
-for key in campionati.keys():
-    campionati[key].set_partite(dispatcher_partite(key))
 
-campionati['I1'].calcolo_giornate()
+#Apro il file e passo npome del file excel al dispatcher per ottenere le strutture dati
+campionati = dispatcher(ocl, "all-euro-data-2016-2017.xls")
+
 
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
