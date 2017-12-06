@@ -149,7 +149,7 @@ def dispatcher(cl, file):
                         aggiungi_al_calendario = False
                         break
 
-                        
+
 
             record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
                                             sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
