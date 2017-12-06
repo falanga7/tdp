@@ -199,17 +199,15 @@ def onsb_click():
 
 
 def onp_click():
-    lista_partite = ttk.Treeview(root, selectmode="extended", height=33)
-    lista_partite.grid(row=2, column=1, columnspan=4, rowspan=10)
-    #lista_partite.heading().clear()
-    #lista_partite.heading("#0", text="Lista partite giocate in data " + comboD.get())
+    lista_partite = tree_view
+    empty_tree_view(tree_view)
     lista_partite["columns"] = ("one", "two","three","four","five")
-    lista_partite.column("#0")
-    lista_partite.column("one")
-    lista_partite.column("two")
-    lista_partite.column("three")
-    lista_partite.column("four")
-    lista_partite.column("five")
+    lista_partite.column("#0", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("two", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("three", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("four", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("five", minwidth=0, width=100, stretch=NO)
     lista_partite.heading("#0", text="Campionato")
     lista_partite.heading("one", text="Squadra casa")
     lista_partite.heading("two", text="Squadra ospite")
@@ -266,8 +264,8 @@ def stampa_classifica():
     lista_partite.column("eight", minwidth=0, width=100, stretch=NO)
     lista_partite.heading("#0", text="Posizione")
     lista_partite.heading("one", text="Squadra")
-    lista_partite.heading("two", text="PT")
-    lista_partite.heading("three", text="PG")
+    lista_partite.heading("two", text="Punti")
+    lista_partite.heading("three", text="Partite")
     lista_partite.heading("four", text="V")
     lista_partite.heading("five", text="P")
     lista_partite.heading("six", text="S")
@@ -284,6 +282,82 @@ def stampa_classifica():
         i = i-1
     lista_partite.pack()
 
+
+def stampa_classifica_ht():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get())-1].classifica()
+    classifica.ordina(0, False)
+    classifica = classifica.lista()
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
+    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight")
+    lista_partite.column("#0", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("two", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("three", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("four", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("five", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("six", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("seven", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("eight", minwidth=0, width=100, stretch=NO)
+    lista_partite.heading("#0", text="Posizione")
+    lista_partite.heading("one", text="Squadra")
+    lista_partite.heading("two", text="Punti")
+    lista_partite.heading("three", text="Partite")
+    lista_partite.heading("four", text="V")
+    lista_partite.heading("five", text="P")
+    lista_partite.heading("six", text="S")
+    lista_partite.heading("seven", text="GF")
+    lista_partite.heading("eight", text="GS")
+    i = len(campionati[ocn[comboC.get()]].squadre())
+
+    for record_classifica in classifica:
+        lista_partite.insert("", 0, text=i,
+                             values=[record_classifica.squadra(), record_classifica.punti_ht(),
+                                     record_classifica.partite(), record_classifica.vittorie_ht(), record_classifica.pareggi_ht(),
+                                     record_classifica.sconfitte_ht(), record_classifica.goalfatti_ht(),
+                                     record_classifica.goalsubiti_ht()])
+        i = i-1
+    lista_partite.pack()
+
+
+
+def ultimi_cinque_risultati():
+    giornata = int(comboG.get())
+    squadra = comboS.get()
+    lista_record = tree_view
+    empty_tree_view(lista_record)
+    lista_record["columns"] = ("one", "two")
+    lista_record.column("#0", minwidth=0, width=100, stretch=NO)
+    lista_record.column("one", minwidth=0, width=100, stretch=NO)
+    lista_record.column("two", minwidth=0, width=100, stretch=NO)
+    lista_record.heading("#0", text="Giornata")
+    lista_record.heading("one", text="Squadra")
+    lista_record.heading("two", text="Risultato")
+    partite_campionato = campionati[ocn[comboC.get()]].partite()
+    g = 0
+    while g != 5:
+        partite_giornata = campionati[ocn[comboC.get()]].giornate()[giornata - 1 - g].date_partite()
+        for data in partite_giornata:
+            partite_giorno = partite_campionato[data]
+            for partita in partite_giorno:
+                if g == 5 or giornata-1-g < 0:
+                    return
+                if partita.hometeam() == squadra:
+                    lista_record.insert("", 0, text=giornata - g,
+                                        values=[squadra, partita.ftr()])
+                    g += 1
+                else:
+                    if partita.ftr() == "H":
+                        lista_record.insert("", 0, text=giornata - g,
+                                            values=[squadra, "A"])
+                    elif partita.ftr() == "D":
+                        lista_record.insert("", 0, text=giornata - g,
+                                            values=[squadra, "H"])
+                    else:
+                        lista_record.insert("", 0, text=giornata - g,
+                                            values=[squadra, partita.ftr()])
+
+                    g += 1
 
 # creazione della GUI
 root = Tk()
@@ -304,13 +378,13 @@ root.grid_rowconfigure(3, weight=1)
 bps = ttk.Button(root, text="Squadre", command=onsb_click)
 bps.grid(row=3, column=5)
 root.grid_rowconfigure(4, weight=1)
-bpht = ttk.Button(root, text="Classifica primo tempo \nalla giornata indicata", command=None)
+bpht = ttk.Button(root, text="Classifica primo tempo \nalla giornata indicata", command=stampa_classifica_ht)
 bpht.grid(row=4, column=5)
 root.grid_rowconfigure(5, weight=1)
 bpft = ttk.Button(root, text="Classifica alla giornata indicata", command=stampa_classifica)
 bpft.grid(row=5, column=5)
 root.grid_rowconfigure(6, weight=1)
-bpfr = ttk.Button(root, text="Ultimi 5 risultati per la squadra indicata", command=None)
+bpfr = ttk.Button(root, text="Ultimi 5 risultati per la squadra indicata", command=ultimi_cinque_risultati)
 bpfr.grid(row=6, column=5)
 root.grid_rowconfigure(7, weight=1)
 bppdi = ttk.Button(root, text="Partite alla data indicata", command=onp_click)
