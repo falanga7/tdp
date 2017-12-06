@@ -188,8 +188,8 @@ def dispatcher(cl, file):
 
 
 def onsb_click():
-    squadre_t = ttk.Treeview(root, selectmode="extended", height=33)
-    squadre_t.grid(row=2, column=1, columnspan=4, rowspan=10)
+    squadre_t = tree_view
+    empty_tree_view(squadre_t)
     squadre_t.heading("#0").clear()
     squadre_t.heading("#0", text=campionati[ocn[comboC.get()]].nome())
     squadre_t.column("#0")
@@ -243,24 +243,27 @@ def ong_change(index, value, op):
     comboD["values"] = date_partite
 
 
+def empty_tree_view(tree):
+    for i in tree.get_children():
+        tree.delete(i)
+
+
 def stampa_classifica():
     classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get())-1].classifica()
     classifica.ordina(0, False)
     classifica = classifica.lista()
-    lista_partite = ttk.Treeview(root, selectmode="extended", height=33)
-    lista_partite.grid(row=2, column=1, columnspan=4, rowspan=10)
-    # lista_partite.heading().clear()
-    # lista_partite.heading("#0", text="Lista partite giocate in data " + comboD.get())
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
     lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight")
-    lista_partite.column("#0")
-    lista_partite.column("one")
-    lista_partite.column("two")
-    lista_partite.column("three")
-    lista_partite.column("four")
-    lista_partite.column("five")
-    lista_partite.column("six")
-    lista_partite.column("seven")
-    lista_partite.column("eight")
+    lista_partite.column("#0", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("two", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("three", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("four", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("five", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("six", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("seven", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("eight", minwidth=0, width=100, stretch=NO)
     lista_partite.heading("#0", text="Posizione")
     lista_partite.heading("one", text="Squadra")
     lista_partite.heading("two", text="PT")
@@ -275,11 +278,11 @@ def stampa_classifica():
     for record_classifica in classifica:
         lista_partite.insert("", 0, text=i,
                              values=[record_classifica.squadra(), record_classifica.punti(),
-                                     record_classifica.partite(),record_classifica.vittorie(), record_classifica.pareggi(),
+                                     record_classifica.partite(), record_classifica.vittorie(), record_classifica.pareggi(),
                                      record_classifica.sconfitte(), record_classifica.goalfatti(),
                                      record_classifica.goalsubiti()])
         i = i-1
-    print("test")
+    lista_partite.pack()
 
 
 # creazione della GUI
@@ -324,7 +327,19 @@ bpksp.grid(row=10, column=5)
 root.grid_rowconfigure(11, weight=1)
 bpksp = ttk.Button(root, text="Squadre rispettivamente con maggior \nnumero di vittorie, in casa e in trasferta", command=None)
 bpksp.grid(row=11, column=5)
-
+main_frame = ttk.Frame(root, width=1300, height=700, relief="groove")
+main_frame.pack_propagate(0)
+main_frame.grid(row=2, column=1, columnspan=4, rowspan=10)
+tree_scroll_v = ttk.Scrollbar(main_frame, orient="vertical")
+tree_scroll_v.pack(side='right', fill='y')
+tree_scroll_o = ttk.Scrollbar(main_frame, orient="horizontal")
+tree_view = ttk.Treeview(main_frame, selectmode="browse", height=33, xscrollcommand=tree_scroll_o,
+                             yscrollcommand=tree_scroll_v)
+tree_scroll_o.configure(command=tree_view.xview)
+tree_scroll_v.configure(command=tree_view.yview)
+tree_scroll_v.pack(side='right', fill='y')
+tree_scroll_o.pack(side='bottom', fill='x')
+tree_view.pack(side=LEFT, expand=True, fill=BOTH)
 bps = ttk.Button(root, text="vittorie, vittorie in casa, vittorie in trasferta", command=None)
 ocn = {'Inghilterra': "E0", "Scozia": "SC0", "Germania": 'D1', "Spagna": "SP1",
       'Italia': 'I1', "Francia": 'F1', "Olanda": 'N1', "Belgio": 'B1', "Portogallo": 'P1',
