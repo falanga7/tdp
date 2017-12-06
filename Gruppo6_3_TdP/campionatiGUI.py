@@ -18,7 +18,7 @@ def dispatcher(cl, file):
     for codice_campionato in cl.keys():
         if codice_campionato == 'SC0':
             continue
-        x_sheet = x_workbook.sheet_by_name('I1')
+        x_sheet = x_workbook.sheet_by_name(codice_campionato)
         nrows = x_sheet.nrows
         partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
@@ -122,18 +122,48 @@ def dispatcher(cl, file):
             record_home = squadre[home_team].record()
 
             record_ospite = squadre[away_team].record()
+
             if record_home.partite() > g or record_ospite.partite() > g:
-                g += 1
+
                 if not rinviata:
-                    giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
+                    giornate_campionato[g+1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),list())
+
+                    g += 1
 
                 else:
                     rinviata = False
 
+            elif record_home.partite() == g and record_ospite.partite() == g:
+                print("ok1")
+                date_giornata_prec = giornate_campionato[g].date_partite()
+                partite_giornata_prec = []
+
+                for data in date_giornata_prec:
+                    partite_giornata_prec += partite[data]
+
+                for partita in partite_giornata_prec:
+                    if partita.hometeam() == home_team or partita.hometeam() == away_team or partita.awayteam() == home_team or partita.awayteam() == away_team:
+                        g+=1
+                        giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
+                        rinviata = True
+                        aggiungi_al_calendario = False
+                        break
             elif record_home.partite() < g and record_ospite.partite() < g:
-                giornate_campionato[g+1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),list())
-                rinviata = True
-                aggiungi_al_calendario = False
+                print("ok2")
+                date_giornata_prec = giornate_campionato[g].date_partite()
+                partite_giornata_prec = []
+
+                for data in date_giornata_prec:
+                    partite_giornata_prec += partite[data]
+
+                for partita in partite_giornata_prec:
+                    if partita.hometeam() == home_team or partita.hometeam() == away_team or partita.awayteam() == home_team or partita.awayteam() == away_team:
+                        g+=1
+                        giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
+                        rinviata = True
+                        aggiungi_al_calendario = False
+                        break
+
 
             record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
                                             sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
@@ -284,8 +314,6 @@ campionati = dispatcher(ocl, "all-euro-data-2016-2017.xls")
 giornate  = campionati['I1'].giornate()
 #giornate[15].classifica()._lista.sort(key=punti,reverse=True)
 #print(giornate[1].classifica())
-print(giornate[2].classifica())
-
 # codice per interfaccia grafica a schermo intero, premere ESC per uscire
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 root.overrideredirect(1)
