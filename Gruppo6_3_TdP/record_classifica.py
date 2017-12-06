@@ -76,7 +76,7 @@ class RecordClassifica:
                                 self._vittorie_ht, self._pareggi_ht, self._sconfitte_ht, self._goalfatti_ht,
                                 self._goalsubiti_ht, self._punti_ht,self._partite_casa,self._vittorie_casa,self._pareggi_casa,self._sconfitte_casa,self._goalfatti_casa,
                                 self._goalsubiti_casa,self._punti_casa,self._partite_trasferta, self._vittorie_trasferta, self._pareggi_trasferta, self._sconfitte_trasferta,
-                                self._goalfatti_trasferta,self._goalsubiti_trasferta, self._punti_trasferta)
+                                    self._goalfatti_trasferta,self._goalsubiti_trasferta, self._punti_trasferta)
 
     def squadra(self):
         return self._squadra

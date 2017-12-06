@@ -9,7 +9,7 @@ class Squadra:
             raise ValueError("Il nome passato non è una stringa.")
         self._nome = nome
         """Oggetto utilizzato per la definizione delle giornate e l'aggiornamento della Classifica"""
-        self._record_classifica = RecordClassifica(nome, 0, 0, 0, 0, 0, 0, 0, 0)
+        self._record_classifica = RecordClassifica(nome)
 
     def squadra(self):
         return self._nome
