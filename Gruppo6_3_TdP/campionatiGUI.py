@@ -289,6 +289,7 @@ def stampa_classifica():
                                      record_classifica.sconfitte(), record_classifica.goalfatti(),
                                      record_classifica.goalsubiti(), record_classifica.sconfitte()])
         i = i-1
+    print("test")
 
 
 # creazione della GUI
@@ -362,6 +363,7 @@ k.grid(row=2, column=4)
 def punti(qualcosa):
     return qualcosa.punti()
 #Apro il file e passo npome del file excel al dispatcher per ottenere le strutture dati
+
 campionati = dispatcher(ocl, "all-euro-data-2016-2017.xls")
 giornate  = campionati['I1'].giornate()
 #giornate[15].classifica()._lista.sort(key=punti,reverse=True)
