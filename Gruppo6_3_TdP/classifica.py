@@ -19,9 +19,24 @@ class Classifica:
     def ordina(self, param, reverse=False):
         def punti(qualcosa):
             return qualcosa.punti()
-        if param == 0:
 
+        def vittorie(qualcosa):
+            return qualcosa.vittorie()
+
+        def vittorie_in_casa(qualcosa):
+            return qualcosa.vittorie_casa()
+
+        def vittorie_in_trasferta(qualcosa):
+            return qualcosa.vittorie_trasferta()
+
+        if param == 0:
             self._lista.sort(key=punti, reverse=reverse)
+        elif param == 1:
+            self._lista.sort(key=vittorie, reverse=reverse)
+        elif param == 2:
+            self._lista.sort(key=vittorie_in_casa, reverse=reverse)
+        elif param == 3:
+            self._lista.sort(key=vittorie_in_trasferta, reverse=reverse)
 
     def aggiungi_record(self, record):
 

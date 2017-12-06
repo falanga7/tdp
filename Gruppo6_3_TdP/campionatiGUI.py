@@ -320,7 +320,6 @@ def stampa_classifica_ht():
     lista_partite.pack()
 
 
-
 def ultimi_cinque_risultati():
     giornata = int(comboG.get())
     squadra = comboS.get()
@@ -358,6 +357,32 @@ def ultimi_cinque_risultati():
                                             values=[squadra, partita.ftr()])
 
                     g += 1
+
+
+def stampa_squadra_vittoriosa():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get()) - 1].classifica()
+    classifica.ordina(1, False)
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
+    lista_partite["columns"] = ("one", "two")
+    lista_partite.column("#0", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("two", minwidth=0, width=200, stretch=NO)
+    lista_partite.heading("#0", text="Top vittorie")
+    lista_partite.heading("one", text="Top vittorie in casa")
+    lista_partite.heading("two", text="Top vittorie in trasferta")
+    vittoriosa = classifica.lista()[0].squadra()
+    classifica.ordina(2, False)
+    vittoriosa_in_casa = classifica.lista()[0].squadra()
+    classifica.ordina(3, False)
+    vittoriosa_in_trasferta = classifica.lista()[0].squadra()
+
+    lista_partite.insert("", 0, text=vittoriosa,
+                         values=[vittoriosa_in_casa, vittoriosa_in_trasferta])
+
+
+    lista_partite.pack()
+
 
 # creazione della GUI
 root = Tk()
@@ -399,7 +424,8 @@ root.grid_rowconfigure(10, weight=1)
 bpksp = ttk.Button(root, text="k squadre con migliore differenza reti \nalla giornata indicata", command=None)
 bpksp.grid(row=10, column=5)
 root.grid_rowconfigure(11, weight=1)
-bpksp = ttk.Button(root, text="Squadre rispettivamente con maggior \nnumero di vittorie, in casa e in trasferta", command=None)
+bpksp = ttk.Button(root, text="Squadre rispettivamente con maggior \nnumero di vittorie, in casa e in trasferta",
+                   command=stampa_squadra_vittoriosa)
 bpksp.grid(row=11, column=5)
 main_frame = ttk.Frame(root, width=1300, height=700, relief="groove")
 main_frame.pack_propagate(0)
