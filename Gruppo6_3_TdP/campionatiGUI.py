@@ -91,6 +91,31 @@ def dispatcher(cl, file):
                 HTAG = int(x_sheet.cell(n, 8).value)
             if x_sheet.cell(n, 9).value != '':
                 HTR = x_sheet.cell(n, 9).value
+
+            # calcolo punti,vittorie,pareggi e sconfitte
+            punti_squadra_casa_ht = 0
+            punti_squadra_ospite_ht = 0
+            vittoria_squadra_casa_ht = 0
+            vittoria_squadra_ospite_ht = 0
+            pareggio_squadra_casa_ht = 0
+            pareggio_squadra_ospite_ht = 0
+            sconfitta_squadra_casa_ht= 0
+            sconfitta_squadra_ospite_ht = 0
+
+            if HTR == "H":
+                punti_squadra_casa_ht = 3
+                vittoria_squadra_casa_ht = 1
+                sconfitta_squadra_ospite_ht = 1
+            elif HTR == "D":
+                punti_squadra_casa_ht = 1
+                punti_squadra_ospite_ht = 1
+                pareggio_squadra_casa_ht = 1
+                pareggio_squadra_ospite_ht = 1
+            elif HTR == "A":
+                punti_squadra_ospite_ht = 3
+                vittoria_squadra_ospite_ht = 1
+                sconfitta_squadra_casa_ht = 1
+
             partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
 
             record_home = squadre[home_team].record()
@@ -107,10 +132,20 @@ def dispatcher(cl, file):
             elif record_home.partite() < g and record_ospite.partite() < g:
                 giornate_campionato[g+1] = Giornata(Classifica())
                 rinviata = True
-            record_home += RecordClassifica(home_team, 1, vittoria_squadra_casa, pareggio_squadra_casa,
-                                           sconfitta_squadra_casa, FTHG, FTAG, (FTHG - FTAG), punti_squadra_casa)
-            record_ospite += RecordClassifica(away_team, 1, vittoria_squadra_ospite, pareggio_squadra_ospite,
-                                           sconfitta_squadra_ospite, FTAG, FTHG, (FTAG - FTHG), punti_squadra_ospite)
+            record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
+                                            sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
+                                            vittorie_ht=vittoria_squadra_casa_ht, pareggi_ht=pareggio_squadra_casa_ht, sconfitte_ht=sconfitta_squadra_casa_ht,
+                                            goalfatti_ht=HTHG, goalsubiti_ht=HTAG, punti_ht=punti_squadra_casa_ht,partite_casa=1,
+                                            vittorie_casa=vittoria_squadra_casa_ht, pareggi_casa=pareggio_squadra_casa_ht, sconfitte_casa=sconfitta_squadra_casa_ht,
+                                            goalfatti_casa=FTHG, goalsubiti_casa=FTAG, punti_casa=punti_squadra_casa)
+
+            record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
+                                            pareggi=pareggio_squadra_ospite,sconfitte=sconfitta_squadra_ospite, goalfatti=FTAG, goalsubiti=FTHG,
+                                            punti=punti_squadra_ospite,vittorie_ht=vittoria_squadra_ospite_ht, pareggi_ht=pareggio_squadra_ospite_ht,
+                                            sconfitte_ht=sconfitta_squadra_ospite_ht,goalfatti_ht=HTAG, goalsubiti_ht=HTHG, punti_ht=punti_squadra_ospite_ht,
+                                            partite_trasferta=1, vittorie_trasferta=vittoria_squadra_ospite,pareggi_trasferta=pareggio_squadra_ospite,
+                                            sconfitte_trasferta=sconfitta_squadra_ospite, goalfatti_trasferta=FTAG,goalsubiti_trasferta=FTAG,
+                                            punti_trasferta=punti_squadra_ospite)
 
             giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
             giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
