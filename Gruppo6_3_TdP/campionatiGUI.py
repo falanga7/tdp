@@ -133,22 +133,7 @@ def dispatcher(cl, file):
                 else:
                     rinviata = False
 
-            elif record_home.partite() == g and record_ospite.partite() == g:
-                print("ok1")
-                date_giornata_prec = giornate_campionato[g].date_partite()
-                partite_giornata_prec = []
-
-                for data in date_giornata_prec:
-                    partite_giornata_prec += partite[data]
-
-                for partita in partite_giornata_prec:
-                    if partita.hometeam() == home_team or partita.hometeam() == away_team or partita.awayteam() == home_team or partita.awayteam() == away_team:
-                        g+=1
-                        giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
-                        rinviata = True
-                        aggiungi_al_calendario = False
-                        break
-            elif record_home.partite() < g and record_ospite.partite() < g:
+            elif record_home.partite() < g or record_ospite.partite() < g:
                 print("ok2")
                 date_giornata_prec = giornate_campionato[g].date_partite()
                 partite_giornata_prec = []
@@ -157,13 +142,14 @@ def dispatcher(cl, file):
                     partite_giornata_prec += partite[data]
 
                 for partita in partite_giornata_prec:
-                    if partita.hometeam() == home_team or partita.hometeam() == away_team or partita.awayteam() == home_team or partita.awayteam() == away_team:
+                    if partita.hometeam() == home_team or partita.hometeam() == away_team and partita.awayteam() == home_team or partita.awayteam() == away_team:
                         g+=1
                         giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
                         rinviata = True
                         aggiungi_al_calendario = False
                         break
 
+                        
 
             record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
                                             sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
@@ -187,6 +173,7 @@ def dispatcher(cl, file):
             if date != prev_data:
                 if aggiungi_al_calendario:
                     giornate_campionato[g].aggiungi_data(date)
+
                 else:
                     aggiungi_al_calendario = True
                 lista_partite = list()
@@ -271,23 +258,26 @@ def stampa_classifica():
     lista_partite.column("three")
     lista_partite.column("four")
     lista_partite.column("five")
+    lista_partite.column("six")
+    lista_partite.column("seven")
+    lista_partite.column("eight")
     lista_partite.heading("#0", text="Posizione")
     lista_partite.heading("one", text="Squadra")
-    lista_partite.heading("two", text="PG")
-    lista_partite.heading("three", text="V")
-    lista_partite.heading("four", text="P")
-    lista_partite.heading("five", text="S")
-    lista_partite.heading("six", text="GF")
-    lista_partite.heading("seven", text="DG")
-    lista_partite.heading("eight", text="S")
+    lista_partite.heading("two", text="PT")
+    lista_partite.heading("three", text="PG")
+    lista_partite.heading("four", text="V")
+    lista_partite.heading("five", text="P")
+    lista_partite.heading("six", text="S")
+    lista_partite.heading("seven", text="GF")
+    lista_partite.heading("eight", text="GS")
     i = len(campionati[ocn[comboC.get()]].squadre())
 
     for record_classifica in classifica:
         lista_partite.insert("", 0, text=i,
                              values=[record_classifica.squadra(), record_classifica.punti(),
-                                     record_classifica.vittorie(), record_classifica.pareggi(),
+                                     record_classifica.partite(),record_classifica.vittorie(), record_classifica.pareggi(),
                                      record_classifica.sconfitte(), record_classifica.goalfatti(),
-                                     record_classifica.goalsubiti(), record_classifica.sconfitte()])
+                                     record_classifica.goalsubiti()])
         i = i-1
     print("test")
 
