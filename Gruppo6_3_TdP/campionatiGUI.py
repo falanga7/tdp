@@ -18,7 +18,7 @@ def dispatcher(cl, file):
     for codice_campionato in cl.keys():
         if codice_campionato == 'SC0':
             continue
-        x_sheet = x_workbook.sheet_by_name('I1')
+        x_sheet = x_workbook.sheet_by_name(codice_campionato)
         nrows = x_sheet.nrows
         partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
         ns = int((1 + sqrt(1 + 4 * (nrows - 1))) / 2)
@@ -211,6 +211,56 @@ def onp_click():
             print("Nel giorno non si sono giocate partite nel campionato",campionato.nome())
 
 
+def onc_change(index, value, op):
+    giornate = list(range(1, len(campionati[ocn[comboC.get()]].giornate())+1))
+    comboG["values"] = giornate
+    squadre = campionati[ocn[comboC.get()]].squadre()
+    squadreL = []
+    for squadra in squadre:
+        squadreL.append(squadra)
+    comboS["values"] = squadreL
+
+
+def ong_change(index, value, op):
+    date_partite = campionati[ocn[comboC.get()]].giornate()[int(comboG.get())-1].date_partite()
+    comboD["values"] = date_partite
+
+
+def stampa_classifica():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get())-1].classifica()
+    classifica.ordina(0, False)
+    classifica = classifica.lista()
+    lista_partite = ttk.Treeview(root, selectmode="extended", height=33)
+    lista_partite.grid(row=2, column=1, columnspan=4, rowspan=10)
+    # lista_partite.heading().clear()
+    # lista_partite.heading("#0", text="Lista partite giocate in data " + comboD.get())
+    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight")
+    lista_partite.column("#0")
+    lista_partite.column("one")
+    lista_partite.column("two")
+    lista_partite.column("three")
+    lista_partite.column("four")
+    lista_partite.column("five")
+    lista_partite.heading("#0", text="Posizione")
+    lista_partite.heading("one", text="Squadra")
+    lista_partite.heading("two", text="PG")
+    lista_partite.heading("three", text="V")
+    lista_partite.heading("four", text="P")
+    lista_partite.heading("five", text="S")
+    lista_partite.heading("six", text="GF")
+    lista_partite.heading("seven", text="DG")
+    lista_partite.heading("eight", text="S")
+    i = len(campionati[ocn[comboC.get()]].squadre())
+
+    for record_classifica in classifica:
+        lista_partite.insert("", 0, text=i,
+                             values=[record_classifica.squadra(), record_classifica.punti(),
+                                     record_classifica.vittorie(), record_classifica.pareggi(),
+                                     record_classifica.sconfitte(), record_classifica.goalfatti(),
+                                     record_classifica.goalsubiti(), record_classifica.sconfitte()])
+        i = i-1
+
+
 # creazione della GUI
 root = Tk()
 root.title("Campionati")
@@ -233,7 +283,7 @@ root.grid_rowconfigure(4, weight=1)
 bpht = ttk.Button(root, text="Classifica primo tempo \nalla giornata indicata", command=None)
 bpht.grid(row=4, column=5)
 root.grid_rowconfigure(5, weight=1)
-bpft = ttk.Button(root, text="Classifica alla giornata indicata", command=None)
+bpft = ttk.Button(root, text="Classifica alla giornata indicata", command=stampa_classifica)
 bpft.grid(row=5, column=5)
 root.grid_rowconfigure(6, weight=1)
 bpfr = ttk.Button(root, text="Ultimi 5 risultati per la squadra indicata", command=None)
@@ -264,9 +314,11 @@ ocl = {"E0": 'Premier League', "SC0": 'Scottish Premiership', "D1": 'Bundesliga'
 csv = StringVar()
 comboC = ttk.Combobox(root, textvariable=csv, values=list(ocn))
 comboC.grid(row=2, column=0)
+csv.trace("w", onc_change)
 gsv = StringVar()
 comboG = ttk.Combobox(root, textvariable=gsv, value=None)
 comboG.grid(row=2, column=1)
+gsv.trace("w", ong_change)
 ssv = StringVar()
 comboS = ttk.Combobox(root, textvariable=ssv, value=None)
 comboS.grid(row=2, column=2)

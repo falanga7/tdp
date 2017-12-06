@@ -1,5 +1,6 @@
 from Gruppo6_3_TdP.record_classifica import RecordClassifica
 
+
 class Classifica:
     __slots__ = '_lista'
 
@@ -20,7 +21,7 @@ class Classifica:
             return qualcosa.punti()
         if param == 0:
 
-            self._lista.sort(key=punti,reverse=reverse)
+            self._lista.sort(key=punti, reverse=reverse)
 
     def aggiungi_record(self, record):
 
