@@ -29,6 +29,15 @@ class Classifica:
         def vittorie_in_trasferta(qualcosa):
             return qualcosa.vittorie_trasferta()
 
+        def goal_fatti(qualcosa):
+            return qualcosa.goalfatti()
+
+        def goal_subiti(qualcosa):
+            return qualcosa.goalsubiti()
+
+        def differenza_reti(qualcosa):
+            return qualcosa.goalfatti() - qualcosa.goalsubiti()
+
         if param == 0:
             self._lista.sort(key=punti, reverse=reverse)
         elif param == 1:
@@ -37,6 +46,12 @@ class Classifica:
             self._lista.sort(key=vittorie_in_casa, reverse=reverse)
         elif param == 3:
             self._lista.sort(key=vittorie_in_trasferta, reverse=reverse)
+        elif param == 4:
+            self._lista.sort(key=goal_fatti, reverse=reverse)
+        elif param == 5:
+            self._lista.sort(key=goal_subiti, reverse=reverse)
+        elif param == 6:
+            self._lista.sort(key=differenza_reti, reverse=reverse)
 
     def aggiungi_record(self, record):
 
@@ -45,7 +60,6 @@ class Classifica:
                 self._lista.remove(r)
                 self._lista.append(record)
                 break
-
 
     def __str__(self):
 
