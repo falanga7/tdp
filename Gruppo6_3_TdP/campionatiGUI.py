@@ -373,7 +373,7 @@ def ultimi_cinque_risultati():
 
 def stampa_squadra_vittoriosa():
     classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get()) - 1].classifica()
-    classifica.ordina(1, False)
+    classifica.ordina(1, True)
     lista_partite = tree_view
     empty_tree_view(lista_partite)
     lista_partite["columns"] = ("one", "two")
@@ -384,15 +384,70 @@ def stampa_squadra_vittoriosa():
     lista_partite.heading("one", text="Top vittorie in casa")
     lista_partite.heading("two", text="Top vittorie in trasferta")
     vittoriosa = classifica.lista()[0].squadra()
-    classifica.ordina(2, False)
-    vittoriosa_in_casa = classifica.lista()[0].squadra()
-    classifica.ordina(3, False)
+    classifica.ordina(2, True)
+    vittoriosa_in_casa = classifica.lista()[0].squadra() + str(classifica.lista()[0].vittorie_casa()) + classifica.lista()[1].squadra() + str(classifica.lista()[1].vittorie_casa()) + classifica.lista()[2].squadra() + str(classifica.lista()[2].vittorie_casa())
+    classifica.ordina(3, True)
     vittoriosa_in_trasferta = classifica.lista()[0].squadra()
 
     lista_partite.insert("", 0, text=vittoriosa,
                          values=[vittoriosa_in_casa, vittoriosa_in_trasferta])
+    lista_partite.pack()
 
 
+def stampa_kspg():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get()) - 1].classifica()
+    classifica.ordina(4, True)
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
+    lista_partite["columns"] = ("one", "two")
+    lista_partite.column("#0", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=200, stretch=NO)
+    lista_partite.heading("#0", text="Top più goal")
+    lista_partite.heading("one", text="Goal fatti")
+    ks = int(k.get())
+    squadre = classifica.lista()[0:ks]
+    squadre.reverse()
+    for record in squadre:
+        lista_partite.insert("", 0, text=record.squadra(),
+                             values=[record.goalfatti()])
+    lista_partite.pack()
+
+
+def stampa_ksmg():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get()) - 1].classifica()
+    classifica.ordina(5, False)
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
+    lista_partite["columns"] = ("one", "two")
+    lista_partite.column("#0", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=200, stretch=NO)
+    lista_partite.heading("#0", text="Top meno goal subiti")
+    lista_partite.heading("one", text="Goal subiti")
+    ks = int(k.get())
+    squadre = classifica.lista()[0:ks]
+    squadre.reverse()
+    for record in squadre:
+        lista_partite.insert("", 0, text=record.squadra(),
+                             values=[record.goalsubiti()])
+    lista_partite.pack()
+
+
+def stampa_ksmdr():
+    classifica = campionati[ocn[comboC.get()]].giornate()[int(comboG.get()) - 1].classifica()
+    classifica.ordina(6, True)
+    lista_partite = tree_view
+    empty_tree_view(lista_partite)
+    lista_partite["columns"] = ("one", "two")
+    lista_partite.column("#0", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("one", minwidth=0, width=200, stretch=NO)
+    lista_partite.heading("#0", text="Top migliore differenza reti")
+    lista_partite.heading("one", text="Differenza reti")
+    ks = int(k.get())
+    squadre = classifica.lista()[0:ks]
+    squadre.reverse()
+    for record in squadre.reverse():
+        lista_partite.insert("", 0, text=record.squadra(),
+                             values=[record.goalfatti() - record.goalsubiti()])
     lista_partite.pack()
 
 
@@ -427,13 +482,13 @@ root.grid_rowconfigure(7, weight=1)
 bppdi = ttk.Button(root, text="Partite alla data indicata", command=onp_click)
 bppdi.grid(row=7, column=5)
 root.grid_rowconfigure(8, weight=1)
-bpksp = ttk.Button(root, text="k squadre che hanno segnato \npiù goal alla giornata indicata", command=None)
+bpksp = ttk.Button(root, text="k squadre che hanno segnato \npiù goal alla giornata indicata", command=stampa_kspg)
 bpksp.grid(row=8, column=5)
 root.grid_rowconfigure(9, weight=1)
-bpksp = ttk.Button(root, text="k squadre che hanno subito \npiù goal alla giornata indicata", command=None)
+bpksp = ttk.Button(root, text="k squadre che hanno subito \npiù goal alla giornata indicata", command=stampa_ksmg)
 bpksp.grid(row=9, column=5)
 root.grid_rowconfigure(10, weight=1)
-bpksp = ttk.Button(root, text="k squadre con migliore differenza reti \nalla giornata indicata", command=None)
+bpksp = ttk.Button(root, text="k squadre con migliore differenza reti \nalla giornata indicata", command=stampa_ksmdr)
 bpksp.grid(row=10, column=5)
 root.grid_rowconfigure(11, weight=1)
 bpksp = ttk.Button(root, text="Squadre rispettivamente con maggior \nnumero di vittorie, in casa e in trasferta",
