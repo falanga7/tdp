@@ -394,6 +394,7 @@ def stampa_kspg():
     lista_partite.heading("one", text="Goal fatti")
     ks = int(k.get())
     squadre = classifica.lista()[0:ks]
+    squadre.reverse()
     for record in squadre:
         lista_partite.insert("", 0, text=record.squadra(),
                              values=[record.goalfatti()])
@@ -412,6 +413,7 @@ def stampa_ksmg():
     lista_partite.heading("one", text="Goal subiti")
     ks = int(k.get())
     squadre = classifica.lista()[0:ks]
+    squadre.reverse()
     for record in squadre:
         lista_partite.insert("", 0, text=record.squadra(),
                              values=[record.goalsubiti()])
@@ -430,10 +432,12 @@ def stampa_ksmdr():
     lista_partite.heading("one", text="Differenza reti")
     ks = int(k.get())
     squadre = classifica.lista()[0:ks]
-    for record in squadre:
+    squadre.reverse()
+    for record in squadre.reverse():
         lista_partite.insert("", 0, text=record.squadra(),
                              values=[record.goalfatti() - record.goalsubiti()])
     lista_partite.pack()
+
 
 # creazione della GUI
 root = Tk()
