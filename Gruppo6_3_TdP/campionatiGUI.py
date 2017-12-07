@@ -123,6 +123,27 @@ def dispatcher(cl, file):
 
             record_ospite = squadre[away_team].record()
 
+            andata = None
+
+            for row_num in range(int(x_sheet.nrows / 2)):
+                row_value = x_sheet.row_values(row_num)
+                if row_value[2] == away_team and row_value[3] == home_team:
+                    print("Amdata", home_team, away_team)
+                    date_search = xlrd.xldate_as_datetime(x_sheet.cell(row_num, 1).value, x_workbook.datemode)
+                    date_search = str(format(date_search.date(), "%d/%m/%Y"))
+                    if date_search in partite.keys():
+                        print("Andata0KKK")
+                        partite_andata = partite[date_search]
+                        for partita in partite_andata:
+                            if partita.awayteam() == home_team and partita.hometeam() == away_team:
+                                for giornata in giornate_campionato:
+                                    if partita.date() in giornata.date_partite():
+                                        andata = giornata.date_partite().index(partita.date())
+                                        print("andata", andata, home_team, away_team)
+                                        break
+                        break
+
+
             if record_home.partite() > g or record_ospite.partite() > g:
 
                 if not rinviata:
@@ -132,23 +153,6 @@ def dispatcher(cl, file):
 
                 else:
                     rinviata = False
-
-            elif record_home.partite() < g or record_ospite.partite() < g:
-                print("ok2")
-                date_giornata_prec = giornate_campionato[g].date_partite()
-                partite_giornata_prec = []
-
-                for data in date_giornata_prec:
-                    partite_giornata_prec += partite[data]
-
-                for partita in partite_giornata_prec:
-                    if partita.hometeam() == home_team or partita.hometeam() == away_team and partita.awayteam() == home_team or partita.awayteam() == away_team:
-                        g+=1
-                        giornate_campionato[g] = Giornata(Classifica(giornate_campionato[g-1].classifica()._lista.copy()),list())
-                        rinviata = True
-                        aggiungi_al_calendario = False
-                        break
-
 
 
             record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
@@ -166,8 +170,16 @@ def dispatcher(cl, file):
                                             sconfitte_trasferta=sconfitta_squadra_ospite, goalfatti_trasferta=FTAG,goalsubiti_trasferta=FTAG,
                                             punti_trasferta=punti_squadra_ospite)
 
-            giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
-            giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
+            if andata is not None and (g+1) - andata < ng/2:
+                giornate_campionato[g + 1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),
+                                                      list())
+                g += 1
+                giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
+                giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
+            else:
+                giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
+                giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
+
 
             #            record_home = RecordClassifica(home_team, g + 1, )
             if date != prev_data:
