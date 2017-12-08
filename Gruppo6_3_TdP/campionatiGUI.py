@@ -479,7 +479,7 @@ def stampa_classifica():
     classifica = classifica.lista()
     lista_partite = tree_view
     empty_tree_view(lista_partite)
-    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight")
+    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
     lista_partite.column("#0", minwidth=0, width=100, stretch=NO)
     lista_partite.column("one", minwidth=0, width=100, stretch=NO)
     lista_partite.column("two", minwidth=0, width=100, stretch=NO)
@@ -489,6 +489,7 @@ def stampa_classifica():
     lista_partite.column("six", minwidth=0, width=100, stretch=NO)
     lista_partite.column("seven", minwidth=0, width=100, stretch=NO)
     lista_partite.column("eight", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("nine", minwidth=0, width=100, stretch=NO)
     lista_partite.heading("#0", text="Posizione")
     lista_partite.heading("one", text="Squadra")
     lista_partite.heading("two", text="Punti")
@@ -498,6 +499,7 @@ def stampa_classifica():
     lista_partite.heading("six", text="S")
     lista_partite.heading("seven", text="GF")
     lista_partite.heading("eight", text="GS")
+    lista_partite.heading("nine", text="DR")
     i = len(campionati[ocn[comboC.get()]].squadre())
 
     for record_classifica in classifica:
@@ -505,7 +507,7 @@ def stampa_classifica():
                              values=[record_classifica.squadra(), record_classifica.punti(),
                                      record_classifica.partite(), record_classifica.vittorie(), record_classifica.pareggi(),
                                      record_classifica.sconfitte(), record_classifica.goalfatti(),
-                                     record_classifica.goalsubiti()])
+                                     record_classifica.goalsubiti(), record_classifica.goalfatti()-record_classifica.goalsubiti()])
         i = i-1
     lista_partite.pack()
 
@@ -516,7 +518,7 @@ def stampa_classifica_ht():
     classifica = classifica.lista()
     lista_partite = tree_view
     empty_tree_view(lista_partite)
-    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight")
+    lista_partite["columns"] = ("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
     lista_partite.column("#0", minwidth=0, width=100, stretch=NO)
     lista_partite.column("one", minwidth=0, width=100, stretch=NO)
     lista_partite.column("two", minwidth=0, width=100, stretch=NO)
@@ -526,6 +528,7 @@ def stampa_classifica_ht():
     lista_partite.column("six", minwidth=0, width=100, stretch=NO)
     lista_partite.column("seven", minwidth=0, width=100, stretch=NO)
     lista_partite.column("eight", minwidth=0, width=100, stretch=NO)
+    lista_partite.column("nine", minwidth=0, width=100, stretch=NO)
     lista_partite.heading("#0", text="Posizione")
     lista_partite.heading("one", text="Squadra")
     lista_partite.heading("two", text="Punti")
@@ -535,6 +538,7 @@ def stampa_classifica_ht():
     lista_partite.heading("six", text="S")
     lista_partite.heading("seven", text="GF")
     lista_partite.heading("eight", text="GS")
+    lista_partite.heading("nine", text="DS")
     i = len(campionati[ocn[comboC.get()]].squadre())
 
     for record_classifica in classifica:
@@ -542,7 +546,7 @@ def stampa_classifica_ht():
                              values=[record_classifica.squadra(), record_classifica.punti_ht(),
                                      record_classifica.partite(), record_classifica.vittorie_ht(), record_classifica.pareggi_ht(),
                                      record_classifica.sconfitte_ht(), record_classifica.goalfatti_ht(),
-                                     record_classifica.goalsubiti_ht()])
+                                     record_classifica.goalsubiti_ht(), record_classifica.goalfatti_ht()-record_classifica.goalsubiti_ht()])
         i = i-1
     lista_partite.pack()
 
@@ -592,13 +596,19 @@ def stampa_squadra_vittoriosa():
     classifica.ordina(1, True)
     lista_partite = tree_view
     empty_tree_view(lista_partite)
-    lista_partite["columns"] = ("one", "two")
+    lista_partite["columns"] = ("one", "two", "three", "four", "five")
     lista_partite.column("#0", minwidth=0, width=200, stretch=NO)
     lista_partite.column("one", minwidth=0, width=200, stretch=NO)
     lista_partite.column("two", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("three", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("four", minwidth=0, width=200, stretch=NO)
+    lista_partite.column("five", minwidth=0, width=200, stretch=NO)
     lista_partite.heading("#0", text="Top vittorie")
-    lista_partite.heading("one", text="Top vittorie in casa")
-    lista_partite.heading("two", text="Top vittorie in trasferta")
+    lista_partite.heading("one", text="Vittorie")
+    lista_partite.heading("two", text="Top vittorie in casa")
+    lista_partite.heading("three", text="Vittorie in casa")
+    lista_partite.heading("four", text="Top vittorie in trasferta")
+    lista_partite.heading("five", text="Vittorie in trasferta")
     vittoriose = classifica.lista()
     vittoriose_lista = []
     vittoriose_lista.append(vittoriose[0])
@@ -648,7 +658,9 @@ def stampa_squadra_vittoriosa():
         except IndexError:
             vittoriose_in_trasferta_record = ""
         lista_partite.insert("", 0, text=vittoriose_record.squadra(),
-                             values=[vittoriose_in_casa_record.squadra(), vittoriose_in_trasferta_record.squadra()])
+                             values=[vittoriose_record.vittorie(), vittoriose_in_casa_record.squadra(),
+                                     vittoriose_in_casa_record.vittorie_casa(), vittoriose_in_trasferta_record.squadra(),
+                                     vittoriose_in_trasferta_record.vittorie_trasferta()])
     lista_partite.pack()
 
 
