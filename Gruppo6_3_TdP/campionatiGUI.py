@@ -614,7 +614,7 @@ def stampa_squadra_vittoriosa():
     vittoriose_lista.append(vittoriose[0])
     k = 1
     while True:
-        if vittoriose[0].punti() == vittoriose[k].punti():
+        if vittoriose[0].vittorie() == vittoriose[k].vittorie():
             vittoriose_lista.append(vittoriose[k])
             k += 1
         else:
@@ -626,7 +626,7 @@ def stampa_squadra_vittoriosa():
     vittoriose_in_casa_lista.append(vittoriose_in_casa[0])
     k = 1
     while True:
-        if vittoriose_in_casa[0].punti() == vittoriose_in_casa[k].punti():
+        if vittoriose_in_casa[0].vittorie_casa() == vittoriose_in_casa[k].vittorie_casa():
             vittoriose_in_casa_lista.append(vittoriose_in_casa[k])
             k += 1
         else:
@@ -637,7 +637,7 @@ def stampa_squadra_vittoriosa():
     vittoriose_in_trasferta_lista.append(vittoriose_in_trasferta[0])
     k = 1
     while True:
-        if vittoriose_in_trasferta[0].punti() == vittoriose_in_trasferta[k].punti():
+        if vittoriose_in_trasferta[0].vittorie_trasferta() == vittoriose_in_trasferta[k].vittorie_trasferta():
             vittoriose_in_trasferta_lista.append(vittoriose_in_trasferta[k])
             k += 1
         else:
