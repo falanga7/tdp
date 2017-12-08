@@ -371,14 +371,56 @@ def stampa_squadra_vittoriosa():
     lista_partite.heading("#0", text="Top vittorie")
     lista_partite.heading("one", text="Top vittorie in casa")
     lista_partite.heading("two", text="Top vittorie in trasferta")
-    vittoriosa = classifica.lista()[0].squadra()
-    classifica.ordina(2, True)
-    vittoriosa_in_casa = classifica.lista()[0].squadra() + str(classifica.lista()[0].vittorie_casa()) + classifica.lista()[1].squadra() + str(classifica.lista()[1].vittorie_casa()) + classifica.lista()[2].squadra() + str(classifica.lista()[2].vittorie_casa())
-    classifica.ordina(3, True)
-    vittoriosa_in_trasferta = classifica.lista()[0].squadra()
+    vittoriose = classifica.lista()
+    vittoriose_lista = []
+    vittoriose_lista.append(vittoriose[0])
+    k = 1
+    while True:
+        if vittoriose[0].punti() == vittoriose[k].punti():
+            vittoriose_lista.append(vittoriose[k])
+            k += 1
+        else:
+            break
 
-    lista_partite.insert("", 0, text=vittoriosa,
-                         values=[vittoriosa_in_casa, vittoriosa_in_trasferta])
+    classifica.ordina(2, True)
+    vittoriose_in_casa = classifica.lista()
+    vittoriose_in_casa_lista = []
+    vittoriose_in_casa_lista.append(vittoriose_in_casa[0])
+    k = 1
+    while True:
+        if vittoriose_in_casa[0].punti() == vittoriose_in_casa[k].punti():
+            vittoriose_in_casa_lista.append(vittoriose_in_casa_lista[k])
+            k += 1
+        else:
+            break
+    classifica.ordina(3, True)
+    vittoriose_in_trasferta = classifica.lista()
+    vittoriose_in_trasferta_lista = []
+    vittoriose_in_trasferta_lista.append(vittoriose_in_trasferta[0])
+    k = 1
+    while True:
+        if vittoriose_in_trasferta[0].punti() == vittoriose_in_trasferta[k].punti():
+            vittoriose_in_trasferta_lista.append(vittoriose_in_trasferta_lista[k])
+            k += 1
+        else:
+            break
+    km = max(len(vittoriose_lista), len(vittoriose_in_casa_lista), len(vittoriose_in_trasferta_lista))
+    for k in range(0, km):
+
+        try:
+            vittoriose_record = vittoriose_lista[k]
+        except IndexError:
+            vittoriose_record = ""
+        try:
+            vittoriose_in_casa_record = vittoriose_in_casa_lista[k]
+        except IndexError:
+            vittoriose_in_casa_record = ""
+        try:
+            vittoriose_in_trasferta_record = vittoriose_in_trasferta_lista[k]
+        except IndexError:
+            vittoriose_in_trasferta_record = ""
+        lista_partite.insert("", 0, text=vittoriose_record.squadra(),
+                             values=[vittoriose_in_casa_record.squadra(), vittoriose_in_trasferta_record.squadra()])
     lista_partite.pack()
 
 
