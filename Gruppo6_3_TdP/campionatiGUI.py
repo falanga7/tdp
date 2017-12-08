@@ -158,7 +158,7 @@ def dispatcher(cl, file):
                                                 sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
                                                 vittorie_ht=vittoria_squadra_casa_ht, pareggi_ht=pareggio_squadra_casa_ht, sconfitte_ht=sconfitta_squadra_casa_ht,
                                                 goalfatti_ht=HTHG, goalsubiti_ht=HTAG, punti_ht=punti_squadra_casa_ht,partite_casa=1,
-                                                vittorie_casa=vittoria_squadra_casa_ht, pareggi_casa=pareggio_squadra_casa_ht, sconfitte_casa=sconfitta_squadra_casa_ht,
+                                                vittorie_casa=vittoria_squadra_casa, pareggi_casa=pareggio_squadra_casa, sconfitte_casa=sconfitta_squadra_casa,
                                                 goalfatti_casa=FTHG, goalsubiti_casa=FTAG, punti_casa=punti_squadra_casa)
 
                 record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
@@ -344,9 +344,9 @@ def dispatcher(cl, file):
                                                 sconfitte_ht=sconfitta_squadra_casa_ht,
                                                 goalfatti_ht=HTHG, goalsubiti_ht=HTAG, punti_ht=punti_squadra_casa_ht,
                                                 partite_casa=1,
-                                                vittorie_casa=vittoria_squadra_casa_ht,
-                                                pareggi_casa=pareggio_squadra_casa_ht,
-                                                sconfitte_casa=sconfitta_squadra_casa_ht,
+                                                vittorie_casa=vittoria_squadra_casa,
+                                                pareggi_casa=pareggio_squadra_casa,
+                                                sconfitte_casa=sconfitta_squadra_casa,
                                                 goalfatti_casa=FTHG, goalsubiti_casa=FTAG,
                                                 punti_casa=punti_squadra_casa)
 
