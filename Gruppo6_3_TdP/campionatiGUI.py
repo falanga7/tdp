@@ -16,7 +16,7 @@ def dispatcher(cl, file):
     x_workbook = xlrd.open_workbook(file)
     campionati = ProbeHashMap(cap=int(len(cl)/0.5 + 1))
     for codice_campionato in cl.keys():
-        if codice_campionato != 'SC0' and codice_campionato != 'P1' and codice_campionato != 'G1':
+        if codice_campionato != 'SC0' and codice_campionato != 'G1':
             x_sheet = x_workbook.sheet_by_name(codice_campionato)
             nrows = x_sheet.nrows
             partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
@@ -122,9 +122,11 @@ def dispatcher(cl, file):
 
                 record_ospite = squadre[away_team].record()
 
-                andata = None
 
-                """for row_num in range(int(x_sheet.nrows / 2)):
+
+                """andata = None
+
+                for row_num in range(int(x_sheet.nrows / 2)):
                     row_value = x_sheet.row_values(row_num)
                     if row_value[2] == away_team and row_value[3] == home_team:
                         print("Amdata", home_team, away_team)
@@ -142,8 +144,15 @@ def dispatcher(cl, file):
                                             break
                             break"""
 
+                if codice_campionato == 'P1'and home_team == 'Maritimo' and away_team == 'Feirense' or home_team == 'Porto' and away_team == 'Chaves':
+                    a = 1
+                elif codice_campionato == 'I1' and (home_team == "Crotone" and away_team == "Bologna") or (codice_campionato == 'E0' and home_team == "Crystal Palace" and away_team == "Leicester"):
+                    giornate_campionato[g + 1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),
+                                                          list())
 
-                if record_home.partite() > g or record_ospite.partite() > g:
+                    g += 1
+                elif record_home.partite() > g or record_ospite.partite() > g:
+
 
                     if not rinviata:
                         giornate_campionato[g+1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),list())
@@ -153,15 +162,39 @@ def dispatcher(cl, file):
                     else:
                         rinviata = False
 
-
-                record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
-                                                sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa,
+                if codice_campionato == "F1" and g == 18 and home_team == "Metz":
+                    record_home += RecordClassifica(squadra = home_team, partite = 1, vittorie = vittoria_squadra_casa, pareggi = pareggio_squadra_casa,
+                                                sconfitte = sconfitta_squadra_casa, goalfatti = FTHG, goalsubiti = FTAG, punti = punti_squadra_casa-2,
                                                 vittorie_ht=vittoria_squadra_casa_ht, pareggi_ht=pareggio_squadra_casa_ht, sconfitte_ht=sconfitta_squadra_casa_ht,
                                                 goalfatti_ht=HTHG, goalsubiti_ht=HTAG, punti_ht=punti_squadra_casa_ht,partite_casa=1,
                                                 vittorie_casa=vittoria_squadra_casa, pareggi_casa=pareggio_squadra_casa, sconfitte_casa=sconfitta_squadra_casa,
                                                 goalfatti_casa=FTHG, goalsubiti_casa=FTAG, punti_casa=punti_squadra_casa)
+                else:
+                    record_home += RecordClassifica(squadra=home_team, partite=1, vittorie=vittoria_squadra_casa,
+                                                    pareggi=pareggio_squadra_casa,
+                                                    sconfitte=sconfitta_squadra_casa, goalfatti=FTHG, goalsubiti=FTAG,
+                                                    punti=punti_squadra_casa,
+                                                    vittorie_ht=vittoria_squadra_casa_ht,
+                                                    pareggi_ht=pareggio_squadra_casa_ht,
+                                                    sconfitte_ht=sconfitta_squadra_casa_ht,
+                                                    goalfatti_ht=HTHG, goalsubiti_ht=HTAG,
+                                                    punti_ht=punti_squadra_casa_ht, partite_casa=1,
+                                                    vittorie_casa=vittoria_squadra_casa,
+                                                    pareggi_casa=pareggio_squadra_casa,
+                                                    sconfitte_casa=sconfitta_squadra_casa,
+                                                    goalfatti_casa=FTHG, goalsubiti_casa=FTAG,
+                                                    punti_casa=punti_squadra_casa)
 
-                record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
+                if codice_campionato == "F1" and g == 26 and away_team == "Metz":
+                    record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
+                                                pareggi=pareggio_squadra_ospite,sconfitte=sconfitta_squadra_ospite, goalfatti=FTAG, goalsubiti=FTHG,
+                                                punti=punti_squadra_ospite+2,vittorie_ht=vittoria_squadra_ospite_ht, pareggi_ht=pareggio_squadra_ospite_ht,
+                                                sconfitte_ht=sconfitta_squadra_ospite_ht,goalfatti_ht=HTAG, goalsubiti_ht=HTHG, punti_ht=punti_squadra_ospite_ht,
+                                                partite_trasferta=1, vittorie_trasferta=vittoria_squadra_ospite,pareggi_trasferta=pareggio_squadra_ospite,
+                                                sconfitte_trasferta=sconfitta_squadra_ospite, goalfatti_trasferta=FTAG,goalsubiti_trasferta=FTAG,
+                                                punti_trasferta=punti_squadra_ospite)
+                else :
+                    record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
                                                 pareggi=pareggio_squadra_ospite,sconfitte=sconfitta_squadra_ospite, goalfatti=FTAG, goalsubiti=FTHG,
                                                 punti=punti_squadra_ospite,vittorie_ht=vittoria_squadra_ospite_ht, pareggi_ht=pareggio_squadra_ospite_ht,
                                                 sconfitte_ht=sconfitta_squadra_ospite_ht,goalfatti_ht=HTAG, goalsubiti_ht=HTHG, punti_ht=punti_squadra_ospite_ht,
@@ -304,27 +337,12 @@ def dispatcher(cl, file):
 
                 record_ospite = squadre[away_team].record()
 
-                andata = None
+                if (home_team == "Hamilton" and away_team == "Aberdeen" and g==9) or (home_team == "Hamilton" and away_team == "Partick" and g==14) or (home_team == "Partick" and away_team == "Celtic" and g==15):
+                    giornate_campionato[g + 1] = Giornata(Classifica(giornate_campionato[g].classifica()._lista.copy()),
+                                                          list())
 
-                """for row_num in range(int(x_sheet.nrows / 2)):
-                    row_value = x_sheet.row_values(row_num)
-                    if row_value[2] == away_team and row_value[3] == home_team:
-                        print("Amdata", home_team, away_team)
-                        date_search = xlrd.xldate_as_datetime(x_sheet.cell(row_num, 1).value, x_workbook.datemode)
-                        date_search = str(format(date_search.date(), "%d/%m/%Y"))
-                        if date_search in partite.keys():
-                            print("Andata0KKK")
-                            partite_andata = partite[date_search]
-                            for partita in partite_andata:
-                                if partita.awayteam() == home_team and partita.hometeam() == away_team:
-                                    for giornata in giornate_campionato:
-                                        if partita.date() in giornata.date_partite():
-                                            andata = giornata.date_partite().index(partita.date())
-                                            print("andata", andata, home_team, away_team)
-                                            break
-                            break"""
-
-                if record_home.partite() > g or record_ospite.partite() > g:
+                    g += 1
+                elif record_home.partite() > g or record_ospite.partite() > g:
 
                     if not rinviata:
                         giornate_campionato[g + 1] = Giornata(
@@ -390,7 +408,7 @@ def dispatcher(cl, file):
             campionato.set_partite(partite)
             campionato.set_giornate(giornate_campionato)
             campionati[codice_campionato] = campionato
-        else:
+        elif codice_campionato == 'G1':
             x_sheet = x_workbook.sheet_by_name(codice_campionato)
             nrows = x_sheet.nrows
             partite = ChainHashMap(cap=int(nrows / 0.9 + 1))
@@ -399,6 +417,8 @@ def dispatcher(cl, file):
             squadre = ChainHashMap(cap=int(ns / 0.9 + 1))
             n = 1
             g = 0
+            recuperate = False
+            saltata_11 = False
             try:
                 while not squadre._n == ns or not n == x_sheet.nrows:
                     home_team = x_sheet.cell(n, 2).value
@@ -408,8 +428,205 @@ def dispatcher(cl, file):
                     n += 1
             except IndexError:
                 print("Il campionato considerato non supporta il nostro algoritmo.")
-            campionato = Campionato(codice_campionato, cl[codice_campionato], squadre)
 
+            campionato = Campionato(codice_campionato, cl[codice_campionato], squadre)
+            # creo le giornate del campionato: una lista di liste di date. Per convenzione la lista all'indice 0 indica
+            # la giornata numero 1, 1 la giornata 2 etc.
+            giornate_campionato = [Giornata] * ng
+            # inizializzazione classifica per la prima giornata
+            lista_squadre = list(squadre)
+            giornate_campionato[0] = Giornata(Classifica(lista_squadre), list())
+            giornate_campionato[1] = Giornata(Classifica(lista_squadre), list())
+            giornate_campionato[2] = Giornata(Classifica(lista_squadre), list())
+
+            # ricomincio a leggere il foglio di calcolo dalla prima riga
+            n = 1
+            lista_partite = list()
+            prev_date = None
+            date = None
+            rinviata = False
+            aggiungi_al_calendario = True
+            while not n == nrows:
+                prev_data = date
+                date = xlrd.xldate_as_datetime(x_sheet.cell(n, 1).value, x_workbook.datemode)
+                date = str(format(date.date(), "%d/%m/%Y"))
+                home_team = x_sheet.cell(n, 2).value
+                away_team = x_sheet.cell(n, 3).value
+                FTHG = int(x_sheet.cell(n, 4).value)
+                FTAG = int(x_sheet.cell(n, 5).value)
+
+                FTR = x_sheet.cell(n, 6).value
+                # calcolo punti,vittorie,pareggi e sconfitte
+                punti_squadra_casa = 0
+                punti_squadra_ospite = 0
+                vittoria_squadra_casa = 0
+                vittoria_squadra_ospite = 0
+                pareggio_squadra_casa = 0
+                pareggio_squadra_ospite = 0
+                sconfitta_squadra_casa = 0
+                sconfitta_squadra_ospite = 0
+
+                if FTR == "H":
+                    punti_squadra_casa = 3
+                    vittoria_squadra_casa = 1
+                    sconfitta_squadra_ospite = 1
+                elif FTR == "D":
+                    punti_squadra_casa = 1
+                    punti_squadra_ospite = 1
+                    pareggio_squadra_casa = 1
+                    pareggio_squadra_ospite = 1
+                elif FTR == "A":
+                    punti_squadra_ospite = 3
+                    vittoria_squadra_ospite = 1
+                    sconfitta_squadra_casa = 1
+
+                # verifico la presenza dei dati nelle celle successive
+                # ( se la partita è vinta a tavolino le celle risultano essere vuote)
+                if x_sheet.cell(n, 7).value != '':
+                    HTHG = int(x_sheet.cell(n, 7).value)
+                if x_sheet.cell(n, 8).value != '':
+                    HTAG = int(x_sheet.cell(n, 8).value)
+                if x_sheet.cell(n, 9).value != '':
+                    HTR = x_sheet.cell(n, 9).value
+
+                # calcolo punti,vittorie,pareggi e sconfitte
+                punti_squadra_casa_ht = 0
+                punti_squadra_ospite_ht = 0
+                vittoria_squadra_casa_ht = 0
+                vittoria_squadra_ospite_ht = 0
+                pareggio_squadra_casa_ht = 0
+                pareggio_squadra_ospite_ht = 0
+                sconfitta_squadra_casa_ht = 0
+                sconfitta_squadra_ospite_ht = 0
+
+                if HTR == "H":
+                    punti_squadra_casa_ht = 3
+                    vittoria_squadra_casa_ht = 1
+                    sconfitta_squadra_ospite_ht = 1
+                elif HTR == "D":
+                    punti_squadra_casa_ht = 1
+                    punti_squadra_ospite_ht = 1
+                    pareggio_squadra_casa_ht = 1
+                    pareggio_squadra_ospite_ht = 1
+                elif HTR == "A":
+                    punti_squadra_ospite_ht = 3
+                    vittoria_squadra_ospite_ht = 1
+                    sconfitta_squadra_casa_ht = 1
+
+                partita = Partita(date, home_team, away_team, FTHG, FTAG, FTR, HTHG, HTAG, HTR)
+
+                record_home = squadre[home_team].record()
+
+                record_ospite = squadre[away_team].record()
+
+                """andata = None
+
+                for row_num in range(int(x_sheet.nrows / 2)):
+                    row_value = x_sheet.row_values(row_num)
+                    if row_value[2] == away_team and row_value[3] == home_team:
+                        print("Amdata", home_team, away_team)
+                        date_search = xlrd.xldate_as_datetime(x_sheet.cell(row_num, 1).value, x_workbook.datemode)
+                        date_search = str(format(date_search.date(), "%d/%m/%Y"))
+                        if date_search in partite.keys():
+                            print("Andata0KKK")
+                            partite_andata = partite[date_search]
+                            for partita in partite_andata:
+                                if partita.awayteam() == home_team and partita.hometeam() == away_team:
+                                    for giornata in giornate_campionato:
+                                        if partita.date() in giornata.date_partite():
+                                            andata = giornata.date_partite().index(partita.date())
+                                            print("andata", andata, home_team, away_team)
+                                            break
+                            break"""
+                print("G1:",g)
+                if home_team == "Asteras Tripolis" and away_team == "Olympiakos":
+                    recuperate = True
+                    saltata_11 = False
+                    g+=3
+
+                if not recuperate:
+                    if home_team == "AEK" and away_team == "Platanias":
+                        saltata_11 = True
+                        giornate_campionato[g + 1 + 2] = Giornata(
+                            Classifica(giornate_campionato[g + 2].classifica()._lista.copy()), list())
+                if (record_home.partite() > g or record_ospite.partite() > g) :
+
+                    if not recuperate:
+                        if saltata_11:
+                            giornate_campionato[g + 1 + 3] = Giornata(
+                                Classifica(giornate_campionato[g + 3].classifica()._lista.copy()), list())
+
+                            g += 1
+                        else:
+                            giornate_campionato[g + 1 + 2] = Giornata(
+                                Classifica(giornate_campionato[g + 2].classifica()._lista.copy()), list())
+
+                            g += 1
+                    else:
+                        giornate_campionato[g + 1] = Giornata(
+                            Classifica(giornate_campionato[g].classifica()._lista.copy()), list())
+                        g+=1
+
+
+
+
+                record_home += RecordClassifica(squadra=home_team, partite=1, vittorie=vittoria_squadra_casa,
+                                                    pareggi=pareggio_squadra_casa,
+                                                    sconfitte=sconfitta_squadra_casa, goalfatti=FTHG, goalsubiti=FTAG,
+                                                    punti=punti_squadra_casa,
+                                                    vittorie_ht=vittoria_squadra_casa_ht,
+                                                    pareggi_ht=pareggio_squadra_casa_ht,
+                                                    sconfitte_ht=sconfitta_squadra_casa_ht,
+                                                    goalfatti_ht=HTHG, goalsubiti_ht=HTAG,
+                                                    punti_ht=punti_squadra_casa_ht, partite_casa=1,
+                                                    vittorie_casa=vittoria_squadra_casa,
+                                                    pareggi_casa=pareggio_squadra_casa,
+                                                    sconfitte_casa=sconfitta_squadra_casa,
+                                                    goalfatti_casa=FTHG, goalsubiti_casa=FTAG,
+                                                    punti_casa=punti_squadra_casa)
+
+                record_ospite += RecordClassifica(squadra=away_team, partite=1, vittorie=vittoria_squadra_ospite,
+                                                      pareggi=pareggio_squadra_ospite,
+                                                      sconfitte=sconfitta_squadra_ospite, goalfatti=FTAG,
+                                                      goalsubiti=FTHG,
+                                                      punti=punti_squadra_ospite,
+                                                      vittorie_ht=vittoria_squadra_ospite_ht,
+                                                      pareggi_ht=pareggio_squadra_ospite_ht,
+                                                      sconfitte_ht=sconfitta_squadra_ospite_ht, goalfatti_ht=HTAG,
+                                                      goalsubiti_ht=HTHG, punti_ht=punti_squadra_ospite_ht,
+                                                      partite_trasferta=1, vittorie_trasferta=vittoria_squadra_ospite,
+                                                      pareggi_trasferta=pareggio_squadra_ospite,
+                                                      sconfitte_trasferta=sconfitta_squadra_ospite,
+                                                      goalfatti_trasferta=FTAG, goalsubiti_trasferta=FTAG,
+                                                      punti_trasferta=punti_squadra_ospite)
+
+                if not recuperate:
+                    if saltata_11:
+                        giornate_campionato[g+3].classifica().aggiungi_record(record_home.copy())
+                        giornate_campionato[g+3].classifica().aggiungi_record(record_ospite.copy())
+                    else:
+                        giornate_campionato[g+2].classifica().aggiungi_record(record_home.copy())
+                        giornate_campionato[g+2].classifica().aggiungi_record(record_ospite.copy())
+                else:
+                    giornate_campionato[g].classifica().aggiungi_record(record_home.copy())
+                    giornate_campionato[g].classifica().aggiungi_record(record_ospite.copy())
+
+                if date != prev_data:
+                    if aggiungi_al_calendario:
+                        if not recuperate:
+                            giornate_campionato[g+2].aggiungi_data(date)
+                        else:
+                            giornate_campionato[g].aggiungi_data(date)
+
+                    else:
+                        aggiungi_al_calendario = True
+                    lista_partite = list()
+
+                lista_partite.append(partita)
+                partite[date] = lista_partite
+                n += 1
+            campionato.set_partite(partite)
+            campionato.set_giornate(giornate_campionato)
             campionati[codice_campionato] = campionato
     return campionati
 
