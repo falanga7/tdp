@@ -934,7 +934,7 @@ def stampa_ksmdr():
     ks = int(k.get())
     squadre = classifica.lista()[0:ks]
     squadre.reverse()
-    for record in squadre.reverse():
+    for record in squadre:
         lista_partite.insert("", 0, text=record.squadra(),
                              values=[record.goalfatti() - record.goalsubiti()])
     lista_partite.pack()
