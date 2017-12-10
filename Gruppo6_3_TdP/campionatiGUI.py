@@ -955,12 +955,12 @@ def stampa_ksmg():
     squadre = []
     for campionato in campionati:
         classifica = campionati[campionato].giornate()[giornata].classifica()
-        classifica.ordina(5, False)
+        classifica.ordina(5, True)
         squadre.extend(classifica.lista()[0:ks])
 
     def goal_subiti(qualcosa):
         return qualcosa.goalsubiti()
-    squadre.sort(key=goal_subiti, reverse=False)
+    squadre.sort(key=goal_subiti, reverse=True)
     squadre = squadre[0:ks]
     for record in squadre:
         lista_partite.insert("", 0, text=record.squadra(),
