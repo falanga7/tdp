@@ -921,10 +921,14 @@ def stampa_kspg():
     lista_partite.heading("#0", text="Top più goal")
     lista_partite.heading("one", text="Goal fatti")
     squadre = []
+
     for campionato in campionati:
-        classifica = campionati[campionato].giornate()[giornata].classifica()
-        classifica.ordina(4, True)
-        squadre.extend(classifica.lista()[0:ks])
+        try:
+            classifica = campionati[campionato].giornate()[giornata].classifica()
+            classifica.ordina(4, True)
+            squadre.extend(classifica.lista()[0:ks])
+        except IndexError:
+            continue
 
     def goal_fatti(qualcosa):
         return qualcosa.goalfatti()
@@ -954,9 +958,12 @@ def stampa_ksmg():
     lista_partite.heading("one", text="Goal subiti")
     squadre = []
     for campionato in campionati:
-        classifica = campionati[campionato].giornate()[giornata].classifica()
-        classifica.ordina(5, True)
-        squadre.extend(classifica.lista()[0:ks])
+        try:
+            classifica = campionati[campionato].giornate()[giornata].classifica()
+            classifica.ordina(5, True)
+            squadre.extend(classifica.lista()[0:ks])
+        except IndexError:
+            continue
 
     def goal_subiti(qualcosa):
         return qualcosa.goalsubiti()
@@ -985,9 +992,12 @@ def stampa_ksmdr():
     lista_partite.heading("one", text="Differenza reti")
     squadre=[]
     for campionato in campionati:
-        classifica = campionati[campionato].giornate()[giornata].classifica()
-        classifica.ordina(6, True)
-        squadre.extend(classifica.lista()[0:ks])
+        try:
+            classifica = campionati[campionato].giornate()[giornata].classifica()
+            classifica.ordina(6, True)
+            squadre.extend(classifica.lista()[0:ks])
+        except IndexError:
+            continue
 
     def differenza_reti(qualcosa):
         return qualcosa.goalfatti() - qualcosa.goalsubiti()
