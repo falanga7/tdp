@@ -30,9 +30,10 @@ class MyGraph(Graph):
             free_vertices = []
             for vertex in self.vertices():
                 free_vertices.append(vertex)
-            covered_vertices = {}
-            uncovered_vertices = {}
+            covered_vertices = []
+            uncovered_vertices = []
             min_vcs = []
+            sol = []
 
         else:
             k = params["k"]
@@ -42,6 +43,7 @@ class MyGraph(Graph):
             covered_vertices = params["covered_vertices"]
             uncovered_vertices = params["uncovered_vertices"]
             min_vcs = params["min_vcs"]
+            sol = params["sol"]
 
         if k == 0:
             min_vcs.append(copy.deepcopy(covered_vertices))
@@ -50,6 +52,9 @@ class MyGraph(Graph):
             opt = uncov
             min_vcs.clear()
             min_vcs.append(copy.deepcopy(covered_vertices))
+            if uncov == 0:
+                sol.append(copy.deepcopy(covered_vertices))
+                sol.sort(key=len)
 #            return opt, min_vcs
 
         if self._bounding(uncov, opt):
@@ -65,20 +70,21 @@ class MyGraph(Graph):
             i = free_vertices.pop()
         except IndexError:
             return min_vcs
-        covered_vertices[i] = i
+        covered_vertices.append(i)
         k -= 1
         self._fix_neighbours_degree(i)
         min_vcs = self.min_vertex_cover(k=k, uncov=uncov-i._cd, opt=opt,
                               free_vertices=free_vertices, covered_vertices=covered_vertices,
-                              uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
-        del covered_vertices[i]
-        uncovered_vertices[i] = i
+                              uncovered_vertices=uncovered_vertices, min_vcs=min_vcs, sol=sol)
+        covered_vertices.pop()
+        uncovered_vertices.append(i)
         k += 1
         self._fix_neighbours_degree(i, False)
 
         min_vcs = self.min_vertex_cover(k=k, uncov=uncov, opt=opt,
                               free_vertices=free_vertices, covered_vertices=covered_vertices,
-                              uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
+                              uncovered_vertices=uncovered_vertices, min_vcs=min_vcs, sol=sol)
+        uncovered_vertices.pop()
         free_vertices.append(i)
         return min_vcs
 
