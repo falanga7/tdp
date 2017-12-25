@@ -28,4 +28,16 @@ vertici = grafo1.greedy_vertex_cover()
 
 for vertice in vertici:
     print(vertice.element())
+vertici = grafo1.min_vertex_cover()
 
+grafo2 = MyGraph()
+
+
+v0 = grafo2.insert_vertex(0)
+v1 =  grafo2.insert_vertex(1)
+v2 = grafo2.insert_vertex(2)
+
+grafo2.insert_edge(v0,v1)
+grafo2.insert_edge(v1,v2)
+vertici = grafo2.min_vertex_cover()
+print("lol")
