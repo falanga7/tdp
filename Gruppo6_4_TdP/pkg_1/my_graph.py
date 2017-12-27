@@ -1,17 +1,18 @@
 import copy
 from TdP_collections.graphs.graph import Graph
-from Gruppo6_4_TdP.pkg_1.heap_priority_queue_max import *
+from Gruppo6_4_TdP.pkg_1.adaptable_heap_priority_queue_max import *
 
 
 class MyGraph(Graph):
 
     class Vertex(Graph.Vertex):
-        __slots__ = '_cd'
+        __slots__ = '_cd', '_locator'
 
         def __init__(self, x):
             """Do not call constructor directly. Use Graph's insert_vertex(x)."""
             super().__init__(x)
             self._cd = 0
+            self._locator = None
 
     def insert_edge(self, u, v, x=None):
         """Insert and return a new Edge from u to v with auxiliary element x.
@@ -45,9 +46,9 @@ class MyGraph(Graph):
             k = self.vertex_count()
             uncov = self.edge_count()
             opt = uncov
-            free_vertices = HeapPriorityQueueMax()
+            free_vertices = AdaptableHeapPriorityQueueMax()
             for vertex in self.vertices():
-                free_vertices.add(vertex._cd, vertex)
+                vertex._locator = free_vertices.add(vertex._cd, vertex)
             covered_vertices = []
             uncovered_vertices = []
             min_vcs = []
@@ -85,8 +86,6 @@ class MyGraph(Graph):
         if self._bounding(uncov, opt, k, kopt):
             return min_vcs, kopt
 
-        def cover_degree(vertex):
-            return vertex._cd
         # scelgo il prossimo vertice sulla base del cover degree maggiore
         try:
             i = free_vertices.remove_max()[1]
@@ -94,29 +93,59 @@ class MyGraph(Graph):
             return min_vcs, kopt
         covered_vertices.append(i)
         k -= 1
-        self._fix_neighbours_degree(i)
+        self._fix_neighbours_degree(i, free_vertices, no_solution=True)
         min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov-i._cd, opt=opt, kopt=kopt,
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
                                                     uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         covered_vertices.pop()
         uncovered_vertices.append(i)
         k += 1
-        self._fix_neighbours_degree(i, False)
+        self._fix_neighbours_degree(i, free_vertices,no_solution=True, covered=False)
 
         min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov, opt=opt, kopt=kopt,
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
                                                     uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         uncovered_vertices.pop()
-        free_vertices.add(i._cd, i)
+        i._locator = free_vertices.add(i._cd, i)
         return min_vcs, kopt
 
-    def _fix_neighbours_degree(self, i, covered=True):
+    def _fix_neighbours_degree(self, i, vertices, solution=None, covered=True, no_solution=False):
         if covered:
             for edge in self.incident_edges(i):
-                edge.opposite(i)._cd -= 1
+                vertex = edge.opposite(i)
+                try:
+                    if solution[vertex]:
+                        continue
+                except KeyError:
+                    pass
+                except TypeError:
+                    pass
+                if no_solution:
+                    vertex._cd -= 1
+                try:
+                    vertices.update(vertex._locator, vertex._locator._key -1, vertex)
+                except ValueError:
+                    return
+                except TypeError:
+                    pass
         else:
             for edge in self.incident_edges(i):
-                edge.opposite(i)._cd += 1
+                vertex = edge.opposite(i)
+                try:
+                    if solution[vertex]:
+                        continue
+                except KeyError:
+                    pass
+                except TypeError:
+                    pass
+                if no_solution:
+                   vertex._cd += 1
+                try:
+                    vertices.update(vertex._locator, vertex._locator._key+1, vertex)
+                except ValueError:
+                    return
+                except TypeError:
+                    pass
 
     def _bounding(self, uncover, opt, k, kopt):
         lb = max(0, uncover)
@@ -127,49 +156,21 @@ class MyGraph(Graph):
         else:
             return False
 
-    def delete_edge(self, u, v):
-        """Insert and return a new Edge from u to v with auxiliary element x.
-
-        Raise a ValueError if u and v are not vertices of the graph.
-        Raise a ValueError if u and v are already adjacent.
-        """
-        del self._outgoing[u][v]
-        del self._incoming[v][u]
-
     def greedy_vertex_cover(self):
+        solution = {}
+        vertices = AdaptableHeapPriorityQueueMax()
 
-        my_graph = copy.deepcopy(self)
-
-        solution = []
-        vertices = []
-
-        for vertex in my_graph.vertices():
-            vertices.append(vertex)
-        vertices.sort(key=my_graph._sort_desc_degree)
-
-        while my_graph.edge_count() != 0:
-            max_vertex = vertices.pop()
-            solution.append(max_vertex)
-
-            while my_graph.degree(max_vertex) != 0:
-                incident = my_graph.incident_edges(max_vertex).__next__() #trovare un modo più elegante
-                opposite = incident.opposite(max_vertex)
-
-                try:
-                    vertices.remove(opposite)
-                except:
-                    continue
-                finally:
-                    my_graph.delete_edge(max_vertex, opposite)
-
+        for vertex in self.vertices():
+            vertex._locator = vertices.add(self.degree(vertex), vertex)
+        edges_uncovered = self.edge_count()
+        while edges_uncovered != 0:
+            max_vertex = vertices.remove_max()[1]
+            if max_vertex._cd != max_vertex._locator._key:
+                continue
+            solution[max_vertex] = max_vertex
+            edges_uncovered -= max_vertex._locator._key
+            self._fix_neighbours_degree(max_vertex, vertices, solution, True)
 
         return solution
-
-
-
-
-    def _sort_desc_degree(self, vertex):
-
-        return self.degree(vertex)
 
 

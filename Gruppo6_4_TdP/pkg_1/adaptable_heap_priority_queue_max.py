@@ -1,11 +1,17 @@
-from TdP_collections.priority_queue.heap_priority_queue import HeapPriorityQueue
+from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
 
 
 class Empty(Exception):
     pass
 
 
-class HeapPriorityQueueMax(HeapPriorityQueue):
+class AdaptableHeapPriorityQueueMax(AdaptableHeapPriorityQueue):
+
+    def _bubble(self, j):
+        if j > 0 and self._data[j] > self._data[self._parent(j)]:
+            self._upheap(j)
+        else:
+            self._downheap(j)
 
     def _upheap(self, j):
         parent = self._parent(j)
