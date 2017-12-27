@@ -23,11 +23,10 @@ class MyGraph(Graph):
         v._cd += 1
 
     def min_vertex_cover(self):
-        lsf, min_vcs = self._last_vertex_cover()
-        min_vcs.sort(key=len)
+        min_vcs = self._min_vertex_cover_kopt()
         return min_vcs[0]
 
-    def _last_vertex_cover(self, **params):
+    def _min_vertex_cover_kopt(self, **params):
         """ Inizializzazione
             k = numero di vertici da coprire
             uncov = numero di archi da coprire
@@ -37,9 +36,10 @@ class MyGraph(Graph):
             covered_vertices
             covered_vertices = vertici marcati come coperti
             uncovered_vertices = vertici marcati come scoperti
-            lsf = rappresenta l'ultima soluzione trovata
+            kopt = rappresenta i vertici rimanenti da coprire nella soluzione ottima
             min_vcs = rappresenta l'insieme di copertura minimo trovato finora.
             """
+        # prima inizializzazione dei parametri
         if not params:
             k = self.vertex_count()
             uncov = self.edge_count()
@@ -49,58 +49,66 @@ class MyGraph(Graph):
                 free_vertices.append(vertex)
             covered_vertices = []
             uncovered_vertices = []
-            lsf = []
             min_vcs = []
+            kopt = 0
+
         elif len(params) != 8:
             raise ValueError("Il metodo è stato chiamato con un numero di parametri non previsto.")
+
+        # Inizializzazione dei parametri passati alle successive chiamate ricorsive.
         else:
-            # Inizializzazione dei parametri passati alle successive chiamate ricorsive.
             k = params["k"]
             uncov = params["uncov"]
             opt = params["opt"]
             free_vertices = params["free_vertices"]
             covered_vertices = params["covered_vertices"]
             uncovered_vertices = params["uncovered_vertices"]
-            lsf = params["lsf"]
             min_vcs = params["min_vcs"]
+            kopt = params["kopt"]
 
+        # caso in cui ho coperto tutti i vertici
         if k == 0:
-            lsf = copy.deepcopy(covered_vertices)
-            return lsf, min_vcs
+            min_vcs = copy.deepcopy(covered_vertices)
+            return min_vcs, kopt
+
         if uncov < opt:
             opt = uncov
-            lsf.clear()
-            lsf = copy.deepcopy(covered_vertices)
+            # ho trovato una soluzione ottima
             if uncov == 0:
-                min_vcs.append(copy.deepcopy(covered_vertices))
-        if self._bounding(uncov, opt):
-            return lsf, min_vcs
+                # è migliore della precedente soluzione ottima trovata?
+                if k > kopt:
+                    kopt = k
+                    min_vcs = copy.deepcopy(covered_vertices)
+                    return min_vcs, kopt
+
+        if self._bounding(uncov, opt, k, kopt):
+            return min_vcs, kopt
 
         def cover_degree(vertex):
             return vertex._cd
-
+        # scelgo il prossimo vertice sulla base del cover degree maggiore
         free_vertices.sort(key=cover_degree)
         try:
             i = free_vertices.pop()
         except IndexError:
-            return lsf, min_vcs
+            return min_vcs, kopt
         covered_vertices.append(i)
         k -= 1
         self._fix_neighbours_degree(i)
-        lsf = self._last_vertex_cover(k=k, uncov=uncov-i._cd, opt=opt,
-                                    free_vertices=free_vertices, covered_vertices=covered_vertices,
-                                    uncovered_vertices=uncovered_vertices, lsf=lsf, min_vcs=min_vcs)[0]
+        min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov-i._cd, opt=opt, kopt=kopt,
+                                                    free_vertices=free_vertices, covered_vertices=covered_vertices,
+                                                    uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         covered_vertices.pop()
         uncovered_vertices.append(i)
         k += 1
         self._fix_neighbours_degree(i, False)
 
-        lsf = self._last_vertex_cover(k=k, uncov=uncov, opt=opt,
-                                    free_vertices=free_vertices, covered_vertices=covered_vertices,
-                                    uncovered_vertices=uncovered_vertices, lsf=lsf, min_vcs=min_vcs)[0]
+        min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov, opt=opt, kopt=kopt,
+                                                    free_vertices=free_vertices, covered_vertices=covered_vertices,
+                                                    uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         uncovered_vertices.pop()
         free_vertices.append(i)
-        return lsf, min_vcs
+        return min_vcs, kopt
 
     def _fix_neighbours_degree(self, i, covered=True):
         if covered:
@@ -110,8 +118,10 @@ class MyGraph(Graph):
             for edge in self.incident_edges(i):
                 edge.opposite(i)._cd += 1
 
-    def _bounding(self, uncover, opt):
+    def _bounding(self, uncover, opt, k, kopt):
         lb = max(0, uncover)
+        if k < kopt:
+            return True
         if lb > opt or uncover == 0:
             return True
         else:
