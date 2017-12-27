@@ -1,5 +1,6 @@
 import copy
 from TdP_collections.graphs.graph import Graph
+from Gruppo6_4_TdP.pkg_1.heap_priority_queue_max import *
 
 
 class MyGraph(Graph):
@@ -44,9 +45,9 @@ class MyGraph(Graph):
             k = self.vertex_count()
             uncov = self.edge_count()
             opt = uncov
-            free_vertices = []
+            free_vertices = HeapPriorityQueueMax()
             for vertex in self.vertices():
-                free_vertices.append(vertex)
+                free_vertices.add(vertex._cd, vertex)
             covered_vertices = []
             uncovered_vertices = []
             min_vcs = []
@@ -87,10 +88,9 @@ class MyGraph(Graph):
         def cover_degree(vertex):
             return vertex._cd
         # scelgo il prossimo vertice sulla base del cover degree maggiore
-        free_vertices.sort(key=cover_degree)
         try:
-            i = free_vertices.pop()
-        except IndexError:
+            i = free_vertices.remove_max()[1]
+        except Empty:
             return min_vcs, kopt
         covered_vertices.append(i)
         k -= 1
@@ -107,7 +107,7 @@ class MyGraph(Graph):
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
                                                     uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         uncovered_vertices.pop()
-        free_vertices.append(i)
+        free_vertices.add(i._cd, i)
         return min_vcs, kopt
 
     def _fix_neighbours_degree(self, i, covered=True):
