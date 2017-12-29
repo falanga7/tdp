@@ -44,7 +44,7 @@ def dfs_brigde(graph, vertex, visited, disc, low, parent):
                 low[vertex] = low[neighbor]
             #If the lowest vertex reachable from subtree under neighbor is  below vertex in DFS tree, then neighbor-vertex is a brige
             if low[neighbor] > disc[vertex]:
-                print("Bridge:",vertex,neighbor)
+                print (edge)
 
         #// Update low value of u for parent function calls.
         elif neighbor != parent[vertex]:
