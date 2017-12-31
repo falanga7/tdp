@@ -21,9 +21,9 @@ grafo1.insert_edge(v5, v6, 1)
 grafo1.insert_edge(v2, v6, 1)
 grafo1.insert_edge(v6, v4, 1)
 
-polizia = {1: v4, 2: v5, 3: v6}
+polizia = {v4: 1, v5: 2, v6: 3}
 
 volanti = emergency_call(grafo1, polizia, v4, 2)
 
-print("Volanti")
+print("Volanti:")
 print(volanti)
