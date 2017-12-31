@@ -42,7 +42,15 @@ def emergency_call(g, pos, v, k):
         except KeyError:
             pass
         del pqlocator[u]  # u is no longer in pq
-        for e in g.incident_edges(u, outgoing=False):  # outgoing edges (u,v)
+        edges = g.incident_edges(u, outgoing=False)
+        try:
+            next(edges)
+        except StopIteration:
+            return volanti
+
+        edges = g.incident_edges(u, outgoing=False)
+
+        for e in edges:  # outgoing edges (u,v)
             v = e.opposite(u)
             if v not in cloud:
                 # perform relaxation step on edge (u,v)

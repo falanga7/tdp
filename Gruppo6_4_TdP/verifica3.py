@@ -23,7 +23,7 @@ grafo1.insert_edge(v6, v4, 1)
 
 polizia = {v4: 1, v5: 2, v6: 3}
 
-volanti = emergency_call(grafo1, polizia, v4, 2)
+volanti = emergency_call(grafo1, polizia, v2, 2)
 
 print("Volanti:")
 print(volanti)

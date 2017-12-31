@@ -39,4 +39,3 @@ grafo2.insert_edge(v0, v1)
 grafo2.insert_edge(v1, v2)
 
 vertici = grafo2.min_vertex_cover()
-print("lol")
