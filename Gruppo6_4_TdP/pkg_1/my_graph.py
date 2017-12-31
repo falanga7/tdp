@@ -100,7 +100,7 @@ class MyGraph(Graph):
         covered_vertices.pop()
         uncovered_vertices.append(i)
         k += 1
-        self._fix_neighbours_degree(i, free_vertices,no_solution=True, covered=False)
+        self._fix_neighbours_degree(i, free_vertices, no_solution=True, covered=False)
 
         min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov, opt=opt, kopt=kopt,
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
