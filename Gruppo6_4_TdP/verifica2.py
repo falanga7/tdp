@@ -1,4 +1,5 @@
 from Gruppo6_4_TdP.pkg_2.bridge import *
+import string
 
 # test primo grafo
 grafo1 = MyGraph()
@@ -66,7 +67,7 @@ bridges = bridge(grafo3)
 for edge in bridges:
     print(edge)
 
-# test quarto grafo
+#test quarto grafo
 
 # grafo4 = MyGraph()
 #
@@ -85,7 +86,7 @@ for edge in bridges:
 # for edge in bridges:
 #     print(edge)
 
-# test quinto grafo
+#test quinto grafo
 
 grafo5 = MyGraph()
 
@@ -106,5 +107,23 @@ grafo5.insert_edge(v2, v4)
 
 print("Bridge del quinto grafo:")
 bridges = bridge(grafo5)
+for edge in bridges:
+    print(edge)
+
+print("Test con bridge.text:")
+grafo6 = MyGraph()
+bridge_file = open("bridge.txt", "r")
+vertices_bridge = {}
+for i in range(0, 17):
+    vertex_label = string.ascii_uppercase[i]
+    vertices_bridge[vertex_label] = grafo6.insert_vertex(vertex_label)
+lines = bridge_file.readlines()
+
+for i in range(2, 27):
+    src = lines[i].split()[0]
+    dst = lines[i].split()[1]
+    grafo6.insert_edge(vertices_bridge[src], vertices_bridge[dst])
+
+bridges = bridge(grafo6)
 for edge in bridges:
     print(edge)
