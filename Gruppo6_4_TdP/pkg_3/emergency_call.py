@@ -1,16 +1,24 @@
 from TdP_collections.graphs.graph import Graph
 from TdP_collections.priority_queue.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
+from collections import defaultdict
 
-
-def emergency_call(g, pos, v, k):
+def emergency_call(g, pos_vol, v, k):
     if not isinstance(g, Graph):
         raise ValueError("G deve essere di tipo Graph")
 
-    if not isinstance(pos, dict):
+    if not isinstance(pos_vol, dict):
         raise ValueError("pos deve essere un dizionario")
 
     if not isinstance(v, Graph.Vertex):
         raise ValueError("v deve essere un oggetto di tipo Vertex")
+
+    pos = defaultdict(list)
+    for key, value in pos_vol.items():
+        if not isinstance(value, Graph.Vertex):
+            raise ValueError("La lista delle volanti passata non è in un formato corretto.")
+        if not isinstance(key, int):
+            raise ValueError("La lista delle volanti passata non è in un formato corretto.")
+        pos[value].append(key)
 
     d = {}  # d[v] is upper bound from s to v
     cloud = {}  # map reachable v to its d[v] value
@@ -37,8 +45,12 @@ def emergency_call(g, pos, v, k):
                 else:
                     return volanti
             elif pos[u] and emergency != 0:
-                volanti.append(pos[u])
-                emergency -= 1
+                for volante in pos[u]:
+                    if emergency == 0:
+                        return volanti
+                    volanti.append(volante)
+                    emergency -= 1
+
         except KeyError:
             pass
         del pqlocator[u]  # u is no longer in pq
@@ -55,6 +67,7 @@ def emergency_call(g, pos, v, k):
             if v not in cloud:
                 # perform relaxation step on edge (u,v)
                 wgt = e.element()
+
                 if d[u] + wgt < d[v]:  # better path to v?
                     d[v] = d[u] + wgt  # update the distance
                     pq.update(pqlocator[v], d[v], v)  # update the pq entry
