@@ -164,9 +164,10 @@ class MyGraph(Graph):
             vertex._locator = vertices.add(self.degree(vertex), vertex)
         edges_uncovered = self.edge_count()
         while edges_uncovered != 0:
-            max_vertex = vertices.remove_max()[1]
-            if max_vertex._cd != max_vertex._locator._key:
-                continue
+            try:
+                max_vertex = vertices.remove_max()[1]
+            except Empty:
+                return solution
             solution[max_vertex] = max_vertex
             edges_uncovered -= max_vertex._locator._key
             self._fix_neighbours_degree(max_vertex, vertices, solution, True)
