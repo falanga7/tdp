@@ -88,13 +88,13 @@ class MyGraph(Graph):
 
         # scelgo il prossimo vertice sulla base del cover degree maggiore
         try:
-            i = free_vertices.remove_max()[1]
+            cd, i = free_vertices.remove_max()
         except Empty:
             return min_vcs, kopt
         covered_vertices.append(i)
         k -= 1
         self._fix_neighbours_degree(i, free_vertices, no_solution=True)
-        min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov-i._cd, opt=opt, kopt=kopt,
+        min_vcs, kopt = self._min_vertex_cover_kopt(k=k, uncov=uncov-cd, opt=opt, kopt=kopt,
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
                                                     uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         covered_vertices.pop()
@@ -106,7 +106,7 @@ class MyGraph(Graph):
                                                     free_vertices=free_vertices, covered_vertices=covered_vertices,
                                                     uncovered_vertices=uncovered_vertices, min_vcs=min_vcs)
         uncovered_vertices.pop()
-        i._locator = free_vertices.add(i._cd, i)
+        i._locator = free_vertices.add(cd, i)
         return min_vcs, kopt
 
     def _fix_neighbours_degree(self, i, vertices, solution=None, covered=True, no_solution=False):
@@ -120,12 +120,12 @@ class MyGraph(Graph):
                     pass
                 except TypeError:
                     pass
-                if no_solution:
-                    vertex._cd -= 1
+                # if no_solution:
+                #     vertex._cd -= 1
                 try:
-                    vertices.update(vertex._locator, vertex._locator._key -1, vertex)
+                    vertices.update(vertex._locator, vertex._locator._key - 1, vertex)
                 except ValueError:
-                    return
+                    continue
                 except TypeError:
                     pass
         else:
@@ -138,12 +138,12 @@ class MyGraph(Graph):
                     pass
                 except TypeError:
                     pass
-                if no_solution:
-                   vertex._cd += 1
+                # if no_solution:
+                #    vertex._cd += 1
                 try:
                     vertices.update(vertex._locator, vertex._locator._key+1, vertex)
                 except ValueError:
-                    return
+                    continue
                 except TypeError:
                     pass
 

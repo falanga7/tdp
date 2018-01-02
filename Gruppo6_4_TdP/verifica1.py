@@ -24,6 +24,7 @@ grafo1.insert_edge(v2, v5)
 grafo1.insert_edge(v5, v6)
 grafo1.insert_edge(v2, v7)
 grafo1.insert_edge(v8, v7)
+# grafo1.insert_edge(v4, v9)
 
 grafo1.insert_edge(v3, v7)
 grafo1.insert_edge(v1, v7)
@@ -49,6 +50,7 @@ v2 = grafo2.insert_vertex(2)
 
 grafo2.insert_edge(v0, v1)
 grafo2.insert_edge(v1, v2)
+grafo2.insert_edge(v2, v0)
 
 vertici = grafo2.min_vertex_cover()
 print(vertici)
