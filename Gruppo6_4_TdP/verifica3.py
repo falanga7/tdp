@@ -54,9 +54,13 @@ id_volante = 1
 for i in posizione_volanti:
     volanti[id_volante] = vertices_city[i]
     id_volante += 1
+print("Posizione iniziale volanti")
+for id_volante,pos_volante in volanti.items():
+    print("Id volante:",id_volante," - Posizione: ",pos_volante)
 
 incidente =  vertices_city[randList(1, len(vertices_city)-1, 1)[0]]
-volanti = emergency_call(grafo6, volanti, incidente, 4)
+volanti = emergency_call(grafo6, volanti, incidente, 5)
+
 print("Si è verificato un incidente all'incrocio N°: ",incidente)
 print("Volanti chiamate:")
 print(volanti)
