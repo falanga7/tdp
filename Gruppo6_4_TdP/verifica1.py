@@ -1,6 +1,6 @@
 from Gruppo6_4_TdP.pkg_1.my_graph import MyGraph
 from util import randList
-
+import time
 # primo test
 grafo1 = MyGraph()
 
@@ -106,13 +106,13 @@ grafi = []
 
 for i in range(n_grafi):
     grafo = MyGraph()
-    n_vertici = randList(50, 60, 1)[0]
+    n_vertici = randList(51, 60, 1)[0]
     lista_vertici = []
 
     for vertice in range(0, n_vertici):
         lista_vertici.append(grafo.insert_vertex(vertice))
     for vertice in grafo.vertices():
-        n_archi = randList(1,5, 1)[0]
+        n_archi = randList(1, 5, 1)[0]
         archi_random = randList(0, n_vertici-1, n_archi)
         vertici_adiacenti = []
         while len(archi_random) != 0:
@@ -124,8 +124,15 @@ for i in range(n_grafi):
                 continue
 
     grafi.append(grafo)
+    greedy_time = time.time()
     greedy = grafi[i].greedy_vertex_cover()
-    print("Greedy")
+    greedy_end_time = time.time() - greedy_time
+    print("Lunghezza greedy vertex cover:")
     print(len(greedy), grafo.vertex_count())
-    """print(grafi[i].min_vertex_cover())"""
-    print(i)
+    print("Tempo di esecuzione greedy:", greedy_end_time)
+    print("Lunghezza min vertex cover: ")
+    mvc_time = time.time()
+    mvcs = grafi[i].min_vertex_cover()
+    mvc_end_time = time.time() - mvc_time
+    print(len(mvcs))
+    print("Tempo di esecuzione min_vertex_cover:", mvc_end_time)
